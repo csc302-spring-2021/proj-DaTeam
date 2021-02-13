@@ -4,7 +4,7 @@
 
 
 import { classMeta } from "./ClassMeta"
-import * as SDC from "./ClassDef";
+import * as Model from "./ClassDef";
 import { StackUtil } from "./Utils"
 
 class ParsingError extends Error {}
@@ -86,19 +86,19 @@ export class SDCFormJsonSerializer extends JsonSerializer {
                return child.class
           }
 
-     private flatMap: {[uid: string]: SDC.SDCQuestion} = {}
+     private flatMap: {[uid: string]: Model.SDCQuestion} = {}
 
      protected constructor(){ super() }
 
-     static encode(form: SDC.SDCForm): string{
+     static encode(form: Model.SDCForm): string{
           return new this()._encode(form)
      }
 
-     _encode(form: SDC.SDCForm): string {
+     _encode(form: Model.SDCForm): string {
           return JSON.stringify(form)
      }
 
-     static decode(json: string): { model: SDC.SDCForm, flatMap: {[uid: string]: SDC.SDCQuestion} }{
+     static decode(json: string): { model: Model.SDCForm, flatMap: {[uid: string]: Model.SDCQuestion} }{
           return new this()._decode(json)
      }
 
@@ -106,7 +106,7 @@ export class SDCFormJsonSerializer extends JsonSerializer {
       * Decode the json as SDCForm
       * Return the decoded form and a flat map of all the questions
       */
-     _decode(json: string): { model: SDC.SDCForm, flatMap: {[uid: string]: SDC.SDCQuestion} } {
+     _decode(json: string): { model: Model.SDCForm, flatMap: {[uid: string]: Model.SDCQuestion} } {
           let obj: any = JSON.parse(json)
           if (this.childClassFinder("", "", obj) !== "SDCForm") {
                throw this.stackUtil.genError("Root object is not SDCForm")
@@ -131,19 +131,19 @@ export class SDCFormResponseJsonSerializer extends JsonSerializer {
 
      protected constructor(){ super() }
 
-     static encode(response: SDC.SDCFormResponse): string{
+     static encode(response: Model.SDCFormResponse): string{
           return new this()._encode(response)
      }
 
-     static decode(json: string): SDC.SDCFormResponse{
+     static decode(json: string): Model.SDCFormResponse{
           return new this()._decode(json)
      }
 
-     protected _encode(response: SDC.SDCFormResponse): string {
+     protected _encode(response: Model.SDCFormResponse): string {
           return JSON.stringify(response)
      }
 
-     protected _decode(json: string): SDC.SDCFormResponse {
+     protected _decode(json: string): Model.SDCFormResponse {
           return this.templateBuilder(null, JSON.parse(json), "SDCFormResponse")
      }
 }

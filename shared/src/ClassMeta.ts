@@ -2,7 +2,7 @@
      Primarily for parsing and validation purposes
  */
 
-import * as SDC from "./ClassDef"
+import * as Model from "./ClassDef"
 
 class TextFieldTypeMetaType{
      processor?: (base: string) => string // formate a field, e.g. strip
@@ -107,7 +107,7 @@ export const classMeta: { [id: string]: ClassMetaType } = {
      },
      "SDCForm": {
           super: "SDCItem",
-          construct: SDC.SDCForm,
+          construct: Model.SDCForm,
           fields: {
                "lineage": {
                     type: "String"
@@ -130,7 +130,7 @@ export const classMeta: { [id: string]: ClassMetaType } = {
           }
      },
      "SDCFormProperty": {
-          construct: SDC.SDCFormProperty,
+          construct: Model.SDCFormProperty,
           fields: {
                "order": {
                     type: "number",

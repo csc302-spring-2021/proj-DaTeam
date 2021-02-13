@@ -4,7 +4,7 @@
  */
 
 import { classMeta, textFieldTypeMeta } from "./ClassMeta"
-import * as SDC from "./ClassDef";
+import * as Model from "./ClassDef";
 import { StackUtil } from "./Utils"
 
 class ValidationError extends Error {}
@@ -81,7 +81,7 @@ export class ResponseValidator extends Validator{
       * @param response form response to validate
       * @param form form corresponded to the response
       */
-     static validateResponse(response: SDC.SDCFormResponse, form: SDC.SDCForm): ValidationError[]{
+     static validateResponse(response: Model.SDCFormResponse, form: Model.SDCForm): ValidationError[]{
           // TODO
           return null as any
      }
@@ -91,7 +91,7 @@ export class ResponseValidator extends Validator{
       * @param answer answer to validate
       * @param form form corresponded to the response
       */
-     static validateAnswer(answer: SDC.SDCAnswer, form: SDC.SDCForm){
+     static validateAnswer(answer: Model.SDCAnswer, form: Model.SDCForm){
           // TODO
      }
 }
