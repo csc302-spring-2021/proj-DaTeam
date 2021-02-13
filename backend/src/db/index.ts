@@ -1,13 +1,13 @@
 import * as promise from "bluebird"; // best promise library today
-import * as dbConfig from "./config.json"; // db connection details
-import * as pgPromise from "pg-promise"; // pg-promise core library
+import * as dbConfig from "./db-config.json"; // db connection details
+import pgPromise from "pg-promise"; // pg-promise core library
 import { IInitOptions, IDatabase, IMain } from "pg-promise";
-import { IExtensions, UsersRepository, ProductsRepository } from "./repos";
+import { IExtensionsDB, SDCFormDAL } from "../services";
 
-type ExtendedProtocol = IDatabase<IExtensions> & IExtensions;
+type ExtendedProtocol = IDatabase<IExtensionsDB> & IExtensionsDB;
 
 // pg-promise initialization options:
-const initOptions: IInitOptions<IExtensions> = {
+const initOptions: IInitOptions<IExtensionsDB> = {
   // Using a custom promise library, instead of the default ES6 Promise:
   promiseLib: promise,
 
@@ -18,8 +18,7 @@ const initOptions: IInitOptions<IExtensions> = {
 
     // Do not use 'require()' here, because this event occurs for every task and transaction being executed,
     // which should be as fast as possible.
-    obj.users = new UsersRepository(obj, pgp);
-    obj.products = new ProductsRepository(obj, pgp);
+    obj.sdcForm = new SDCFormDAL(obj, pgp);
   },
 };
 

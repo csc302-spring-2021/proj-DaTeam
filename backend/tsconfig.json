@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/db/db-config.json"],
   "files": ["src/config.json"],
   "references": [{ "path": "../shared" }],
   "exclude": ["node_modules", "build"],
