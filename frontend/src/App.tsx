@@ -1,8 +1,9 @@
 import React, { Suspense } from "react";
 import { BrowserRouter, Switch, Redirect, Route } from "react-router-dom";
-import { Loading } from "./components/Loading";
+import { Loading } from "./pages/Loading";
 import { Notification } from "./components/Notification";
 import { Home } from "./pages/Home";
+import { NotFound } from "./pages/NotFound";
 
 function App() {
   return (
@@ -10,7 +11,11 @@ function App() {
       <Notification />
       <Suspense fallback={<Loading />}>
         <BrowserRouter>
-          <Route exact path="/" component={Home} />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/404" component={NotFound} />
+            <Redirect to="/404" />
+          </Switch>
         </BrowserRouter>
       </Suspense>
     </div>
