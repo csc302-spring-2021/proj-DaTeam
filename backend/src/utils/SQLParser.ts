@@ -3,7 +3,7 @@ import { join } from "path";
 
 // Helper for linking to external query files;
 export function parseSQL(file: string): QueryFile {
-  const fullPath: string = join(__dirname, file); // generating full path;
+  const fullPath: string = join(__dirname, "../services/", file); // generating full path;
 
   const options: IQueryFileOptions = {
     // minifying the SQL is always advised;
