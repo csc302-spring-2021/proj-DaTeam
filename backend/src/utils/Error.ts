@@ -1,4 +1,8 @@
-export enum ErrorCode {
+/* 
+  Reference for all HTTP codes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status  
+*/
+
+export enum HttpCode {
   OK = 200,
   CREATED = 201,
   ACCEPTED = 202,

@@ -1,4 +1,4 @@
-import express, { application } from "express";
+/* import express, { application } from "express";
 import { SDCForm, SDCNode, SDCFormJsonSerializer } from "@dateam/shared";
 
 import * as config from "./config.json";
@@ -39,3 +39,4 @@ db.any("select * from item")
     console.log(e);
   });
 console.log("done");
+ */

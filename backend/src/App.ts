@@ -3,8 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import logger from "./utils/Logger";
-import { ErrorCode } from "./utils/Error";
-import * as config from "./config.json";
+import { HttpCode } from "./utils/Error";
 
 const app = express();
 dotenv.config(); // read env variables from .env file
@@ -25,7 +24,7 @@ if (process.env.NODE_ENV === "development") {
 // print all api errors
 app.use((err: Error, _: Request, res: Response) => {
   logger.error(err.message, err);
-  return res.status(ErrorCode.BAD_REQUEST).json({
+  return res.status(HttpCode.BAD_REQUEST).json({
     error: err.message,
   });
 });
