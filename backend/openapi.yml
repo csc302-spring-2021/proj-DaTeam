@@ -4,7 +4,7 @@ info:
   description: DaTeam SDC service provides an interface to SDC Forms and their Responses
   version: 1.0.0
 servers:
-  - url: http://localhost:3001/v1
+  - url: http://localhost:3001/api
 tags:
   - name: patient
     description: Access to patient information
