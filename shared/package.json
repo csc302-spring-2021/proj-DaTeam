@@ -1,0 +1,28 @@
+{
+    "name": "@dateam/shared",
+    "version": "1.0.0",
+    "description": "Shared code between frontend and backend",
+    "main": "build/main.js",
+    "scripts": {
+      "start": "make run",
+      "test": "make test"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/csc302-spring-2021/proj-DaTeam.git"
+    },
+    "keywords": [
+      "SDC"
+    ],
+    "author": "DaTeam",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/csc302-spring-2021/proj-DaTeam/issues"
+    },
+    "homepage": "https://github.com/csc302-spring-2021/proj-DaTeam#readme",
+    "dependencies": {
+    },
+    "devDependencies": {
+    }
+  }
+  

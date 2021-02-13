@@ -1,0 +1,16 @@
+{
+     "app": {
+          "port": 3000
+     },
+     "db": {
+          "connectOptions": 
+          {
+            "host": "localhost",
+            "port": 5432,
+            "database": "dateam",
+            "user": "dateam",
+            "password": "dateam",
+            "ssl": false
+          }
+     }
+}
