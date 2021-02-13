@@ -29,8 +29,6 @@ export abstract class SDCNode {
     title?: string
     order?: number
     children: SDCNode[] = []
-    maxSelections = 1
-    minSelections = 1
 
     constructor(data?: any){
         Object.assign(this, data)
@@ -70,6 +68,8 @@ export class SDCTextField extends SDCQuestion {
 }
 
 export class SDCListField extends SDCQuestion {
+    maxSelections = 1
+    minSelections = 1
     options: SDCListFieldItem[] = []
     lookupEndPoint?: string
 }
