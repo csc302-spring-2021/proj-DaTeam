@@ -3,19 +3,27 @@
  */
 
 export class Procedure {
-    uid: string
+    uid?: string
     id: string
-    assignedFormUID: string
+    assignedFormID?: string
+
+    constructor(data?: any){
+        Object.assign(this, data)
+    }
 }
 
 export class Patient {
-    uid: string
-    id: string
+    uid?: string
+    id: string // external patient id (OHIP)
     name: string
+
+    constructor(data?: any){
+        Object.assign(this, data)
+    }
 }
 
 export abstract class SDCNode {
-    readonly class: string
+    readonly class: string // for json serilization only
     id: string
     uid?: string // uid is only assigned after it is stored in the database
     title?: string
