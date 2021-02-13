@@ -1,6 +1,7 @@
 *.sw[a-p]
 .DS_Store
-.vscode/
+.vscode/*
+!.vscode/extensions.json
 node_modules/
 build/
 dbdata/
