@@ -82,7 +82,7 @@ export class SDCListFieldItem extends SDCNode {
 
 export class SDCFormResponse {
     uid?: string // uid is only assigned after it is stored in the database
-    formId: string
+    formId: string // uid of the form
     patientID: string // uid of the patient
     answers: SDCAnswer[] = []
 
@@ -94,9 +94,11 @@ export class SDCFormResponse {
 export class SDCAnswer {
     // uid: string  // No need and cannot expose this field 
                     // as it may have multiple uid's in db
-    questionID: string
+    questionID: string // id of the question
     // an answer without responses will not be save in db
     responses: string[] = []
+    // if the question is a list field then responses will store a list of
+    // id of SDCListFieldItem
 
     constructor(data?: any){
         Object.assign(this, data)
