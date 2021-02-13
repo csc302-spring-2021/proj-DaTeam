@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import logger from "./utils/Logger";
 import { HttpCode } from "./utils/Error";
+import {ServicesAPI} from "./services"
 
 const app = express();
 dotenv.config(); // read env variables from .env file
@@ -31,9 +32,9 @@ app.use((err: Error, _: Request, res: Response) => {
 
 // TODO init database
 
+const router: Router = express.Router();
+const serviceAPI = new ServicesAPI(router);
 
-app.get("/api", (req: Request, res: Response) => {
-  res.send("Hello World 5");
-});
+app.get("/api", serviceAPI.getRouter());
 
 export default app;
