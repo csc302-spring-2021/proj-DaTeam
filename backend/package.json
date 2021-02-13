@@ -4,7 +4,7 @@
   "description": "DaTeam's Backend service",
   "main": "build/main.js",
   "scripts": {
-    "build": "npx tsc src/index.ts",
+    "build": "tsc",
     "start": "node build/index.js",
     "test": "node build/index.js",
     "devstart": "npx nodemon src/index.ts"
