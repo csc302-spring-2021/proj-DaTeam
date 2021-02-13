@@ -1,0 +1,18 @@
+{
+  "name": "dateam",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "shared"
+  ],
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=7.0.0"
+  },
+  "scripts": {
+    "build": "echo 'Whoops! You need to cd into either frontend/ or backend/ to run scripts'",
+    "start": "echo 'Whoops! You need to cd into either frontend/ or backend/ to run scripts'",
+    "test": "echo 'Whoops! You need to cd into either frontend/ or backend/ to run scripts'"
+  }
+}

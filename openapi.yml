@@ -1,0 +1,262 @@
+openapi: 3.0.1
+info:
+  title: DaTeam API Server
+  description: DaTeam SDC service provides an interface to SDC Forms and their Responses
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/v1
+tags:
+  - name: patient
+    description: Access to patient information
+  - name: procedure
+    description: Access to medical procedure information
+  - name: form
+    description: Operations on SDC Forms
+  - name: response
+    description: Operations on SDC Form responses
+externalDocs:
+  description: "Find out more about our project"
+  url: "https://umar-ahmed.gitbook.io/project-dateam/"
+paths:
+  /patient/search:
+    get:
+      description: "Search for a patient by ID or legal name"
+      tags:
+        - patient
+      parameters:
+        - name: query
+          in: query
+          description: "Partial ID or name of patient to search for"
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Return patients matching query"
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Patient"
+
+  /patient/{patientId}:
+    get:
+      description: "Get a specific patient"
+      tags:
+        - patient
+      parameters:
+        - name: patientId
+          description: "UID of patient (not the OHIP number)"
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Return the specified patient"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Patient"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+
+  /procedure/{procedureId}:
+    get:
+      description: Get a specific procedure
+      tags:
+        - procedure
+      parameters:
+        - name: procedureId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Returns the requested procedure
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Procedure"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+
+  /form:
+    post:
+      tags:
+        - form
+      description: Create a new form from an XML document
+      requestBody:
+        required: true
+        content:
+          "application/xml":
+            schema:
+      responses:
+        201:
+          description: Successfully created form
+          content: {}
+        400:
+          $ref: "#/components/responses/BadRequest"
+
+  /form/{formId}:
+    get:
+      description: Get a specific form
+      tags:
+        - form
+      parameters:
+        - name: formId
+          description: "UID of form"
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Return patients matching query"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Form"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+
+  /response:
+    post:
+      description: Create a new response
+      tags:
+        - response
+      responses:
+        204:
+          description: Response created successfully
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+
+  /response/{responseId}:
+    get:
+      description: Get a specific form response
+      tags:
+        - response
+      parameters:
+        - name: responseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Returns the requested response
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/FormResponse"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+    put:
+      description: Update a response
+      tags:
+        - response
+      parameters:
+        - name: responseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Response created successfully
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/FormResponse"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+
+components:
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    BadRequest:
+      description: BadRequest
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+    Patient:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this patient
+          format: uuid
+        external_id:
+          type: string
+          description: External ID (typically OHIP) for identifying the patient
+          example: "5584-486-674-YM"
+        name:
+          type: string
+          description: The legal name of the patient
+          example: "Jane Doe"
+
+    Procedure:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this procedure
+          format: uuid
+        external_id:
+          type: string
+          description: External ID (ProcedureID in handout) for identifying the procedure
+        name:
+          type: string
+          description: The name of the procedure
+          example: "Lung Biopsy"
+
+    Form:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of this form
+          format: uuid
+        title:
+          type: string
+          description: The title of the form
+          example: "Lung Biopsy Analysis"
+
+    FormResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of this form response
+          format: uuid
