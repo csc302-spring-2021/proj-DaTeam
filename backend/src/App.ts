@@ -1,5 +1,5 @@
 import path from "path";
-import express, { Request, Response, Router } from "express";
+import express, { NextFunction, Request, Response, Router } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // print all api errors
-app.use((err: Error, _: Request, res: Response) => {
+app.use((err: Error, _: Request, res: Response, next: NextFunction) => {
   logger.error(err.message, err);
   return res.status(HttpCode.BAD_REQUEST).json({
     error: err.message,
