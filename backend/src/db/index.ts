@@ -2,7 +2,7 @@ import * as promise from "bluebird"; // best promise library today
 import * as dbConfig from "./db-config.json"; // db connection details
 import pgPromise from "pg-promise"; // pg-promise core library
 import { IInitOptions, IDatabase, IMain } from "pg-promise";
-import { IExtensionsDB, SDCFormDAL } from "../services";
+import { IExtensionsDB, FormDAL } from "../services";
 
 type ExtendedProtocol = IDatabase<IExtensionsDB> & IExtensionsDB;
 
@@ -18,7 +18,7 @@ const initOptions: IInitOptions<IExtensionsDB> = {
 
     // Do not use 'require()' here, because this event occurs for every task and transaction being executed,
     // which should be as fast as possible.
-    obj.sdcForm = new SDCFormDAL(obj, pgp);
+    obj.form = new FormDAL(obj, pgp);
   },
 };
 

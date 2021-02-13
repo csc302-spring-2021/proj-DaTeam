@@ -1,7 +1,7 @@
 import { IDatabase, IMain } from "pg-promise";
 import sql from "./sql";
 
-export class SDCFormDAL {
+export class FormDAL {
   /**
    * @param db
    * Automated database connection context/interface.

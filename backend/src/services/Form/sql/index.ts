@@ -1,6 +1,6 @@
 import { parseSQL } from "../../../utils/SQLParser";
 
-const sdcFormPath = "./SDCForm/sql/"
+const sdcFormPath = "./Form/sql/"
 
 export default {
   create: parseSQL(sdcFormPath + "create.sql"),

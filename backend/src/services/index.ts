@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { SDCFormDAL, SDCFormAPI } from "./SDCForm";
-
+import { FormDAL, FormAPI } from "./Form";
 
 export interface IExtensionsDB {
-  sdcForm: SDCFormDAL;
+  form: FormDAL;
 }
+export { FormDAL };
 
 export class ServicesAPI {
   private router: Router;
@@ -19,12 +19,8 @@ export class ServicesAPI {
   }
 
   private routeSDCFormAPI() {
-    const scheduleEventAPI = new SDCFormAPI(this.router);
+    const scheduleEventAPI = new FormAPI(this.router);
     const scheduleEventRouter = scheduleEventAPI.returnRouter();
     this.router.use("/v1", scheduleEventRouter);
   }
-
-
 }
-
-export { SDCFormDAL };
