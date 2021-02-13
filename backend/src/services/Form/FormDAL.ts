@@ -1,4 +1,6 @@
 import { IDatabase, IMain } from "pg-promise";
+
+import { Form } from "./Form";
 import sql from "./sql";
 
 export class FormDAL {
@@ -22,9 +24,19 @@ export class FormDAL {
   }
 
   // Creates the table;
+  /* TODO Replace with create table */
   async create(): Promise<null> {
     return this.db.none(sql.create);
   }
 
-  
+  /* TODO: replace with actual add */
+  // Adds a new record and returns the full object;
+  // It is also an example of mapping HTTP requests into query parameters;
+  async add(values: { userId: number; name: string }): Promise<Form> {
+    return this.db.one(sql.add, {
+      userId: +values.userId,
+      productName: values.name,
+    });
+  }
+
 }

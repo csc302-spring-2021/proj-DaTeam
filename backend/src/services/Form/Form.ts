@@ -1,4 +1,4 @@
 /* Model for SDC Form */
-export interface SDCForm {
+export interface Form {
   id: number;
 }
