@@ -91,10 +91,6 @@ export class SDCFormJsonSerializer extends JsonSerializer {
      protected constructor(){ super() }
 
      static encode(form: Model.SDCForm): string{
-          return new this()._encode(form)
-     }
-
-     _encode(form: Model.SDCForm): string {
           return JSON.stringify(form)
      }
 
@@ -106,7 +102,7 @@ export class SDCFormJsonSerializer extends JsonSerializer {
       * Decode the json as SDCForm
       * Return the decoded form and a flat map of all the questions
       */
-     _decode(json: string): { model: Model.SDCForm, flatMap: {[uid: string]: Model.SDCQuestion} } {
+     protected _decode(json: string): { model: Model.SDCForm, flatMap: {[uid: string]: Model.SDCQuestion} } {
           let obj: any = JSON.parse(json)
           if (this.childClassFinder("", "", obj) !== "SDCForm") {
                throw this.stackUtil.genError("Root object is not SDCForm")
@@ -132,18 +128,10 @@ export class SDCFormResponseJsonSerializer extends JsonSerializer {
      protected constructor(){ super() }
 
      static encode(response: Model.SDCFormResponse): string{
-          return new this()._encode(response)
-     }
-
-     static decode(json: string): Model.SDCFormResponse{
-          return new this()._decode(json)
-     }
-
-     protected _encode(response: Model.SDCFormResponse): string {
           return JSON.stringify(response)
      }
 
-     protected _decode(json: string): Model.SDCFormResponse {
-          return this.templateBuilder(null, JSON.parse(json), "SDCFormResponse")
+     static decode(json: string): Model.SDCFormResponse{
+          return new this().templateBuilder(null, JSON.parse(json), "SDCFormResponse")
      }
 }
