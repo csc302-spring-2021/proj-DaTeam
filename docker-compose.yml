@@ -4,7 +4,7 @@ services:
     build: ./
     # env_file: ./.env
     ports:
-      - "${OUT_PORT}:${APP_PORT}"
+      - "3000:3000"
     networks:
       - dateam-app
     depends_on:
@@ -12,16 +12,13 @@ services:
   postgres:
     image: "postgres:13.2"
     environment:
-      - POSTGRES_DB=${DB_DATABASE}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=dateam
     ports:
-      - "${DB_PORT}:5432"
+      - "5431:5432"
     networks:
       - dateam-app
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./backend/src/db/DBInitSQL/schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
 networks:
   dateam-app:

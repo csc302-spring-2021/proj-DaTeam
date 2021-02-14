@@ -13,7 +13,6 @@
   "scripts": {
     "build": "cd ./shared && npm run build && cd ../frontend && npm run build && cd .. && cd ./backend && npm run build ",
     "start": "cd ./backend && npm start",
-    "test": "echo 'Whoops! You need to cd into either frontend/ or backend/ to run scripts'",
-    "docker": "docker-compose --env-file ./backend/.env up"
+    "test": "echo 'Whoops! You need to cd into either frontend/ or backend/ to run scripts'"
   }
 }
