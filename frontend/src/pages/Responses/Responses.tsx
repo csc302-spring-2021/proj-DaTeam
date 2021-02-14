@@ -1,5 +1,5 @@
 function Responses() {
-  return <div></div>;
+  return <div>Responses Page</div>;
 }
 
 export default Responses;
