@@ -1,29 +1,28 @@
 version: "3"
-services: 
+services:
   server:
     build: ./
-    env_file: ./.env
-    ports: 
+    # env_file: ./.env
+    ports:
       - "3000:3000"
-    networks: 
+    networks:
       - dateam-app
-    depends_on: 
+    depends_on:
       - postgres
   postgres:
-    image: 'postgres:13.2'
-    environment: 
+    image: "postgres:13.2"
+    environment:
       - POSTGRES_DB=dateam
     ports:
-      - '5432:5432'
-    networks: 
+      - "5431:5432"
+    networks:
       - dateam-app
-    volumes: 
-      - postgres-data:/data/db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
-networks: 
+networks:
   dateam-app:
-    driver: brige
-volumes: 
+    driver: bridge
+volumes:
   postgres-data:
     driver: local
-
