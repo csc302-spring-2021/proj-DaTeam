@@ -8,3 +8,4 @@ dbdata/
 tsconfig.tsbuildinfo
 .env
 local/
+Makefile
