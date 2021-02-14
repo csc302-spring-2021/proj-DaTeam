@@ -1,5 +1,5 @@
 function Home() {
-  return <div className="w-full h-64 bg-blue-500"></div>;
+    return <div>Home Page</div>;
 }
 
 export default Home;
