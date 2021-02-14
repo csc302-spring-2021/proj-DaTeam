@@ -10,6 +10,8 @@ import logger from "./utils/Logger";
 import { HttpCode } from "./utils/Error";
 import { ServicesAPI } from "./services";
 
+dotenv.config()
+
 const app = express();
 dotenv.config(); // read env variables from .env file
 
