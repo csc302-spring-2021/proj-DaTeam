@@ -13,5 +13,4 @@ tsconfig.tsbuildinfo
 local/
 Makefile
 
-# other
-.DS_Store
+backend/.idea/
