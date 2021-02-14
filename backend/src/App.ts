@@ -49,6 +49,5 @@ const router: Router = express.Router();
 const serviceAPI = new ServicesAPI(router);
 
 app.get("/api", serviceAPI.getRouter());
-app.listen(3000, () => { return console.log(`server is listening on 3000`); }); 
 
 export default app;
