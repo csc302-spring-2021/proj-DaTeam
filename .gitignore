@@ -10,7 +10,4 @@ build/
 dbdata/
 tsconfig.tsbuildinfo
 .env
-local/
-Makefile
-
 backend/.idea/
