@@ -106,7 +106,7 @@ export const classMeta: { [id: string]: ClassMetaType } = {
           }
      },
      "SDCForm": {
-          super: "SDCItem",
+          super: "SDCNode",
           construct: Model.SDCForm,
           fields: {
                "lineage": {
