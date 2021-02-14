@@ -1,10 +1,5 @@
 import { Router } from "express";
-import { FormDAL, FormAPI } from "./Form";
-
-export interface IExtensionsDB {
-  form: FormDAL;
-}
-export { FormDAL };
+import { FormAPI } from "./Form";
 
 export class ServicesAPI {
   private router: Router;
