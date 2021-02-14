@@ -3,3 +3,4 @@ export * from "./ClassDef";
 export * from "./ClassMeta";
 export * from "./ClassJsonSerializer";
 export * from "./ClassValidator";
+export * from "./MockData"
