@@ -94,14 +94,6 @@ export const classMeta: { [id: string]: ClassMetaType } = {
                "children": {
                     type: "Array",
                     "generic": "SDCNode"
-               },
-               "minSelections": {
-                    type: "Number",
-                    validator: o => { return o.minSelections >= 0 }
-               },
-               "maxSelections": {
-                    type: "Number",
-                    validator: o => { return o.maxSelections >= o.minSelections }
                }
           }
      },
