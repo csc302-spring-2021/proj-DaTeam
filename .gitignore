@@ -7,3 +7,4 @@ build/
 dbdata/
 tsconfig.tsbuildinfo
 .env
+local/
