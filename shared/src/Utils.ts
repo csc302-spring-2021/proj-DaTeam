@@ -2,7 +2,7 @@
 export class StackUtil {
 
      /** Keep track of where the parser is parsing */
-     private callStack: string[] = ["Object"]
+     private callStack: string[] = []
 
      /** Error type to generate */
      private errorType: new(message: string) => Error = Error
