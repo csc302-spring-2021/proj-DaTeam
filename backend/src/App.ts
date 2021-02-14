@@ -10,8 +10,6 @@ import logger from "./utils/Logger";
 import { HttpCode } from "./utils/Error";
 import { ServicesAPI } from "./services";
 
-dotenv.config()
-
 const app = express();
 dotenv.config(); // read env variables from .env file
 
@@ -47,11 +45,10 @@ app.use((err: Error, _: Request, res: Response, next: NextFunction) => {
   });
 });
 
-// TODO init database
-
 const router: Router = express.Router();
 const serviceAPI = new ServicesAPI(router);
 
 app.get("/api", serviceAPI.getRouter());
+app.listen(3000, () => { return console.log(`server is listening on 3000`); }); 
 
 export default app;

@@ -1,7 +1,6 @@
 {
   "extends": "../tsconfig.json",
   "include": ["src/**/*"],
-  "files": ["src/config.json"],
   "references": [{ "path": "../shared" }],
   "exclude": ["node_modules", "build"],
   "compilerOptions": {
