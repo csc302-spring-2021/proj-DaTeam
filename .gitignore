@@ -9,3 +9,5 @@ tsconfig.tsbuildinfo
 .env
 local/
 Makefile
+
+backend/.idea/
