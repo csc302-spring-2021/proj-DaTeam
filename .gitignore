@@ -1,7 +1,10 @@
+# dev tool
 *.sw[a-p]
-.DS_Store
+.idea/
 .vscode/*
 !.vscode/extensions.json
+
+# local env
 node_modules/
 build/
 dbdata/
@@ -10,6 +13,5 @@ tsconfig.tsbuildinfo
 local/
 Makefile
 
-backend/.idea/
-
-backend/.idea/
+# other
+.DS_Store
