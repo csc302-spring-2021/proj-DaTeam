@@ -8,6 +8,9 @@ import YAML from "yamljs";
 import logger from "./utils/Logger";
 import { HttpCode } from "./utils/Error";
 import { ServicesAPI } from "./services";
+import * as db from "./db";
+
+db.initDB()
 
 const app = express();
 
