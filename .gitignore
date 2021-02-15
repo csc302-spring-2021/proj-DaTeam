@@ -10,4 +10,8 @@ build/
 dbdata/
 tsconfig.tsbuildinfo
 .env
-backend/.idea/
+local/
+Makefile
+
+# other
+.DS_Store
