@@ -93,6 +93,8 @@ CREATE TABLE formProperty (
 
 CREATE TABLE listField (
   uid uuid PRIMARY KEY,
+  minSelections integer NOT NULL,
+  maxSelections integer NOT NULL,
   lookupEndPoint text
 );
 
@@ -100,8 +102,6 @@ CREATE TABLE listFieldItem (
   uid uuid PRIMARY KEY,
   listId uuid NOT NULL,
   textResponse uuid,
-  minSelections integer NOT NULL,
-  maxSelections integer NOT NULL,
   selectionDeselectsSiblings boolean NOT NULL,
   selectionDisablesChildren boolean NOT NULL
 );
