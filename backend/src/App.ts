@@ -1,7 +1,6 @@
 import path from "path";
 import express, { NextFunction, Request, Response, Router } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
@@ -11,7 +10,6 @@ import { HttpCode } from "./utils/Error";
 import { ServicesAPI } from "./services";
 
 const app = express();
-dotenv.config(); // read env variables from .env file
 
 /* Middlewares */
 // block cross origin access
