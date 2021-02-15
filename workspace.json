@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "projects": {
+    "@dateam/backend": {
+      "root": "apps/backend",
+      "type": "application"
+    },
+    "@dateam/frontend": {
+      "root": "apps/frontend",
+      "type": "application"
+    },
+    "@dateam/shared": {
+      "root": "libs/shared",
+      "type": "library"
+    }
+  }
+}

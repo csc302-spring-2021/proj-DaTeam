@@ -1,7 +1,6 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../../tsconfig.json",
   "include": ["src/**/*"],
-  "references": [{ "path": "../shared" }],
   "exclude": ["node_modules", "build"],
   "compilerOptions": {
     "rootDir": "./src",

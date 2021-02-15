@@ -2,17 +2,22 @@
   "name": "dateam",
   "private": true,
   "workspaces": [
-    "backend",
-    "frontend",
-    "shared"
+    "apps/*",
+    "libs/*"
   ],
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=7.0.0"
   },
   "scripts": {
-    "build": "cd ./shared && npm run build && cd ../frontend && npm run build && cd .. && cd ./backend && npm run build ",
+    "build": "npx nx run-many --target=build --all --parallel",
     "start": "cd ./backend && npm start",
     "test": "echo 'Whoops! You need to cd into either frontend/ or backend/ to run scripts'"
+  },
+  "devDependencies": {
+    "@nrwl/cli": "latest",
+    "@nrwl/tao": "latest",
+    "@nrwl/workspace": "latest",
+    "typescript": "4.1.3"
   }
 }
