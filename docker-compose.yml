@@ -4,7 +4,7 @@ services:
     build: ./
     # env_file: ./.env
     ports:
-      - "3000:3000"
+      - "${OUT_PORT}:${APP_PORT}"
     networks:
       - dateam-app
     depends_on:
@@ -12,11 +12,11 @@ services:
   postgres:
     image: "postgres:13.2"
     environment:
-      - POSTGRES_DB=dateam
-      - POSTGRES_USER=csc302
-      - POSTGRES_PASSWORD=1&J7lgO5EnGmEgOPKXh3
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
-      - "5431:5432"
+      - "${DB_PORT}:5432"
     networks:
       - dateam-app
     volumes:
