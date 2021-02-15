@@ -5,7 +5,7 @@
 export class Procedure {
     uid?: string
     id: string
-    assignedFormID?: string
+    assignedFormID?: string // uid of the form
 
     constructor(data?: any){
         Object.assign(this, data)
