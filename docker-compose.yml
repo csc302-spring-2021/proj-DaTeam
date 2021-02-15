@@ -1,10 +1,10 @@
 version: "3"
 services:
-  web:
+  frontend:
     build: ./frontend
     ports:
       - 3000:3000
-  server:
+  backend:
     build: ./backend
     ports:
       - "${OUT_PORT}:${APP_PORT}"
