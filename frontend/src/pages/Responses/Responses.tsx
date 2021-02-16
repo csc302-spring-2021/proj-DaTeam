@@ -1,6 +1,6 @@
 function Responses() {
   return (
-    <div className="mx-auto px-4">
+    <div data-testid="responses" className="mx-auto px-4">
     <div className="-mx-4 flex h-screen">
       <div className="overflow-y-scroll w-full p-4 sm:w-1/2 lg:w-1/4 bg-white rounded-lg shadow-2xl">
         <div className=" px-10 py-12 bg-white rounded-lg shadow-lg text-center text-2xl font-sans">

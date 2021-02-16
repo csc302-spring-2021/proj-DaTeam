@@ -7,7 +7,7 @@ import { Nav } from "./pages/Nav";
 
 function App() {
     return (
-        <div className="App">
+        <div data-testid="app">
             <Notification />
             <Suspense fallback={<Loading />}>
                 <BrowserRouter>
