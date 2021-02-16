@@ -5,7 +5,9 @@
  */
 
 import dotenv from "dotenv";
-dotenv.config(); // read env variables from .env file
+dotenv.config({
+  path: process.env.NODE_ENV === "production" ? "./.env" : "../.env",
+});
 
 /**
  * Module dependencies.
