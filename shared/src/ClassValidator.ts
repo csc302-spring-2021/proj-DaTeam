@@ -5,9 +5,9 @@
 
 import { classMeta, textFieldTypeMeta } from "./ClassMeta"
 import * as Model from "./ClassDef";
-import { StackUtil } from "./Utils"
+import { StackUtil, nativeTypes } from "./Utils"
 
-class ValidationError extends Error {}
+export class ValidationError extends Error {}
 
 /** Offers call stack support for error */
 abstract class Validator{
@@ -25,8 +25,8 @@ export class GenericClassValidator extends Validator{
       * @param obj object to validate
       * @param className use the validation logic of this class
       */
-     static validate(obj: any, className?: string){
-          return new this()._validate(obj, className)
+     static validate(obj: any){
+          return new this()._validate(obj)
      }
      
      /**
@@ -53,20 +53,53 @@ export class GenericClassValidator extends Validator{
                          throw this.stackUtil.genError("Missing attribute: " + id)
                     }
                }
-               if (targetField.type !== field.constructor) {
-                    throw this.stackUtil.genError("Attribute type error: " + id)
+               if (targetField.type !== field.constructor && !(field instanceof targetField.type)) {
+                    throw this.stackUtil.genError(
+                         `Attribute type error: ${id}, expecting ${targetField.type.name} `
+                         + `but got ${field.constructor.name}`)
                }
-               if (targetField.validator && !targetField.validator(obj)) {
-                    throw this.stackUtil.genError("Attribute invalid: " + id)
+               if (targetField.validator) {
+                    try{
+                         targetField.validator(obj)
+                    } catch(e){
+                         throw this.stackUtil.genError(`Attribute invalid: ${id}, ${e.message}`)
+                    }
                }
                if (targetField.generic) {
                     this.stackUtil.enter(id)
                     if (targetField.type === Array) {
-                         (field as Array<any>).forEach(o => this._validate(o))
-                    } else {
+                         const array = field as Array<any>
+                         for (let i in array){
+                              const child = array[i]
+                              if (child.constructor !== targetField.generic &&
+                                   !(child instanceof targetField.generic)){
+                                   throw this.stackUtil.genError(
+                                        `Attribute type error: ${id}[${i}], `
+                                        + `expecting ${targetField.generic.name} `
+                                        + `but got ${child.constructor.name}`
+                                   )
+                              }
+                              // for array only validate custom types
+                              if (nativeTypes.indexOf(targetField.generic.name.toLowerCase()) < 0){
+                                   this._validate(child)
+                              }
+                         }
+                    } else if (targetField.type === Object) {
+                         if (!(field instanceof targetField.generic)){
+                              throw this.stackUtil.genError(
+                                   `Attribute type error: ${id}, `
+                                   + `expecting ${targetField.generic.name} `
+                                   + `but got ${field.constructor.name}`
+                              )
+                         }
                          this._validate(field)
+                    } else {
+                         // classMeta defintion is invalid
+                         throw this.stackUtil.genError(
+                              `Invalid type and generic combination for class meta ${className}.${id}`
+                         )
                     }
-                    this.stackUtil.leave(id)
+                    this.stackUtil.leave()
                }
           }
      }
