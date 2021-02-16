@@ -7,5 +7,5 @@
 
 ## Docker
 
-1. (Optional) Run `docker-compose down --remove-orphans` to remove orphaned containers
+1. (Optional) Run `docker-compose --env-file=./backend/.env down --remove-orphans` to remove orphaned containers
 2. `npm run docker`
