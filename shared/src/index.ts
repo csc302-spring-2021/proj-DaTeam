@@ -4,3 +4,4 @@ export * from "./ClassMeta";
 export * from "./ClassJsonSerializer";
 export * from "./ClassValidator";
 export * from "./MockData"
+export { ValidationError, ParsingError } from "./Utils"
