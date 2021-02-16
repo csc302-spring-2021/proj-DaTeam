@@ -2,6 +2,7 @@
 *.sw[a-p]
 .idea/
 .vscode/*
+.vs/*
 !.vscode/extensions.json
 
 # local env

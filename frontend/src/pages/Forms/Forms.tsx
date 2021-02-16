@@ -1,5 +1,5 @@
 function Forms() {
-  return <div>Forms Page</div>;
+  return <div data-testid="forms" >Forms Page</div>;
 }
 
 export default Forms;

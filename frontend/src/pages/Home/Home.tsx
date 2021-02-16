@@ -1,5 +1,5 @@
 function Home() {
-    return <div>Home Page</div>;
+    return <div data-testid="home">Home Page</div>;
 }
 
 export default Home;
