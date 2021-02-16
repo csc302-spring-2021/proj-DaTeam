@@ -1,23 +1,16 @@
 /**
- * Class validators definitions for domain objects
- * Important! Do not reuse validator objects!
+ * Class validator for domain objects
  */
 
-import { classMeta, textFieldTypeMeta } from "./ClassMeta"
-import * as Model from "./ClassDef";
-import { StackUtil, nativeTypes } from "./Utils"
-
-export class ValidationError extends Error {}
-
-/** Offers call stack support for error */
-abstract class Validator{
-     protected stackUtil: StackUtil = new StackUtil("Root", ValidationError)
-}
+import { classMeta } from "./ClassMeta"
+import { StackUtil, nativeTypes, ValidationError } from "./Utils"
 
 /** This validator can only validate object integrity based on classMeta */
-export class GenericClassValidator extends Validator{
+export class GenericClassValidator {
 
-     protected constructor(){ super() }
+     protected stackUtil: StackUtil = new StackUtil("Root", ValidationError)
+
+     protected constructor(){}
 
      /**
       * Validate an object 
@@ -102,29 +95,5 @@ export class GenericClassValidator extends Validator{
                     this.stackUtil.leave()
                }
           }
-     }
-}
-
-
-// For front end text field formate validation, use classMeta.textFieldTypeMeta.validator
-export class ResponseValidator extends Validator{
-
-     /**
-      * Validate a form response, return a list of validation errors on all question
-      * @param response form response to validate
-      * @param form form corresponded to the response
-      */
-     static validateResponse(response: Model.SDCFormResponse, form: Model.SDCForm): ValidationError[]{
-          // TODO
-          return null as any
-     }
-
-     /**
-      * Validate one answer based on the provided form
-      * @param answer answer to validate
-      * @param form form corresponded to the response
-      */
-     static validateAnswer(answer: Model.SDCAnswer, form: Model.SDCForm){
-          // TODO
      }
 }
