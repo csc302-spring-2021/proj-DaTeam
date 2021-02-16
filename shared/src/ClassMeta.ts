@@ -90,7 +90,7 @@ class FieldMetaType{
      nullable?: boolean
 
      /** Validator of this field, the input is the entire object, not just the field */
-     validator?: (obj: any) => boolean
+     validator?: (obj: any) => void
 }
 
 /** Dictionary containing class meta info */
@@ -143,11 +143,18 @@ export const classMeta: { [id: string]: ClassMetaType } = {
                order: {
                     type: Number,
                     nullable: true,
-                    validator: o => { return o.order >= 0 }
+                    validator: o => { if (o.order < 0) throw new Error("order cannot be negetive") }
                },
                children: {
                     type: Array,
-                    generic: Model.SDCNode
+                    generic: Model.SDCNode,
+                    validator: o => {
+                         for (let child of o.children){
+                              if (child instanceof Model.SDCForm){
+                                   throw new Error("SDCForm cannot be a child")
+                              }
+                         }
+                    }
                }
           }
      },
@@ -186,7 +193,7 @@ export const classMeta: { [id: string]: ClassMetaType } = {
                order: {
                     type: Number,
                     nullable: true,
-                    validator: o => { return o.order >= 0 }
+                    validator: o => { if (o.order < 0) throw new Error("order cannot be negetive") }
                },
                name: {
                     type: String,
@@ -219,7 +226,11 @@ export const classMeta: { [id: string]: ClassMetaType } = {
                },
                type: {
                     type: String,
-                    validator: o => { return textFieldTypeMeta[o.type] != null }
+                    validator: o => {
+                         if (textFieldTypeMeta[o.type] == null){
+                              throw new Error(o.type + " is not a valid TextFieldType")
+                         }
+                    }
                }
           }
      },
@@ -229,11 +240,19 @@ export const classMeta: { [id: string]: ClassMetaType } = {
           fields: {
                minSelections: {
                     type: Number,
-                    validator: o => { return o.minSelections >= 0 }
+                    validator: o => {
+                         if (o.minSelections < 0){
+                              throw new Error("minSelections cannot be negetive")
+                         }
+                    }
                },
                maxSelections: {
                     type: Number,
-                    validator: o => { return o.maxSelections >= o.minSelections }
+                    validator: o => {
+                         if (o.maxSelections < o.minSelections){
+                              throw new Error("maxSelections must be greater than minSelections")
+                         }
+                    }
                },
                options: {
                     type: Array,
