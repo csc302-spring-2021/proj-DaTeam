@@ -41,7 +41,7 @@ abstract class JsonSerializer {
                template = new targetClass.construct()
           }
 
-          if (targetClass.super) this.templateBuilder(template, obj, targetClass.super)
+          if (targetClass.super) this.templateBuilder(template, obj, targetClass.super.name)
 
           for (let [id, targetField] of Object.entries(targetClass.fields)){
                const field = obj[id]
@@ -60,7 +60,7 @@ abstract class JsonSerializer {
                }
                if (targetField.generic) {
                     this.stackUtil.enter(id)
-                    if (targetField.type === "Array") {
+                    if (targetField.type === Array) {
                          template[id] = (field as Array<any>).map(
                               o => this.templateBuilder(null, o, this.childClassFinder(targetClassName, id, o))
                               )

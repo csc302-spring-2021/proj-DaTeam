@@ -42,7 +42,7 @@ export class GenericClassValidator extends Validator{
           const targetClass = classMeta[className]
           if (targetClass == null) throw this.stackUtil.genError("Unsupported class: " + className)
           
-          if (targetClass.super) this._validate(obj, targetClass.super)
+          if (targetClass.super) this._validate(obj, targetClass.super.name)
 
           for (let [id, targetField] of Object.entries(targetClass.fields)){
                const field = obj[id]
@@ -53,7 +53,7 @@ export class GenericClassValidator extends Validator{
                          throw this.stackUtil.genError("Missing attribute: " + id)
                     }
                }
-               if (targetField.type !== field.constructor.name) {
+               if (targetField.type !== field.constructor) {
                     throw this.stackUtil.genError("Attribute type error: " + id)
                }
                if (targetField.validator && !targetField.validator(obj)) {
@@ -61,7 +61,7 @@ export class GenericClassValidator extends Validator{
                }
                if (targetField.generic) {
                     this.stackUtil.enter(id)
-                    if (targetField.type === "Array") {
+                    if (targetField.type === Array) {
                          (field as Array<any>).forEach(o => this._validate(o))
                     } else {
                          this._validate(field)
