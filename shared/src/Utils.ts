@@ -23,7 +23,18 @@ export class StackUtil {
      }
 
      /** append level to call stack */
-     leave(level: string){
+     leave(){
           this.callStack.pop()
      }
 }
+
+export const nativeTypes = [
+     "string",
+     "number",
+     "bigint",
+     "boolean",
+     "symbol",
+     "undefined",
+     "object",
+     "function"
+]
