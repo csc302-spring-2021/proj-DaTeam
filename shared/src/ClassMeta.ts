@@ -59,19 +59,41 @@ export const textFieldTypeMeta: { [id: string]: TextFieldTypeMetaType } = {
 }
 
 class ClassMetaType{
+
+     /** Super class of this class */
      super?: Function
+
+     /** Constructor of this class */
      construct?: { new(data?: any): Object}
+
+     /** All fields contain in this class */
      fields: { [id: string] : FieldMetaType }
 }
 
 class FieldMetaType{
-     type: { new(): Object} // type should only be String, Number, Boolean, Array, Object
+
+     /**
+      * Basic type of this field, should only be `String`, `Number`, `Boolean`, `Array`, `Object`
+      *
+      * If the type of the field is a custom object, use `Object` here
+      */
+     type: { new(): Object}
+
+     /**
+      * Generic type of this field if `type` is `Array`,
+      *
+      * or the actual type of the field if `type` is `Object`
+      */
      generic?: Function
-     nullable?: boolean // default false
-     validator?: (obj: any) => boolean // takes the whole object as input
+
+     /** Default to false */
+     nullable?: boolean
+
+     /** Validator of this field, the input is the entire object, not just the field */
+     validator?: (obj: any) => boolean
 }
 
-// TODO
+/** Dictionary containing class meta info */
 export const classMeta: { [id: string]: ClassMetaType } = {
      Procedure:{
           construct: Model.Procedure,
