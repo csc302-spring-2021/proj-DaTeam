@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { HttpCode } from "../../utils/Error";
 
-export const FormController = {
+export const ResponseController = {
   create: function (req: Request, res: Response) {
+    //res.status(502).send();
     res.sendStatus(501);
     //res.status(HttpCode.OK).send();
   },

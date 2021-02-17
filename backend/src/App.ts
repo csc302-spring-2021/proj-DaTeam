@@ -49,8 +49,8 @@ app.use((err: Error, _: Request, res: Response, next: NextFunction) => {
 const router: Router = express.Router();
 const serviceAPI = new ServicesAPI(router);
 
-app.get("/api", serviceAPI.getRouter());
-
+app.use("/api", serviceAPI.getRouter());
+/*
 app.get("/patient/search", (req, res) => {
   res.sendStatus(501);
 });
@@ -82,7 +82,7 @@ app.get("/response/:responseId", (req, res) => {
 app.put("/response/:responseId", (req, res) => {
   res.sendStatus(501);
 });
-
+*/
 
 
 export default app;
