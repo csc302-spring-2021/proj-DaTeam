@@ -34,7 +34,7 @@ function Form() {
         <div data-testid="form" className="relative">
             <div data-testid="form-title" className="px-8 py-8 text-left text-3xl leading-relaxed">
                 <p className="font-normal">
-                    Respose for <p className="inline font-bold">{form?.title}</p> for <p className="inline font-bold">{"Arnav Verma"}</p>
+                    Response for <p className="inline font-bold">{form?.title}</p> for <p className="inline font-bold">{"Arnav Verma"}</p>
                 </p>   
             </div>
             <div data-testid="input-form-patientid" className="pb-8 px-8">
@@ -52,7 +52,7 @@ function Form() {
                     PAITIENT NAME:
                 </label>
                 <div className="py-2">
-                    <input id="ohipnumber" type="text"
+                    <input id="patientname" type="text"
                         placeholder="ex. Arnav Verma"
                         className="px-3 py-3 focus:ring-indigo-500 bg-gray-200 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded" />
                 </div>
