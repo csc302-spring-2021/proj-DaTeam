@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "test": "node ./build/Test.js",
-    "build": "../node_modules/.bin/tsc"
+    "build": "npx tsc"
   },
   "repository": {
     "type": "git",

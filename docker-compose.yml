@@ -1,8 +1,12 @@
 version: "3"
 services:
-  server:
-    build: ./
-    # env_file: ./.env
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
+  backend:
+    build: ./backend
+    env_file: ./.env
     ports:
       - "${OUT_PORT}:${APP_PORT}"
     networks:
