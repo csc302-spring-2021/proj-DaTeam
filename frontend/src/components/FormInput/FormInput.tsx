@@ -17,7 +17,7 @@ function FormInput(props: IFormInputProps) {
       onChange={valueSetter}
       type={props.type}
       placeholder={props.placeholder}
-      className="w-full h-6 px-4 py-6 bg-gray-200 rounded"
+      className="w-full h-6 px-4 py-5 bg-gray-200 rounded"
     />
   );
 }

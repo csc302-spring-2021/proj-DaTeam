@@ -32,29 +32,29 @@ function Form() {
 
     return (
         <div data-testid="form" className="relative">
-            <div data-testid="form-title" className="px-8 py-8 text-left text-3xl leading-relaxed">
-                <p className="font-normal">
+            <div data-testid="form-title" className="px-8 py-8 text-3xl leading-relaxed text-left">
+                <div className="font-normal">
                     Response for <p className="inline font-bold">{form?.title}</p> for <p className="inline font-bold">{"Arnav Verma"}</p>
-                </p>   
+                </div>   
             </div>
-            <div data-testid="input-form-patientid" className="pb-8 px-8">
-                <label className="font-bold text-sm">
+            <div data-testid="input-form-patientid" className="px-8 pb-8">
+                <label className="text-sm font-bold">
                     OHIP NUMBER:
                 </label>
                 <div className="py-2">
                     <input id="ohipnumber" type="text"
                         placeholder="ex. 1234123123YM"
-                        className="px-3 py-3 focus:ring-indigo-500 bg-gray-200 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded" />
+                        className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
                 </div>
             </div>
-            <div data-testid="input-form-patientname" className="pb-8 px-8">
-                <label className="font-bold text-sm">
+            <div data-testid="input-form-patientname" className="px-8 pb-8">
+                <label className="text-sm font-bold">
                     PAITIENT NAME:
                 </label>
                 <div className="py-2">
                     <input id="patientname" type="text"
                         placeholder="ex. Arnav Verma"
-                        className="px-3 py-3 focus:ring-indigo-500 bg-gray-200 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded" />
+                        className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
                 </div>
             </div>
             {/*RenderNode(form)*/}
