@@ -54,9 +54,10 @@ function ResponseForms() {
     { id: 5, name: "Pancreatic Cancer Biopsy", responses: 25 },
     { id: 6, name: "Pancreatic Cancer Biopsy", responses: 25 },
   ];
-  const responseFormInfoBlocks = responseFormInfoArr.map((responseForm) => {
+  const responseFormInfoBlocks = responseFormInfoArr.map((responseForm, i) => {
     return (
       <ResponseFormInfoBlock
+        key={i}
         responseForm={responseForm}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
@@ -92,9 +93,10 @@ function FormResponses() {
     { id: 5, name: "Pancreatic Cancer Biopsy", responses: 25 },
     { id: 6, name: "Pancreatic Cancer Biopsy", responses: 25 },
   ];
-  const responseFormInfoBlocks = responseFormInfoArr.map((responseForm) => {
+  const responseFormInfoBlocks = responseFormInfoArr.map((responseForm, i) => {
     return (
       <ResponseFormInfoBlock
+        key={i}
         responseForm={responseForm}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
