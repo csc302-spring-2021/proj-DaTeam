@@ -9,7 +9,6 @@ import YAML from "yamljs";
 import logger from "./utils/Logger";
 import { HttpCode } from "./utils/Error";
 import { ServicesAPI } from "./services";
-import pgPromise from "pg-promise";
 
 const app = express();
 dotenv.config(); // read env variables from .env file
@@ -50,39 +49,5 @@ const router: Router = express.Router();
 const serviceAPI = new ServicesAPI(router);
 
 app.use("/api", serviceAPI.getRouter());
-/*
-app.get("/patient/search", (req, res) => {
-  res.sendStatus(501);
-});
-
-app.get("/patient/:patientId", (req, res) => {
-  res.sendStatus(501);
-});
-
-app.get("/procedure/:procedureId", (req, res) => {
-  res.sendStatus(501);
-});
-
-app.post("/form", (req, res) => {
-  res.sendStatus(501);
-});
-
-app.get('/form/:formId', (req, res) => {
-  res.sendStatus(501);
-});
-
-app.post("/response", (req, res) => {
-  res.sendStatus(501);
-});
-
-app.get("/response/:responseId", (req, res) => {
-  res.sendStatus(501);
-});
-
-app.put("/response/:responseId", (req, res) => {
-  res.sendStatus(501);
-});
-*/
-
 
 export default app;
