@@ -28,18 +28,18 @@ function Form() {
   useEffect(() => {
     FormService.mockRead().then((sdcform) => {
       setForm(sdcform);
+      console.log(sdcform);
     });
   }, []);
 
   return (
     <div data-testid="form" className="relative">
-      <div
-        data-testid="form-title"
-        className="px-8 py-8 text-3xl leading-relaxed text-left"
-      >
-        <div className="font-normal">
-          Response for <p className="inline font-bold">{form?.title}</p> for{" "}
-          <p className="inline font-bold">{"Arnav Verma"}</p>
+      <div data-testid="form-title" className="px-8 py-4 text-3xl text-left">
+        <div className="inline-block">
+          Response of <p className="inline font-bold">{form?.title}</p>
+        </div>
+        <div className="inline-block ml-2">
+          for <p className="inline font-bold"> {"Arnav Verma"}</p>
         </div>
       </div>
       <div data-testid="input-form-patientid" className="px-8 pb-8">
