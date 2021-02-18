@@ -20,9 +20,36 @@ function Responses() {
 
 function ResponseForms() {
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
+  const [selectedId, setSelectedId] = useState(1);
+
+  const setSelectedResponseFormId = (id: number) => () => setSelectedId(id);
+
+  const responseFormInfoArr = [
+    { id: 1, name: "Pancreatic Cancer Biopsy", responses: 25 },
+    { id: 2, name: "Pancreatic Cancer Biopsy", responses: 25 },
+    { id: 3, name: "Pancreatic Cancer Biopsy", responses: 25 },
+    { id: 4, name: "Pancreatic Cancer Biopsy", responses: 25 },
+    { id: 5, name: "Pancreatic Cancer Biopsy", responses: 25 },
+    { id: 6, name: "Pancreatic Cancer Biopsy", responses: 25 },
+  ];
+  const responseFormInfoBlocks = responseFormInfoArr.map((responseForm) => {
+    const isSelected = selectedId === responseForm.id;
+    return (
+      <div
+        key={responseForm.id}
+        className={`h-32 mx-2 my-4 cursor-pointer ${
+          isSelected ? "bg-black text-white" : "text-black bg-gray-50 hover:bg-gray-200"
+        } rounded-lg`}
+        onClick={setSelectedResponseFormId(responseForm.id)}
+      >
+        <div> {responseForm.id} </div>{" "}
+      </div>
+    );
+  });
+
   return (
     <div className="z-20 w-1/2 w-full px-4 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50">
-      <h2 className="my-4 ml-4 text-4xl font-semibold"> Choose a Form</h2>
+      <h2 className="my-4 ml-2 text-3xl font-semibold"> Choose a Form</h2>
       <h3 className="mx-2 mb-6 font-medium">
         {" "}
         Responses are grouped by the form they come from.
@@ -33,6 +60,7 @@ function ResponseForms() {
         state={responseFormsSearch}
         setState={setResponseFormsSearch}
       />
+      {responseFormInfoBlocks}
     </div>
   );
 }
@@ -42,7 +70,7 @@ function FormResponses() {
 
   return (
     <div className="z-10 w-1/2 w-full px-4 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50">
-      <h2 className="my-4 ml-4 text-4xl font-semibold"> Responses</h2>
+      <h2 className="my-4 ml-2 text-3xl font-medium"> Responses</h2>
       <h3 className="mx-2 mb-6 font-medium">
         {" "}
         Responses are grouped by the form they come from.
