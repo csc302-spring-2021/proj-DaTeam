@@ -55,9 +55,6 @@ abstract class JsonSerializer {
                if (targetField.type !== field.constructor.name) {
                     throw this.stackUtil.genError("Attribute type error: " + id)
                }
-               if (targetField.validator && !targetField.validator(obj)) {
-                    throw this.stackUtil.genError("Attribute invalid: " + id)
-               }
                if (targetField.generic) {
                     this.stackUtil.enter(id)
                     if (targetField.type === Array) {
@@ -67,7 +64,7 @@ abstract class JsonSerializer {
                     } else {
                          template[id] = this.templateBuilder(null, field, this.childClassFinder(targetClassName, id, field))
                     }
-                    this.stackUtil.leave(id)
+                    this.stackUtil.leave()
                } else {
                     template[id] = obj[id]
                }
