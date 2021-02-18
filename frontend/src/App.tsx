@@ -10,7 +10,7 @@ import { Home } from "./pages/Home";
 
 function App() {
   return (
-    <div data-testid="app">
+    <div data-testid="app" className="bg-gray-100">
       <Notification />
       <Suspense fallback={<Loading />}>
         <BrowserRouter>
