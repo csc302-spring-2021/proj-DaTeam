@@ -33,16 +33,97 @@ describe("GET /mock", () => {
  * Add a new test block for each API end point
  */
 
-// For each endpoint
-describe("GET /api/patient/search", () => {
+describe("GET /api/patient/search: Search for a patient by ID or legal name", () => {
     // For each test case for the endpoint
-    test("Base Case", done => {
-        request
-            .get("/api/patient/search")
-            .expect(HttpCode.NOT_FOUND)
-            .end(function(err, res) {
-                if (err) return done(err);
-                return done();
-            });
+    test("Return patients matching query", done => {
+        // request
+        //     .get("/api/patient/search")
+        //     .expect(HttpCode.NOT_FOUND)
+        //     .end(function(err, res) {
+        //         if (err) return done(err);
+        //         return done();
+        //     });
+        done(); // Replace when API is implemented/Stubs on this branch
+    });
+});
+
+describe("GET /patient/{patientId}: Get a specific patient", () => {
+    test("Return the specified patient", done => {
+        done();
+    });
+    test("Bad Request", done => {
+        done();
+    });
+    test("Not Found", done => {
+        done();
+    });
+});
+
+describe("GET /procedure/{procedureId}: Get a specific procedure", () => {
+    test("Returns the requested procedure", done => {
+        done();
+    });
+    test("Bad Request", done => {
+        done();
+    });
+    test("Not Found", done => {
+        done();
+    });
+});
+
+describe("POST /form: Create a new form from an XML document", () => {
+    test("Successfully created form", done => {
+        done();
+    });
+    test("Bad Request", done => {
+        done();
+    });
+});
+
+describe("GET /form/{formId}: Get a specific form", () => {
+    test("Return patients matching query", done => {
+        done();
+    });
+    test("Bad Request", done => {
+        done();
+    });
+    test("Not Found", done => {
+        done();
+    });
+});
+
+describe("POST /response: Create a new response", () => {
+    test("Response created successfully", done => {
+        done();
+    });
+    test("Bad Request", done => {
+        done();
+    });
+    test("Not Found", done => {
+        done();
+    });
+});
+
+describe("GET /response/{responseId}: Get a specific form response", () => {
+    test("Returns the requested response", done => {
+        done();
+    });
+    test("Bad Request", done => {
+        done();
+    });
+    test("Not Found", done => {
+        done();
+    });
+});
+
+describe("PUT /response/{responseId}: Update a response", () => {
+    test("Response created successfully", done => {
+        done();
+    });
+    test("Bad Request", done => {
+        done();
+    });
+    test("Not Found", done => {
+        done();
     });
 });
