@@ -1,6 +1,7 @@
 import { Children, useEffect, useState } from "react";
 import { SDCNode, Patient } from "@dateam/shared";
 import { Section } from "../../components/Section";
+import { DisplayItem } from "../../components/DisplayItem";
 import FormService from "../../services/FormService";
 
 
@@ -8,11 +9,10 @@ function RenderNode(sdcnode: SDCNode | null | undefined) {
     if (sdcnode == null || sdcnode === undefined) {
         return;
     }
-    console.log(sdcnode);
-
+    
     const childNodes: React.ReactNode[] = sdcnode.children.map((childnode, i) => {
         return (
-            <div key={i} className="mx-4">
+            <div key={i}>
                 {RenderNode(childnode)}
             </div>
         );
@@ -22,48 +22,49 @@ function RenderNode(sdcnode: SDCNode | null | undefined) {
     switch (sdcnode.class) {
         case "SDCSection":
             rootNode = (
-                <div>
-                     section compo
+                <Section sdcSection={sdcnode}>
                     {childNodes}
-                </div>
+                </Section>
             );
             break;
         case "SDCDisplayItem":
             rootNode = (
-                <div>
-                    display item
-                    {childNodes}
-                </div>
+                <DisplayItem sdcDisplayitem={sdcnode}/>
             );
             break;
         case "SDCTextField":
             rootNode = (
                 <div>
-                    text field
+                    {/*Remove this div and add component*/}
+                    <label data-testid={"question-" + sdcnode.id} >{sdcnode.title}</label>
+                    <div className="py-2">
+                        <input
+                        type="text"
+                        className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        /> 
+                    </div>   
                     {childNodes}
                 </div>
             );
             break;
         case "SDCListField":
             rootNode = (
-                <div>
-                    list field
+                <>
+                    {/*Remove this and add component*/}
                     {childNodes}
-                </div>
+                </>
             );
             break;
         default:
             rootNode = (
-                <div>
-                    form 
+                <>
                     {childNodes}
-                </div>
+                </>
             );
     }
 
     return (
         <>
-            {/*SDCnode processing for react rendering*/}
             {rootNode}
         </>
     );
@@ -76,7 +77,6 @@ function Form() {
     useEffect(() => {
         FormService.mockRead().then((sdcform) => {
             setForm(sdcform);
-            console.log(sdcform);
         });
     }, []);
 
