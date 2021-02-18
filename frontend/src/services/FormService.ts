@@ -1,4 +1,3 @@
-export default { read, mockRead };
 import { buildFormComplete, SDCForm, SDCNode, Patient } from "@dateam/shared";
 
 /**
@@ -32,3 +31,5 @@ async function mockRead(): Promise<SDCForm> {
   const sdcForm: SDCForm = buildFormComplete();
   return Promise.resolve(sdcForm);
 }
+
+export default { read, mockRead };
