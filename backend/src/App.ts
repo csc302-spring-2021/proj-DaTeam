@@ -46,6 +46,6 @@ app.use((err: Error, _: Request, res: Response, next: NextFunction) => {
 const router: Router = express.Router();
 const serviceAPI = new ServicesAPI(router);
 
-app.get("/api", serviceAPI.getRouter());
+app.use("/api", serviceAPI.getRouter());
 
 export default app;
