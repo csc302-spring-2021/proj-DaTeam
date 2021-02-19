@@ -23,7 +23,6 @@ export class Patient {
 }
 
 export abstract class SDCNode {
-    readonly class: string // for json serilization only
     id: string
     uid?: string // uid is only assigned after it is stored in the database
     title?: string
@@ -32,7 +31,6 @@ export abstract class SDCNode {
 
     constructor(data?: any){
         Object.assign(this, data)
-        this.class = this.constructor.name;
     }
 }
 
@@ -47,7 +45,6 @@ export class SDCForm extends SDCNode {
 }
 
 export class SDCFormProperty {
-    readonly class = "SDCFormProperty"
     order?: number
     name: string
     propName: string

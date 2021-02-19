@@ -2,133 +2,110 @@
  * Contains SDC object parsers
  */
 
-
 import { classMeta } from "./ClassMeta"
-import * as Model from "./ClassDef";
-import { StackUtil } from "./Utils"
+import { GenericClassValidator } from "./ClassValidator"
+import { ParsingError, ValidationError } from "./Utils"
 
-class ParsingError extends Error {}
+export class GenericJsonSerializer {
 
-abstract class JsonSerializer {
+     protected static readonly classKey = "__class"
 
-     /* childClassFinder: provide the class of a child given current class name and child object */
-     protected childClassFinder: (className: string, fieldName: string, child: any) => string
-
-     protected stackUtil: StackUtil = new StackUtil("Root", ParsingError)
-
-     protected constructor(){}
-
-     /** 
-      * Generic parse for any class in classMeta
-      * 
-      * should gurantee the return object is valid
-      * 
-      * @param template an empty base object to populate, can be null
-      * @param obj source json
-      * @param targetClassName name of the class to build
-     */
-     protected templateBuilder(template: any, obj: any, targetClassName: string): any {
-          
-          const targetClass = classMeta[targetClassName]
-
-          if (targetClass == null) {
-               throw this.stackUtil.genError("Class not found in meta: " + targetClassName)
-          }
-          if (template == null){
-               if (targetClass.construct == null) {
-                    throw this.stackUtil.genError("No constructor for class: " + targetClassName)
-               }
-               template = new targetClass.construct()
-          }
-
-          if (targetClass.super) this.templateBuilder(template, obj, targetClass.super.name)
-
-          for (let [id, targetField] of Object.entries(targetClass.fields)){
-               const field = obj[id]
-               if (field == null){
-                    if (targetField.nullable) {
-                         continue
-                    } else {
-                         throw this.stackUtil.genError("Missing attribute: " + id)
-                    }
-               }
-               if (targetField.type !== field.constructor.name) {
-                    throw this.stackUtil.genError("Attribute type error: " + id)
-               }
-               if (targetField.generic) {
-                    this.stackUtil.enter(id)
-                    if (targetField.type === Array) {
-                         template[id] = (field as Array<any>).map(
-                              o => this.templateBuilder(null, o, this.childClassFinder(targetClassName, id, o))
-                              )
-                    } else {
-                         template[id] = this.templateBuilder(null, field, this.childClassFinder(targetClassName, id, field))
-                    }
-                    this.stackUtil.leave()
-               } else {
-                    template[id] = obj[id]
-               }
-          }
-
-          return template
-     }
-
-}
-
-export class SDCFormJsonSerializer extends JsonSerializer {
-
-     protected childClassFinder: (className: string, fieldName: string, child: any) => string
-          = (_, __, child) => {
-               if (child.class == null) throw this.stackUtil.genError("Missing attribute: class")
-               return child.class
-          }
-
-     private flatMap: {[uid: string]: Model.SDCQuestion} = {}
-
-     protected constructor(){ super() }
-
-     static encode(form: Model.SDCForm): string{
-          return JSON.stringify(form)
-     }
-
-     static decode(json: string): { model: Model.SDCForm, flatMap: {[uid: string]: Model.SDCQuestion} }{
-          return new this()._decode(json)
+     /**
+      * Encode a domain object to pure json with class info
+      * Throw ParsingError if the input object is invalid
+      * @param obj input object
+      * @param fromClass the class of the input object for runtime validation
+      */
+     static encode(obj: any, fromClass: Function): any{
+          this.validate(obj, fromClass)
+          return this.deepCopy( 
+               o => o.constructor.name, 
+               name => {
+                    const template: any = {}
+                    template[this.classKey] = name
+                    return template
+               }, null, obj
+          )
      }
 
      /**
-      * Decode the json as SDCForm
-      * Return the decoded form and a flat map of all the questions
+      * Decode a json object with class info to domain object
+      * Throw ParsingError if the output object is invalid
+      * @param obj input object
+      * @param toClass the class of the output object for runtime validation
       */
-     protected _decode(json: string): { model: Model.SDCForm, flatMap: {[uid: string]: Model.SDCQuestion} } {
-          let obj: any = JSON.parse(json)
-          if (this.childClassFinder("", "", obj) !== "SDCForm") {
-               throw this.stackUtil.genError("Root object is not SDCForm")
-          }
-          return { model: this.templateBuilder(null, obj, "SDCForm"), flatMap: this.flatMap }
-     }
-
-     /**
-      * Overrides the super class one to build flatMap
-      */
-     protected templateBuilder(template: any, obj: any, targetClassName: string): any {
-          const result = super.templateBuilder(template, obj, targetClassName)
-          if (result.uid) this.flatMap[result.uid] = result
+     static decode(obj: any, toClass: Function): any{
+          const result = this.deepCopy(
+               o => o[this.classKey],
+               name => {
+                    const targetClass = classMeta[name]
+                    if (targetClass && targetClass.construct) return new targetClass.construct()
+                    return {}
+               }, null, obj
+          )
+          this.validate(result, toClass)
           return result
      }
-}
 
-export class SDCFormResponseJsonSerializer extends JsonSerializer {
-
-     protected childClassFinder: (className: string, fieldName: string, child: any) => string
-          = () => { return "SDCAnswer" }
-
-     protected constructor(){ super() }
-
-     static encode(response: Model.SDCFormResponse): string{
-          return JSON.stringify(response)
+     /**
+      * Validate an object and check its class
+      * @param obj 
+      * @param asClass 
+      */
+     protected static validate(obj: any, asClass: Function){
+          try{
+               if (!(obj instanceof asClass)) throw new Error(
+                    `Expecting serialized objectto be ${asClass.name} but got ${obj.constructor.name}`
+               )
+               GenericClassValidator.validate(obj)
+          } catch(e){
+               if (e instanceof ValidationError){
+                    throw new ParsingError(e.message)
+               } else {
+                    throw e
+               }
+          }
      }
 
-     static decode(json: string): Model.SDCFormResponse{
-          return new this().templateBuilder(null, JSON.parse(json), "SDCFormResponse")
+     /**
+      * Recursively and selectively copy an object based on classMeta
+      * @param classFinder Returns the class name given an object
+      * @param construct Creates a new object given the class name
+      * @param template A template to copy to, can be null
+      * @param obj Object to copy from
+      * @param targetClassName Copy attributes based on this class
+      */
+     protected static deepCopy(classFinder: (obj: any) => string, 
+               construct: (name: string) => any,
+               template: any, obj: any, targetClassName?: string): any{
+
+          if (targetClassName == null) targetClassName = classFinder(obj)
+          if (targetClassName == null || classMeta[targetClassName] == null){
+               return JSON.parse(JSON.stringify(obj)) // deep copy
+          }
+          const targetClass = classMeta[targetClassName]
+
+          if (template == null) template = construct(targetClassName)
+
+          if (targetClass.super) this.deepCopy(
+               classFinder, construct, template, obj, targetClass.super.name)
+
+          // The validator did all the checking
+          for (let [id, targetField] of Object.entries(targetClass.fields)){
+               const field = obj[id]
+               if (field == null) continue
+               if (targetField.generic) {
+                    if (targetField.type === Array) {
+                         template[id] = (field as Array<any>).map(
+                              o => { return this.deepCopy(classFinder, construct, null, o) }
+                         )
+                    } else if (targetField.type === Object) {
+                         template[id] = this.deepCopy(classFinder, construct, null, field)
+                    }
+               } else {
+                    template[id] = field
+               }
+          }
+          return template
      }
 }
