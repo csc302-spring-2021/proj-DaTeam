@@ -41,7 +41,6 @@ export function genPatientComplete(): Model.Patient {
 
 export function genFormPartial(): Model.SDCForm {
      const temp: Model.SDCForm =  {
-          class: "SDCForm",
           id: "covid-19-test-" + shortID(),
           children: [],
           lineage: "Covid-19-test",
@@ -63,7 +62,6 @@ export function genFormComplete(): Model.SDCForm {
 
 export function genFormPropertyPartial(): Model.SDCFormProperty {
      const temp: Model.SDCFormProperty =  {
-          class: "SDCFormProperty",
           name: "OfficialName",
           propName: "OfficialName",
           val: "Covid 19 test"
@@ -73,7 +71,6 @@ export function genFormPropertyPartial(): Model.SDCFormProperty {
 
 export function genFormPropertyPartial2(): Model.SDCFormProperty {
      const temp: Model.SDCFormProperty =  {
-          class: "SDCFormProperty",
           name: "GenericHeaderText",
           propName: "GenericHeaderText",
           val: "Covid 19 Preliminary Test"
@@ -95,7 +92,6 @@ export function genFormPropertyComplete2(): Model.SDCFormProperty {
 
 export function genSectionPartial(): Model.SDCSection {
      const temp: Model.SDCSection =  {
-          class: "SDCSection",
           id: "section-" + shortID(),
           children: []
      }
@@ -112,7 +108,6 @@ export function genSectionComplete(): Model.SDCSection {
 
 export function genDisplayItemPartial(): Model.SDCDisplayItem {
      const temp: Model.SDCDisplayItem =  {
-          class: "SDCDisplayItem",
           id: "display-" + shortID(),
           title: "Please fill out this form",
           children: []
@@ -129,7 +124,6 @@ export function genDisplayItemComplete(): Model.SDCDisplayItem {
 
 export function genTextFieldPartial(): Model.SDCTextField {
      const temp: Model.SDCTextField =  {
-          class: "SDCTextField",
           id: "text-" + shortID(),
           children: [],
           type: "string"
@@ -149,7 +143,6 @@ export function genTextFieldComplete(): Model.SDCTextField {
 
 export function genListFieldPartial(): Model.SDCListField {
      const temp: Model.SDCListField =  {
-          class: "SDCListField",
           id: "list-" + shortID(),
           children: [],
           maxSelections: 1,
@@ -170,7 +163,6 @@ export function genListFieldComplete(): Model.SDCListField {
 
 export function genListFieldItemPartial(): Model.SDCListFieldItem {
      const temp: Model.SDCListFieldItem =  {
-          class: "SDCListFieldItem",
           id: "listitem-" + shortID(),
           children: [],
           selectionDeselectsSiblings: false,
