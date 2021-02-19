@@ -10,6 +10,9 @@ At the beginning of the project, we came up with the following learning goals to
 - Learn how to build a REST API with a good developer experience
 - Try using Typescript for both frontend and backend to see how it improves/worsens code re-use and productivity
 - Learn how to set up CI/CD processes using GitHub Actions and Heroku
+- Learn how to use Docker to deploy application
+- How to put "clean architecture" into practice in a large team
+- Learn how to use Pull Requests to integrate and review code changes
 
 ## Use Cases
 
