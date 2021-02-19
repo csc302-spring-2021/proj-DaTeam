@@ -86,16 +86,28 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
-  /form:
+  /parser:
     post:
       tags:
-        - form
-      description: Create a new form from an XML document
+        - parser
+      description: Parses an SDC XML file into JSON
       requestBody:
         required: true
         content:
           "application/xml":
             schema:
+      responses:
+        201:
+          description: Successfully created form
+          content: {}
+        400:
+          $ref: "#/components/responses/BadRequest"
+
+  /form:
+    post:
+      tags:
+        - form
+      description: Create a new form
       responses:
         201:
           description: Successfully created form
