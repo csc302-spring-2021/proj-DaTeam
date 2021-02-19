@@ -6,7 +6,7 @@ events {
 
 http {
     server {
-        listen 3000;
+        listen ${PORT};
         server_name  localhost;
 
         root   /usr/share/nginx/html;
