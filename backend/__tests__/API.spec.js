@@ -4,20 +4,28 @@ const http = require("http");
 const supertest = require('supertest');
 const customMatchers = require('./ObjectSchema').default;
 
-expect.extend(customMatchers);
+let server, request;
 
-// Add Mock endpoint example
-app.get("/mock", function(req, res) {
-    let patient = {
-        id: "xxxx",
-        external_id: "5584-486-674-YM",
-        name: "Jane Doe"
-    };
-    res.status(HttpCode.OK).json({mock_patient: patient});
+/* Set up */
+beforeAll(() => {
+    expect.extend(customMatchers);
+    // Add Mock endpoint example
+    app.get("/mock", function(req, res) {
+        let patient = {
+            id: "xxxx",
+            external_id: "5584-486-674-YM",
+            name: "Jane Doe"
+        };
+        let data = {
+            mock_patient: patient
+        }
+        res.status(HttpCode.OK).json(data);
+    });
+
+    server = http.createServer(app);
+    request = supertest(server);
 });
 
-const server = http.createServer(app);
-const request = supertest(server);
 
 // Mock Endpoint test example
 describe("GET /mock", () => {
@@ -33,7 +41,6 @@ describe("GET /mock", () => {
             .catch(err => done(err));
     });
 });
-
 
 /*
  * Demo API tests 
