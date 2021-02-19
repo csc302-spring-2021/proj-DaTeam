@@ -2,6 +2,8 @@ version: "3"
 services:
   frontend:
     build: ./frontend
+    environment:
+      - PORT=3000
     ports:
       - 3000:3000
   backend:
