@@ -8,7 +8,7 @@ services:
     build: ./backend
     env_file: ./.env
     ports:
-      - "${OUT_PORT}:${APP_PORT}"
+      - "${OUT_PORT}:${PORT}"
     networks:
       - dateam-app
     depends_on:
