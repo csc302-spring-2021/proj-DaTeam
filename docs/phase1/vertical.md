@@ -17,7 +17,10 @@ We'll also set up the app layout as part of this vertical slice, so that we have
 
 ## Feature 2: XML upload
 
-For the second feature, we'll be building a basic XML file upload UI and endpoint that takes a sample SDC XML file, creates a new record in our database for the form, and returns a JSON payload representing an SDCForm in our model.
+For the second feature, we'll be building two components:
+
+- XML parser endpoint: takes a sample SDC XML file and returns the parsed form JSON
+- Form creation endpoint: creates a new form using the provided form JSON
 
 **We will NOT be guaranteeing an implementation for the XML parsing logic for the vertical slice.** If we have time we will implement part of it, but most likely we will follow the advice from the P1 Handout and return mock data from the associated endpoint.
 
