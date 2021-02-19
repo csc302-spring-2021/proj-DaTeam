@@ -6,7 +6,7 @@ const supertest = require('supertest');
 
 // Add Mock endpoint example
 app.get("/mock", function(req, res) {
-    res.status(200).json({ name: 'dateam' });
+    res.status(HttpCode.OK).json({ name: 'dateam' });
   });
 
 const server = http.createServer(app);
@@ -15,15 +15,16 @@ const request = supertest(server);
 
 // Mock Endpoint test example
 describe("GET /mock", () => {
-    test("Base Case", done => {
+    test("Mock Example", done => {
         request
             .get("/mock")
             .expect('Content-Type', /json/)
             .expect(HttpCode.OK)
-            .end(function(err, res) {
-                if (err) return done(err);
-                return done();
-            });
+            .then(response => {
+                expect(response.body.name).toBe('dateam');
+                done();
+            })
+            .catch(err => done(err));
     });
 });
 
@@ -34,96 +35,214 @@ describe("GET /mock", () => {
  */
 
 describe("GET /api/patient/search: Search for a patient by ID or legal name", () => {
-    // For each test case for the endpoint
     test("Return patients matching query", done => {
-        // request
-        //     .get("/api/patient/search")
-        //     .expect(HttpCode.NOT_FOUND)
-        //     .end(function(err, res) {
-        //         if (err) return done(err);
-        //         return done();
-        //     });
-        done(); // Replace when API is implemented/Stubs on this branch
+        request
+            .get("/api/patient/search")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
 });
 
-describe("GET /patient/{patientId}: Get a specific patient", () => {
+describe("GET /api/patient/{patientId}: Get a specific patient", () => {
     test("Return the specified patient", done => {
-        done();
+        request
+            .get("/api/patient/{patientId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Bad Request", done => {
-        done();
+        request
+            .get("/api/patient/{patientId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Not Found", done => {
-        done();
+        request
+            .get("/api/patient/{patientId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
 });
 
-describe("GET /procedure/{procedureId}: Get a specific procedure", () => {
+describe("GET /api/procedure/{procedureId}: Get a specific procedure", () => {
     test("Returns the requested procedure", done => {
-        done();
+        request
+            .get("/api/procedure/{procedureId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Bad Request", done => {
-        done();
+        request
+            .get("/api/procedure/{procedureId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Not Found", done => {
-        done();
+        request
+            .get("/api/procedure/{procedureId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
 });
 
-describe("POST /form: Create a new form from an XML document", () => {
+describe("POST /api/form: Create a new form from an XML document", () => {
     test("Successfully created form", done => {
-        done();
+        request
+            .post("/api/form")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Bad Request", done => {
-        done();
+        request
+            .post("/api/form")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
 });
 
-describe("GET /form/{formId}: Get a specific form", () => {
+describe("GET /api/form/{formId}: Get a specific form", () => {
     test("Return patients matching query", done => {
-        done();
+        request
+            .get("/api/form/{formId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Bad Request", done => {
-        done();
+        request
+            .get("/api/form/{formId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Not Found", done => {
-        done();
+        request
+            .get("/api/form/{formId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
 });
 
-describe("POST /response: Create a new response", () => {
+describe("POST /api/response: Create a new response", () => {
     test("Response created successfully", done => {
-        done();
+        request
+            .post("/api/response")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Bad Request", done => {
-        done();
+        request
+            .post("/api/response")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Not Found", done => {
-        done();
+        request
+            .post("/api/response")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
 });
 
-describe("GET /response/{responseId}: Get a specific form response", () => {
+describe("GET /api/response/{responseId}: Get a specific form response", () => {
     test("Returns the requested response", done => {
-        done();
+        request
+            .get("/api/response/{responseId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Bad Request", done => {
-        done();
+        request
+            .get("/api/response/{responseId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Not Found", done => {
-        done();
+        request
+            .get("/api/response/{responseId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
 });
 
-describe("PUT /response/{responseId}: Update a response", () => {
+describe("PUT /api/response/{responseId}: Update a response", () => {
     test("Response created successfully", done => {
-        done();
+        request
+            .put("/api/response/{responseId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Bad Request", done => {
-        done();
+        request
+            .put("/api/response/{responseId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
     test("Not Found", done => {
-        done();
+        request
+            .put("/api/response/{responseId}")
+            .expect(HttpCode.NOT_IMPLEMENTED)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
     });
 });
