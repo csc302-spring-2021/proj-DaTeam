@@ -52,19 +52,19 @@ function RenderNode(sdcnode: SDCNode | null | undefined) {
 }
 
 function Form() {
-  const [form, setForm] = useState<SDCNode | null | undefined>();
+  const [sdcform, setSdcform] = useState<SDCNode | null | undefined>();
   const [patient, setPatient] = useState<Patient | null | undefined>();
 
   useEffect(() => {
     FormService.mockRead().then((sdcform) => {
-      setForm(sdcform);
+        setSdcform(sdcform);
     });
   }, []);
 
   return (
     <div data-testid="form" className="relative p-12 space-y-8">
       <h2 data-testid="form-title" className="text-3xl tracking-tighter">
-        Response of <span className="font-bold">{form?.title}</span> for{" "}
+        Response of <span className="font-bold">{sdcform?.title}</span> for{" "}
         <span className="font-bold"> {"Arnav Verma"}</span>
       </h2>
 
@@ -92,7 +92,7 @@ function Form() {
         </div>
       </div>
 
-      {RenderNode(form)}
+      {RenderNode(sdcform)}
     </div>
   );
 }
