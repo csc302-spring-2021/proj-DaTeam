@@ -2,16 +2,22 @@ const app = require("../build/App").default;
 const HttpCode = require("../build/utils/Error").HttpCode;
 const http = require("http");
 const supertest = require('supertest');
-const validator = require('./ObjectSchema').default;
+const customMatchers = require('./ObjectSchema').default;
+
+expect.extend(customMatchers);
 
 // Add Mock endpoint example
 app.get("/mock", function(req, res) {
-    res.status(HttpCode.OK).json({ name: 'dateam' });
-  });
+    let patient = {
+        id: "xxxx",
+        external_id: "5584-486-674-YM",
+        name: "Jane Doe"
+    };
+    res.status(HttpCode.OK).json({mock_patient: patient});
+});
 
 const server = http.createServer(app);
 const request = supertest(server);
-
 
 // Mock Endpoint test example
 describe("GET /mock", () => {
@@ -21,7 +27,7 @@ describe("GET /mock", () => {
             .expect('Content-Type', /json/)
             .expect(HttpCode.OK)
             .then(response => {
-                expect(response.body.name).toBe('dateam');
+                expect(response.body.mock_patient).isPatient();
                 done();
             })
             .catch(err => done(err));
