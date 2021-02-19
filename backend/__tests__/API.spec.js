@@ -2,7 +2,7 @@ const app = require("../build/App").default;
 const HttpCode = require("../build/utils/Error").HttpCode;
 const http = require("http");
 const supertest = require('supertest');
-
+const validator = require('./ObjectSchema').default;
 
 // Add Mock endpoint example
 app.get("/mock", function(req, res) {
