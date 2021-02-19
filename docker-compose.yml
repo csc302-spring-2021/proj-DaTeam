@@ -2,13 +2,15 @@ version: "3"
 services:
   frontend:
     build: ./frontend
+    environment:
+      - PORT=3000
     ports:
       - 3000:3000
   backend:
     build: ./backend
     env_file: ./.env
     ports:
-      - "${OUT_PORT}:${APP_PORT}"
+      - "${OUT_PORT}:${PORT}"
     networks:
       - dateam-app
     depends_on:
