@@ -1,10 +1,10 @@
 import { Children, useEffect, useState } from "react";
-import { SDCNode, Patient } from "@dateam/shared";
+import { Model } from "@dateam/shared";
 import { Section } from "../../components/Section";
 import { DisplayItem } from "../../components/DisplayItem";
 import FormService from "../../services/FormService";
 
-function RenderNode(sdcnode: SDCNode | null | undefined) {
+function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
   if (sdcnode == null || sdcnode === undefined) {
     return;
   }
@@ -52,12 +52,12 @@ function RenderNode(sdcnode: SDCNode | null | undefined) {
 }
 
 function Form() {
-  const [sdcform, setSdcform] = useState<SDCNode | null | undefined>();
-  const [patient, setPatient] = useState<Patient | null | undefined>();
+  const [sdcform, setSdcform] = useState<Model.SDCNode | null | undefined>();
+  const [patient, setPatient] = useState<Model.Patient | null | undefined>();
 
   useEffect(() => {
     FormService.mockRead().then((sdcform) => {
-        setSdcform(sdcform);
+      setSdcform(sdcform);
     });
   }, []);
 

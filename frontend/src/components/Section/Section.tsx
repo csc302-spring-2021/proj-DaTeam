@@ -1,6 +1,6 @@
-import { SDCSection } from "@dateam/shared";
+import { Model } from "@dateam/shared";
 
-function Section(props: { children?: any; sdcSection: SDCSection }) {
+function Section(props: { children?: any; sdcSection: Model.SDCSection }) {
   return (
     <section data-testid="section">
       <h3 id="section-title" className="text-2xl font-bold pb-4">
