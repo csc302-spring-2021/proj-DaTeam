@@ -14,7 +14,7 @@ function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
   });
 
   let rootNode: React.ReactNode | null = null;
-  switch (sdcnode.class) {
+  switch (sdcnode.constructor.name) {
     case "SDCSection":
       rootNode = <Section sdcSection={sdcnode}>{childNodes}</Section>;
       break;
