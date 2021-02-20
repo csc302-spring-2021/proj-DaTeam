@@ -52,14 +52,75 @@ describe("GET /mock", () => {
  */
 
 describe("GET /api/patient/search: Search for a patient by ID or legal name", () => {
-    test("Return patients matching query", done => {
+    var mockPatient = Mock.getMockPatient();
+    var patientId = mockPatient.id;
+    var patientName = mockPatient.name;
+
+    //extend jest if the functionalities dont already exist
+
+    test("Search by ID that exists", done => {
         request
-            .get("/api/patient/search")
-            .expect(HttpCode.NOT_IMPLEMENTED)
-            .end(function(err, res) {
-                if (err) return done(err);
-                return done();
-            });
+            .get("/api/patient/search?query=")
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isPatient(); // check if list
+                // make sure list is not empty
+                // check if list contains types of patients (all of them are patients)
+                // check if list contains the patientID and patientName
+                done();
+            })
+            .catch(err => done(err));
+    });
+    test("Search by name that exists", done => {
+        request
+            .get("/api/patient/search?query=")
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isPatient();// check if list
+                // make sure list is not empty
+                // check if list contains types of patients (all of them are patients)
+                // check if list contains the patientID and patientName
+                done();
+            })
+            .catch(err => done(err));
+    });
+    test("Search by name that does not exist", done => {
+        request
+            .get("/api/patient/search?query=")
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isPatient(); // check if list
+                // make sure list is empty
+                done();
+            })
+            .catch(err => done(err));
+    });
+    test("Search by ID that does not exist", done => {
+        request
+            .get("/api/patient/search?query=")
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isPatient();// check if list
+                // make sure list is empty
+                done();
+            })
+            .catch(err => done(err));
+    });
+    test("Search without parameter", done => {
+        request
+            .get("/api/patient/search?query=")
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isPatient();// check if list
+                // make sure list is empty
+                done();
+            })
+            .catch(err => done(err));
     });
 });
 
