@@ -13,6 +13,7 @@ At the beginning of the project, we came up with the following learning goals to
 - Learn how to use Docker to deploy application
 - How to put "clean architecture" into practice in a large team
 - Learn how to use Pull Requests to integrate and review code changes
+- Learn how to use a kanban board and issues to organize the team's work
 
 ## Use Cases
 
