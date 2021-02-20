@@ -54,7 +54,7 @@ export class GenericJsonSerializer {
       */
      protected static validate(obj: any, asClass: Function){
           try{
-               if (!(obj instanceof asClass)) throw new Error(
+               if (!(obj instanceof asClass)) throw new ParsingError(
                     `Expecting serialized objectto be ${asClass.name} but got ${obj.constructor.name}`
                )
                GenericClassValidator.validate(obj)
