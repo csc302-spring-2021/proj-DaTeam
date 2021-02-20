@@ -3,6 +3,7 @@ import { GenericClassValidator } from "./ClassValidator"
 import util from "util"
 import { GenericJsonSerializer } from "./ClassJsonSerializer"
 import * as Model from "./ClassDef"
+import * as assert from "assert"
 
 const log = console.log
 const inspect = (o: any) => { log(util.inspect(o, false, null, true)) }
@@ -74,10 +75,13 @@ const encoded = GenericJsonSerializer.encode(obj, Model.SDCForm)
 const decoded = GenericJsonSerializer.decode(encoded, Model.SDCForm)
 
 log("----Serializer test----")
-log("----the object printed below should be the same----")
 
-inspect(obj)
-inspect(decoded)
+try{
+     log("Encode then decode, expecting no output")
+     assert.deepStrictEqual(obj, decoded)
+}catch(e){
+     log(e.message)
+}
 
 log("----expecting reasonable error message----")
 
