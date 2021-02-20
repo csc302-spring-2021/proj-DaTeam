@@ -14,7 +14,8 @@
     "postinstall": "npm run build",
     "build": "cd ./shared && npm run build && cd ../frontend && npm run build && cd .. && cd ./backend && npm run build ",
     "start": "cd ./backend && npm start",
-    "test": "echo 'Whoops! You need to cd into either frontend/ or backend/ to run scripts'",
+    "pretest": "npm run build",
+    "test": "cd ./backend && npm test",
     "predocker": "npm run build",
     "docker": "docker-compose --env-file .env up"
   }
