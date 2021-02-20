@@ -1,5 +1,4 @@
-import { SDCForm } from "@dateam/shared/src/ClassDef";
-import { buildFormComplete } from "@dateam/shared/src/MockData";
+import { Mocks, GenericJsonSerializer, Model } from "@dateam/shared";
 import { Request, Response } from "express";
 import { HttpCode } from "../../utils/Error";
 
@@ -10,10 +9,10 @@ export const FormController = {
   },
 
   read: function (req: Request, res: Response) {
-    const sdcForm: SDCForm = buildFormComplete();
+    const sdcForm = Mocks.buildFormComplete();
+    const serialized = GenericJsonSerializer.encode(sdcForm, Model.SDCForm)
 
-    //res.sendStatus(HttpCode.NOT_IMPLEMENTED);
-    res.status(HttpCode.OK).send(sdcForm);
+    res.status(HttpCode.OK).send(serialized);
   },
 
   update: function (req: Request, res: Response) {
