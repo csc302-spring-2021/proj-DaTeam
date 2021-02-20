@@ -2,7 +2,10 @@ const app = require("../build/App").default;
 const HttpCode = require("../build/utils/Error").HttpCode;
 const http = require("http");
 const supertest = require('supertest');
-const customMatchers = require('./ObjectSchema').default;
+const customMatchers = require('./ValidateResponse').default;
+
+import * as Mock from "./MockData";
+
 
 let server, request;
 
@@ -11,13 +14,11 @@ beforeAll(() => {
     expect.extend(customMatchers);
     // Add Mock endpoint example
     app.get("/mock", function(req, res) {
-        let patient = {
-            id: "xxxx",
-            external_id: "5584-486-674-YM",
-            name: "Jane Doe"
-        };
         let data = {
-            mock_patient: patient
+            mock_patient: Mock.getMockPatient(),
+            mock_procedure: Mock.getMockProcedure(),
+            mock_form: Mock.getMockForm(),
+            mock_form_response: Mock.getMockFormResponse()
         }
         res.status(HttpCode.OK).json(data);
     });
@@ -36,6 +37,9 @@ describe("GET /mock", () => {
             .expect(HttpCode.OK)
             .then(response => {
                 expect(response.body.mock_patient).isPatient();
+                expect(response.body.mock_procedure).isProcedure();
+                expect(response.body.mock_form).isForm();
+                expect(response.body.mock_form_response).isFormResponse();
                 done();
             })
             .catch(err => done(err));
