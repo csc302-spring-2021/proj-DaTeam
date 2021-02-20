@@ -2,6 +2,37 @@
 
 > Establish how your team is going to work together. How you will manage your sources. How you will contribute to your sources. When you will meet, how you will communicate, who will scribe, how you will maintain your backlog, etc.
 
+## Roles
+
+To give team members an area of focus and ensure most people get to work on tasks that they are interested in/want to learn more about, we decided to divide up the team into different roles.
+
+| Name                     | Roles          |
+| ------------------------ | :------------- |
+| Arnav Verma              | FD, DO         |
+| Tony Yi                  | BD             |
+| Umar Ahmed               | PM, DO         |
+| Diadem Shoukralla (Didi) | BD, (FD or DO) |
+| Vinay Komaravolu         | DO, FD         |
+| Toby                     | BD             |
+| Ensar Ilyas              | FD, BD         |
+| Jin                      | FD             |
+
+- **PM** - Product Manager
+  - Translate project/milestones into concrete tasks that team members can complete (ie. user acceptance criteria) (github projects)
+  - Manage backlog of tasks and prioritize which ones to work on first
+- **FD** - Frontend Developer
+  - Designer/UI Developer (split pages / split functions / design components / friendly experience)
+  - “Back of the frontend” (validation + api + logic)
+- **BD** - Backend Developer
+  - XML Parser Engineer
+  - Database Engineer
+  - APIs (label endpoints)
+  - Loading forms / Saving responses
+- **DO** - DevOps
+  - Continuous Integration
+  - QA/Test Infrastructure
+  - Continuous Deployment
+
 ## Meetings
 
 We have two meetings every week:
