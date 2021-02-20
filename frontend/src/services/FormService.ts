@@ -14,7 +14,7 @@ async function read(formId: number): Promise<Model.SDCForm> {
         "Content-Type": "application/json",
       },
     });
-    if (formResponse.status != 201) {
+    if (formResponse.status != 200) {
       throw Error(
         `Could not get form by ID. Error: ${formResponse.statusText}`
       );
