@@ -8,7 +8,6 @@ We divided our project into three major packages:
 - **Frontend**: A React app bootstrapped using [Create React App](https://create-react-app.dev/) that communicates via HTTP requests with the REST API exposed by the Backend service
 - **Backend**: An Express-based REST API that returns JSON data and uses a Postgres database as a persistent storage layer
 
-
 ## Shared
 
 In the shared package, we have our shared Typescript types, serializer, and validator. These are used to ensure that both our frontend and backend agree on the structure of data passed between them via HTTP.
@@ -30,3 +29,5 @@ Our backend is broken up into the following groups:
 - **Database Management:** Provides an interface over a Postgres database
 - **XML Parser:** Parses SDC Form XML to our internal domain object classes
 - **Services Layer:** Express.js handlers for different routes documented by our OpenAPI spec
+
+Our Frontend app communicates with our Backend app by performing XHR requests in the client's browser.
