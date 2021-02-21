@@ -1,6 +1,6 @@
-import { SDCDisplayItem } from "@dateam/shared";
+import { Model } from "@dateam/shared";
 
-function DisplayItem({ sdcDisplayitem }: { sdcDisplayitem: SDCDisplayItem }) {
+function DisplayItem({ sdcDisplayitem }: { sdcDisplayitem: Model.SDCDisplayItem }) {
   return (
     <div
       data-testid="displayitem"

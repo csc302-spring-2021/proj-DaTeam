@@ -1,10 +1,13 @@
 import { Children, useEffect, useState } from "react";
-import { SDCNode, Patient } from "@dateam/shared";
+import { Model } from "@dateam/shared";
 import { Section } from "../../components/Section";
 import { DisplayItem } from "../../components/DisplayItem";
 import FormService from "../../services/FormService";
 
-function RenderNode(sdcnode: SDCNode | null | undefined) {
+
+function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
+ 
+  const { SDCNode } = Model;
   if (sdcnode == null || sdcnode === undefined) {
     return;
   }
@@ -14,49 +17,46 @@ function RenderNode(sdcnode: SDCNode | null | undefined) {
   });
 
   let rootNode: React.ReactNode | null = null;
-  switch (sdcnode.class) {
-    case "SDCSection":
-      rootNode = <Section sdcSection={sdcnode}>{childNodes}</Section>;
-      break;
-    case "SDCDisplayItem":
-      rootNode = <DisplayItem sdcDisplayitem={sdcnode} />;
-      break;
-    case "SDCTextField":
-      rootNode = (
-        <div>
-          {/*Remove this div and add component*/}
-          <label data-testid={"question-" + sdcnode.id}>{sdcnode.title}</label>
-          <div className="py-2">
-            <input
-              type="text"
-              className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-          </div>
-          {childNodes}
+  if(sdcnode instanceof Model.SDCSection){
+    rootNode = <Section sdcSection={sdcnode}>{childNodes}</Section>;
+  } else if(sdcnode instanceof Model.SDCDisplayItem){
+    rootNode = <DisplayItem sdcDisplayitem={sdcnode} />;
+  }else if(sdcnode instanceof Model.SDCTextField){
+    rootNode = (
+      <div>
+        {/*Remove this div and add component*/}
+        <label data-testid={"question-" + sdcnode.id}>{sdcnode.title}</label>
+        <div className="py-2">
+          <input
+            type="text"
+            className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
         </div>
-      );
-      break;
-    case "SDCListField":
-      rootNode = (
-        <>
-          {/*Remove this and add component*/}
-          {childNodes}
-        </>
-      );
-      break;
-    default:
-      rootNode = <>{childNodes}</>;
+        {childNodes}
+      </div>
+    );
+
+  } else if(sdcnode instanceof Model.SDCListField){
+    rootNode = (
+      <>
+        {/*Remove this and add component*/}
+        {childNodes}
+      </>
+    );
+  } else {
+    rootNode = <>{childNodes}</>;
   }
+    
 
   return <>{rootNode}</>;
 }
 
 function Form() {
-  const [sdcform, setSdcform] = useState<SDCNode | null | undefined>();
-  const [patient, setPatient] = useState<Patient | null | undefined>();
+  const [sdcform, setSdcform] = useState<Model.SDCNode | null | undefined>();
+  const [patient, setPatient] = useState<Model.Patient | null | undefined>();
 
   useEffect(() => {
-    FormService.mockRead().then((sdcform) => {
+    FormService.read(123).then((sdcform) => {
         setSdcform(sdcform);
     });
   }, []);
