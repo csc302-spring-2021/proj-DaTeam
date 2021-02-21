@@ -161,5 +161,23 @@ export default {
           pass: false,
         };
       }
+    }, 
+    hasFormId(received, expectedId) {
+      // PreCondition: received is a Form item
+      let form = Mock.JsonToObj(received, Model.SDCForm);
+      const pass = form.uid == expectedId;
+      if (pass) {
+        return {
+          message: () =>
+            `expected ${received} to not have form id of ${expectedId}`,
+          pass: true,
+        };
+      } else {
+        return {
+          message: () =>
+            `expected ${received} to have form id of ${expectedId}`,
+          pass: false,
+        };
+      }
     }
 }

@@ -51,7 +51,7 @@ describe("GET /mock", () => {
  * Add a new test block for each API end point
  */
 
-describe("GET /api/patient/search: Search for a patient by ID or legal name", () => {
+describe.skip("GET /api/patient/search: Search for a patient by ID or legal name", () => {
     var mockPatient = Mock.getMockPatient();
     var patientId = mockPatient.id;
     var patientName = mockPatient.name;
@@ -192,14 +192,20 @@ describe("POST /api/form: Create a new form from an XML document", () => {
 });
 
 describe("GET /api/form/{formId}: Get a specific form", () => {
-    test("Return patients matching query", done => {
+    var mockForm = Mock.getMockForm();
+    var formId = mockForm.uid;
+
+    test("Return Form matching query", done => {
         request
-            .get("/api/form/{formId}")
-            .expect(HttpCode.NOT_IMPLEMENTED)
-            .end(function(err, res) {
-                if (err) return done(err);
-                return done();
-            });
+            .get(`/api/form/${formId}`)
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isForm();
+                expect(response.body).hasFormId(formId);
+                done();
+            })
+            .catch(err => done(err));
     });
     test("Bad Request", done => {
         request
