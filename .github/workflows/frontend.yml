@@ -4,15 +4,17 @@ on:
   pull_request:
     branches: [dev]
 
-defaults:
-  run:
-    working-directory: frontend
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          
+      - run: npm i -g npm@7
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -26,11 +28,14 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
       - name: Install Node Dependencies
         run: npm install
 
       - name: Build 
-        run: npm run-script build
+        run: |
+          cd frontend/
+          npm run-script build
 
       - name: Test
         run: npm run-script test
