@@ -1,5 +1,18 @@
+import { motion } from "framer-motion";
+import { pageVariants } from "../../App";
+
 function Forms() {
-  return <div data-testid="forms" >Forms Page</div>;
+  return (
+    <motion.div
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      data-testid="forms"
+    >
+      Forms Page
+    </motion.div>
+  );
 }
 
 export default Forms;
