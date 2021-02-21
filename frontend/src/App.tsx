@@ -7,6 +7,13 @@ import { Nav } from "./components/Nav";
 import { Responses } from "./pages/Responses";
 import { Forms } from "./pages/Forms";
 import { Home } from "./pages/Home";
+import { AnimatePresence } from "framer-motion";
+
+export const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+};
 
 function App() {
   return (
@@ -17,14 +24,16 @@ function App() {
           <div className="flex flex-row">
             <Nav />
             <div className="flex-1">
-              <Switch>
-                <Route exact path="/responses" component={Responses} />
-                <Route exact path="/home" component={Home} />
-                <Route exact path="/forms" component={Forms} />
-                <Route exact path="/404" component={NotFound} />
-                <Redirect exact path="/" to="/responses" />
-                <Redirect to="/404" />
-              </Switch>
+              <AnimatePresence>
+                <Switch>
+                  <Route exact path="/responses" component={Responses} />
+                  <Route exact path="/home" component={Home} />
+                  <Route exact path="/forms" component={Forms} />
+                  <Route exact path="/404" component={NotFound} />
+                  <Redirect exact path="/" to="/responses" />
+                  <Redirect to="/404" />
+                </Switch>
+              </AnimatePresence>
             </div>
           </div>
         </BrowserRouter>

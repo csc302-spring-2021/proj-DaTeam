@@ -62,7 +62,7 @@ function Form() {
   }, []);
 
   return (
-    <div data-testid="form" className="relative p-12 space-y-8">
+    <div data-testid="form" className="p-12 space-y-8">
       <h2 data-testid="form-title" className="text-3xl tracking-tighter">
         Response of <span className="font-bold">{sdcform?.title}</span> for{" "}
         <span className="font-bold"> {"Arnav Verma"}</span>
