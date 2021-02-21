@@ -14,6 +14,8 @@ tags:
     description: Operations on SDC Forms
   - name: response
     description: Operations on SDC Form responses
+  - name: parser
+    description: XML parser for SDC Form
 externalDocs:
   description: "Find out more about our project"
   url: "https://umar-ahmed.gitbook.io/project-dateam/"
@@ -93,9 +95,18 @@ paths:
       description: Parses an SDC XML file into JSON
       requestBody:
         required: true
+        description: SDC XML file
         content:
-          "application/xml":
+          application/xml:
             schema:
+              $ref: "#/components/schemas/SDXML"
+            examples:
+              lung:
+                summary: LDCT Lung Screening
+                externalValue: "https://umar-ahmed.github.io/SDC-Sample-XML-Files/PKG_LDCT_LUNG.xml"
+              stroke:
+                summary: CT Scan for Stroke
+                externalValue: "https://umar-ahmed.github.io/SDC-Sample-XML-Files/PKG_ACR_CT_STROKE.xml"
       responses:
         201:
           description: Successfully created form
@@ -272,3 +283,24 @@ components:
           type: string
           description: Unique identifier of this form response
           format: uuid
+
+    SDXML:
+      type: object
+      properties:
+        XMLPackage:
+          type: object
+          properties:
+            FormDesign:
+              type: object
+              properties:
+                Property:
+                  type: object
+                Body:
+                  type: object
+                  properties:
+                    ChildItems:
+                      type: object
+                Footer:
+                  type: object
+      xml:
+        name: "SDCPackage"
