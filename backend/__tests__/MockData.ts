@@ -2,25 +2,28 @@
  */
 
 import * as Mocks from "@dateam/shared/build/MockData";
+import * as Model from "@dateam/shared/build/ClassDef"
+import {GenericJsonSerializer as serializer} from "@dateam/shared";
 
-export function JsonToObj(jsonObj, toClass){
-    return new toClass(jsonObj);
-}
 
 /** Mocks */
 
 export function getMockPatient(){
-    return Mocks.genPatientComplete();
+    const patient = Mocks.genPatientComplete();
+    return serializer.encode(patient, Model.Patient);
 }
 
 export function getMockProcedure(){
-    return Mocks.genProcedureComplete();
+    const procedure = Mocks.genProcedureComplete();
+    return serializer.encode(procedure, Model.Procedure);
 }
 
 export function getMockForm(){
-    return Mocks.genFormComplete();
+    const form = Mocks.buildFormComplete();
+    return serializer.encode(form, Model.SDCForm)
 }
 
 export function getMockFormResponse(){
-    return Mocks.genFormResponseComplete();
+    const form_response = Mocks.genFormResponseComplete();
+    return serializer.encode(form_response, Model.SDCFormResponse);
 }

@@ -2,22 +2,19 @@
  * Verify objs conform to schema in openapi.yml
  */
 
-import {GenericClassValidator as validator} from "@dateam/shared";
+import {GenericClassValidator as validator, GenericJsonSerializer as serializer} from "@dateam/shared";
 import * as Model from "@dateam/shared/build/ClassDef";
-import * as Mock from "./MockData";
 
 /** Generic validator */
 function validate(obj, expectedClass){
-  let isValid = false;
-  if (typeof obj === 'object' && obj !== null){
+  let isValid;
+    try{
+      serializer.decode(obj, expectedClass);
       isValid = true;
-      let jsonObj = Mock.JsonToObj(obj, expectedClass);
-      try{
-        validator.validate(jsonObj);
-      } catch(e){
-        isValid = false;
-      }
-  }
+    } catch(e){
+      console.log(e);
+      isValid = false;
+    }
   return isValid;
 }
 
@@ -143,7 +140,7 @@ export default {
       // PreCondition: received is an array of Patient items
       let pass = false;
       received.forEach(element => {
-        let patient = Mock.JsonToObj(element, Model.Patient);
+        let patient = serializer.decode(element, Model.Patient);
         if(patient.id == patientId && patient.name == patientName){
           pass = true;
         }
@@ -164,7 +161,7 @@ export default {
     }, 
     hasFormId(received, expectedId) {
       // PreCondition: received is a Form item
-      let form = Mock.JsonToObj(received, Model.SDCForm);
+      let form = serializer.decode(received, Model.SDCForm);
       const pass = form.uid == expectedId;
       if (pass) {
         return {
