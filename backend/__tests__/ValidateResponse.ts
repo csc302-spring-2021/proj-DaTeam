@@ -59,13 +59,13 @@ export default {
       if (pass) {
         return {
           message: () =>
-            `expected ${received} to not be a valid form object`,
+            `expected ${JSON.stringify(received)} to not be a valid form object`,
           pass: true,
         };
       } else {
         return {
           message: () =>
-            `expected ${received} to be a valid form object`,
+            `expected ${JSON.stringify(received)} to be a valid form object`,
           pass: false,
         };
       }

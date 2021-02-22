@@ -29,7 +29,7 @@ beforeAll(() => {
 
 
 // Mock Endpoint test example
-describe("GET /mock", () => {
+describe.only("GET /mock", () => {
     test("Mock Example", done => {
         request
             .get("/mock")
