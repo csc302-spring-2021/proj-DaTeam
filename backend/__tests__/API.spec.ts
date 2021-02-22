@@ -51,7 +51,7 @@ describe("GET /mock", () => {
  * Add a new test block for each API end point
  */
 
-describe.skip("GET /api/patient/search: Search for a patient by ID or legal name", () => {
+describe("GET /api/patient/search: Search for a patient by ID or legal name", () => {
     var mockPatient = Mock.getMockPatient();
     var patientId = mockPatient.id;
     var patientName = mockPatient.name;
@@ -191,11 +191,11 @@ describe("POST /api/form: Create a new form from an XML document", () => {
     });
 });
 
-describe("GET /api/form/{formId}: Get a specific form", () => {
+describe.only("GET /api/form/{formId}: Get a specific form", () => {
     var mockForm = Mock.getMockForm();
     var formId = mockForm.uid;
 
-    test("Return Form matching query", done => {
+    test.only("Return Form matching query", done => {
         request
             .get(`/api/form/${formId}`)
             .expect('Content-Type', /json/)
