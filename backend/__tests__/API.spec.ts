@@ -2,7 +2,10 @@ const app = require("../build/App").default;
 const HttpCode = require("../build/utils/Error").HttpCode;
 const http = require("http");
 const supertest = require('supertest');
-const customMatchers = require('./ObjectSchema').default;
+const customMatchers = require('./ValidateResponse').default;
+
+import * as Mock from "./MockData";
+
 
 let server, request;
 
@@ -11,13 +14,11 @@ beforeAll(() => {
     expect.extend(customMatchers);
     // Add Mock endpoint example
     app.get("/mock", function(req, res) {
-        let patient = {
-            id: "xxxx",
-            external_id: "5584-486-674-YM",
-            name: "Jane Doe"
-        };
         let data = {
-            mock_patient: patient
+            mock_patient: Mock.getMockPatient(),
+            mock_procedure: Mock.getMockProcedure(),
+            mock_form: Mock.getMockForm(),
+            mock_form_response: Mock.getMockFormResponse()
         }
         res.status(HttpCode.OK).json(data);
     });
@@ -28,7 +29,7 @@ beforeAll(() => {
 
 
 // Mock Endpoint test example
-describe("GET /mock", () => {
+describe.only("GET /mock", () => {
     test("Mock Example", done => {
         request
             .get("/mock")
@@ -36,6 +37,9 @@ describe("GET /mock", () => {
             .expect(HttpCode.OK)
             .then(response => {
                 expect(response.body.mock_patient).isPatient();
+                expect(response.body.mock_procedure).isProcedure();
+                expect(response.body.mock_form).isForm();
+                expect(response.body.mock_form_response).isFormResponse();
                 done();
             })
             .catch(err => done(err));
@@ -48,14 +52,61 @@ describe("GET /mock", () => {
  */
 
 describe("GET /api/patient/search: Search for a patient by ID or legal name", () => {
-    test("Return patients matching query", done => {
+    var mockPatient = Mock.getMockPatient();
+    var patientId = mockPatient.id;
+    var patientName = mockPatient.name;
+
+    test("Search by ID that exists", done => {
         request
-            .get("/api/patient/search")
-            .expect(HttpCode.NOT_IMPLEMENTED)
-            .end(function(err, res) {
-                if (err) return done(err);
-                return done();
-            });
+            .get(`/api/patient/search?query=${patientId}`)
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isList(); 
+                expect(response.body).not.isListEmpty();
+                expect(response.body).allPatientItems();
+                expect(response.body).containsPatient(patientName, patientId);
+                done();
+            })
+            .catch(err => done(err));
+    });
+    test("Search by name that exists", done => {
+        request
+            .get(`/api/patient/search?query=${patientName}`)
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isList();
+                expect(response.body).not.isListEmpty();
+                expect(response.body).allPatientItems();
+                expect(response.body).containsPatient(patientName, patientId);
+                done();
+            })
+            .catch(err => done(err));
+    });
+    test("Search by name that does not exist", done => {
+        request
+            .get("/api/patient/search?query=FakeName")
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isList(); 
+                expect(response.body).isListEmpty();
+                done();
+            })
+            .catch(err => done(err));
+    });
+    test("Search by ID that does not exist", done => {
+        request
+            .get("/api/patient/search?query=FakeID")
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isList();
+                expect(response.body).isListEmpty();
+                done();
+            })
+            .catch(err => done(err));
     });
 });
 
@@ -140,15 +191,21 @@ describe("POST /api/form: Create a new form from an XML document", () => {
     });
 });
 
-describe("GET /api/form/{formId}: Get a specific form", () => {
-    test("Return patients matching query", done => {
+describe.only("GET /api/form/{formId}: Get a specific form", () => {
+    var mockForm = Mock.getMockForm();
+    var formId = mockForm.uid;
+
+    test.only("Return Form matching query", done => {
         request
-            .get("/api/form/{formId}")
-            .expect(HttpCode.NOT_IMPLEMENTED)
-            .end(function(err, res) {
-                if (err) return done(err);
-                return done();
-            });
+            .get(`/api/form/${formId}`)
+            .expect('Content-Type', /json/)
+            .expect(HttpCode.OK)
+            .then(response => {
+                expect(response.body).isForm();
+                expect(response.body).hasFormId(formId);
+                done();
+            })
+            .catch(err => done(err));
     });
     test("Bad Request", done => {
         request
