@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node ./build/Server.js",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "dev": "npx nodemon ./src/Server.ts"
   },
   "repository": {
