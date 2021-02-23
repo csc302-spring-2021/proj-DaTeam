@@ -1,53 +1,42 @@
-import { Children, useEffect, useState } from "react";
+import { Children, useEffect, useState, ReactNode } from "react";
 import { Model } from "@dateam/shared";
 import { Section } from "../../components/Section";
 import { DisplayItem } from "../../components/DisplayItem";
 import FormService from "../../services/FormService";
 import { notify } from "../Notification/Notification";
-import { FormInput } from "../FormInput";
 import { NotFound } from "../../pages/NotFound";
 
-function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
-  const { SDCNode } = Model;
-  if (sdcnode == null || sdcnode === undefined) {
-    return;
-  }
+interface IMockPrivateClass {
+  __class?: "SDCSection" | "SDCDisplayItem" | "SDCTextField" | "SDCListField";
+}
 
-  const childNodes: React.ReactNode[] = sdcnode.children.map((childnode, i) => {
-    return <div key={i}>{RenderNode(childnode)}</div>;
+function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
+  const childNodes = sdcnode.children.map((childnode, i) => {
+    return <div key={childnode.id}>{RenderNode(childnode)}</div>;
   });
-
-  let rootNode: React.ReactNode | null = null;
-  if (sdcnode instanceof Model.SDCSection) {
-    rootNode = <Section sdcSection={sdcnode}>{childNodes}</Section>;
-  } else if (sdcnode instanceof Model.SDCDisplayItem) {
-    rootNode = <DisplayItem sdcDisplayitem={sdcnode} />;
-  } else if (sdcnode instanceof Model.SDCTextField) {
-    rootNode = (
-      <div>
-        {/*Remove this div and add component*/}
-        <label data-testid={"question-" + sdcnode.id}>{sdcnode.title}</label>
-        <div className="py-2">
-          <input
-            type="text"
-            className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+  switch (sdcnode.__class) {
+    case "SDCSection":
+      return <Section sdcSection={sdcnode}>{childNodes}</Section>;
+    case "SDCDisplayItem":
+      return <DisplayItem sdcDisplayitem={sdcnode} />;
+    case "SDCTextField":
+      return (
+        <div>
+          <label data-testid={"question-" + sdcnode.id}>{sdcnode.title}</label>
+          <div className="py-2">
+            <input
+              type="text"
+              className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          {childNodes}
         </div>
-        {childNodes}
-      </div>
-    );
-  } else if (sdcnode instanceof Model.SDCListField) {
-    rootNode = (
-      <>
-        {/*Remove this and add component*/}
-        {childNodes}
-      </>
-    );
-  } else {
-    rootNode = <>{childNodes}</>;
+      );
+    case "SDCListField":
+      return <>{childNodes}</>;
+    default:
+      return <>{childNodes}</>;
   }
-
-  return <>{rootNode}</>;
 }
 
 function Form() {
@@ -83,11 +72,15 @@ function Form() {
           <ValueBlock id="patientid" value={sdcform.id} label="OHIP number" />
         </div>
         <div className="w-1/2" data-testid="input-form-patientname">
-          <ValueBlock id="patientname" value={patient.name} label="Patient Name" />
+          <ValueBlock
+            id="patientname"
+            value={patient.name}
+            label="Patient Name"
+          />
         </div>
       </div>
-
       {RenderNode(sdcform)}
+      {console.log("render", RenderNode(sdcform))}
     </div>
   );
 }
