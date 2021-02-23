@@ -14,17 +14,16 @@ function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
   const childNodes = sdcnode.children.map((childnode, i) => {
     return <div key={childnode.id}>{RenderNode(childnode)}</div>;
   });
-  const decodedSdcNode = GenericJsonSerializer.decode(sdcnode, Model.SDCNode);
 
-  if (decodedSdcNode instanceof Model.SDCSection) {
+  if (sdcnode instanceof Model.SDCSection) {
     return (
       <Section sdcSection={sdcnode as Model.SDCSection}>{childNodes}</Section>
     );
-  } else if (decodedSdcNode instanceof Model.SDCDisplayItem) {
-    return <></>
+  } else if (sdcnode instanceof Model.SDCDisplayItem) {
+    return <></>;
     //return <DisplayItem sdcDisplayitem={sdcnode as Model.SDCDisplayItem} />;
-  } else if (decodedSdcNode instanceof Model.SDCTextField) {
-    const sdcTextField = decodedSdcNode as Model.SDCTextField;
+  } else if (sdcnode instanceof Model.SDCTextField) {
+    const sdcTextField = sdcnode as Model.SDCTextField;
     return (
       sdcTextField.title &&
       sdcTextField.textAfterResponse && (
@@ -39,7 +38,7 @@ function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
         </div>
       )
     );
-  } else if (decodedSdcNode instanceof Model.SDCListField) {
+  } else if (sdcnode instanceof Model.SDCListField) {
     return <>{childNodes}</>;
   } else {
     return <>{childNodes}</>;
@@ -53,7 +52,11 @@ function Form() {
   useEffect(() => {
     FormService.read(123)
       .then((sdcform) => {
-        setSdcform(sdcform);
+        const decodedSdcNode = GenericJsonSerializer.decode(
+          sdcform,
+          Model.SDCNode
+        );
+        setSdcform(decodedSdcNode);
         /* Remove to use actual patient */
         const patient = new Model.Patient({});
         patient.id = "111";
