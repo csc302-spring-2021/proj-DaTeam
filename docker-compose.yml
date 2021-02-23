@@ -1,13 +1,19 @@
 version: "3"
 services:
   frontend:
-    build: ./frontend
+    image: frontend
+    build:
+      dockerfile: ./frontend/Dockerfile
+      context: .
     environment:
       - PORT=3000
     ports:
       - 3000:3000
   backend:
-    build: ./backend
+    image: backend
+    build:
+      dockerfile: ./backend/Dockerfile
+      context: .
     env_file: ./.env
     ports:
       - "${OUT_PORT}:${PORT}"
