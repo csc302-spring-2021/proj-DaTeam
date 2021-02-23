@@ -3,10 +3,9 @@ import { Model } from "@dateam/shared";
 import { Section } from "../../components/Section";
 import { DisplayItem } from "../../components/DisplayItem";
 import FormService from "../../services/FormService";
-
+import { notify } from "../Notification/Notification";
 
 function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
- 
   const { SDCNode } = Model;
   if (sdcnode == null || sdcnode === undefined) {
     return;
@@ -17,11 +16,11 @@ function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
   });
 
   let rootNode: React.ReactNode | null = null;
-  if(sdcnode instanceof Model.SDCSection){
+  if (sdcnode instanceof Model.SDCSection) {
     rootNode = <Section sdcSection={sdcnode}>{childNodes}</Section>;
-  } else if(sdcnode instanceof Model.SDCDisplayItem){
+  } else if (sdcnode instanceof Model.SDCDisplayItem) {
     rootNode = <DisplayItem sdcDisplayitem={sdcnode} />;
-  }else if(sdcnode instanceof Model.SDCTextField){
+  } else if (sdcnode instanceof Model.SDCTextField) {
     rootNode = (
       <div>
         {/*Remove this div and add component*/}
@@ -35,8 +34,7 @@ function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
         {childNodes}
       </div>
     );
-
-  } else if(sdcnode instanceof Model.SDCListField){
+  } else if (sdcnode instanceof Model.SDCListField) {
     rootNode = (
       <>
         {/*Remove this and add component*/}
@@ -46,7 +44,6 @@ function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
   } else {
     rootNode = <>{childNodes}</>;
   }
-    
 
   return <>{rootNode}</>;
 }
@@ -56,9 +53,11 @@ function Form() {
   const [patient, setPatient] = useState<Model.Patient | null | undefined>();
 
   useEffect(() => {
-    FormService.read(123).then((sdcform) => {
+    FormService.read(123)
+      .then((sdcform) => {
         setSdcform(sdcform);
-    });
+      })
+      .catch((err) => notify(err));
   }, []);
 
   return (
