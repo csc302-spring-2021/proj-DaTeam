@@ -14,6 +14,7 @@ At the beginning of the project, we came up with the following learning goals to
 - How to put "clean architecture" into practice in a large team
 - Learn how to use Pull Requests to integrate and review code changes
 - Learn how to use a kanban board and issues to organize the team's work
+- Learn how to use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) to provide meaningful git commit messages
 
 ## Use Cases
 
