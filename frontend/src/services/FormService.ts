@@ -1,7 +1,7 @@
 import { Model } from "@dateam/shared";
 
 /**
- * Preform a GET request to the /api/form/:formId route
+ * Preform a GET request to the /api/v1/form/:formId route
  *
  * @param formId An ID for the SDC form that is to be recived.
  * @returns A SDC Form Object
