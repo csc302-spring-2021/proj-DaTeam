@@ -13,6 +13,7 @@ function FormInput(props: IFormInputProps) {
 
   return (
     <input
+      data-testid="form-input"
       value={props.state}
       onChange={valueSetter}
       type={props.type}
