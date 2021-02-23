@@ -60,6 +60,6 @@ Umar manages the backlog with the help of team members to add relevant details t
 
 To keep us organized and on-schedule, we also created a system of issue tags and milestones on GitHub. The tags subdivide the issues by their area (ex. frontend, backend, devops, etc.) and the milestones are based on the due dates of phases in the project.
 
-As tasks are ready to get started, devs move them through the various stages in our Kanban board. PRs are linked to GitHub issues and marked for review by the author, and it's the job of the reviewer to review the code, follow the QA steps (as outlined in the PR description), and hopefully approve the code changes to have them integrated.
+As tasks are ready to get started, devs move them through the various stages in our [Kanban board](https://github.com/csc302-spring-2021/proj-DaTeam/projects/1). PRs are linked to GitHub issues and marked for review by the author, and it's the job of the reviewer to review the code, follow the QA steps (as outlined in the PR description), and hopefully approve the code changes to have them integrated.
 
 ![image](https://user-images.githubusercontent.com/8302959/108604287-ffd0a400-737a-11eb-9238-a0a3d4cf529c.png)
