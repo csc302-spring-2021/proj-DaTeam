@@ -4,6 +4,8 @@ import { Section } from "../../components/Section";
 import { DisplayItem } from "../../components/DisplayItem";
 import FormService from "../../services/FormService";
 import { notify } from "../Notification/Notification";
+import { FormInput } from "../FormInput";
+import { NotFound } from "../../pages/NotFound";
 
 function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
   const { SDCNode } = Model;
@@ -49,16 +51,19 @@ function RenderNode(sdcnode: Model.SDCNode | null | undefined) {
 }
 
 function Form() {
-  const [sdcform, setSdcform] = useState<Model.SDCNode | null | undefined>();
-  const [patient, setPatient] = useState<Model.Patient | null | undefined>();
+  const [sdcform, setSdcform] = useState<Model.SDCNode | undefined>(undefined);
+  const [patient, setPatient] = useState<Model.Patient | undefined>(undefined);
 
   useEffect(() => {
     FormService.read(123)
       .then((sdcform) => {
         setSdcform(sdcform);
       })
-      .catch((err) => notify(err));
+      .catch((err) => notify.error(err));
   }, []);
+  if (!sdcform) {
+    return <NotFound />;
+  }
 
   return (
     <div data-testid="form" className="p-12 space-y-8">
@@ -66,32 +71,29 @@ function Form() {
         Response of <span className="font-bold">{sdcform?.title}</span> for{" "}
         <span className="font-bold"> {"Arnav Verma"}</span>
       </h2>
-
-      <div data-testid="input-form-patientid">
-        <label className="font-bold">OHIP NUMBER:</label>
-        <div className="py-2">
-          <input
-            id="ohipnumber"
-            type="text"
-            placeholder="ex. 1234123123YM"
-            className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+      <div className="flex justify-between space-x-4">
+        <div className="w-1/2" data-testid="input-form-patientid">
+          <label className="text-lg font-bold uppercase">OHIP number:</label>
+          <ValueBlock id="patientid" value={sdcform.id} />
         </div>
-      </div>
-
-      <div data-testid="input-form-patientname">
-        <label className="font-bold">PAITIENT NAME:</label>
-        <div className="py-2">
-          <input
-            id="patientname"
-            type="text"
-            placeholder="ex. Arnav Verma"
-            className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+        <div className="w-1/2" data-testid="input-form-patientname">
+          <label className="text-lg font-bold uppercase">Patient Name:</label>
+          <ValueBlock id="patientname" value={"Arnav"} />
         </div>
       </div>
 
       {RenderNode(sdcform)}
+    </div>
+  );
+}
+
+function ValueBlock({ value, id }: { value: string; id: string }) {
+  return (
+    <div
+      id={id}
+      className="block w-full px-3 py-3 my-2 text-xl bg-gray-200 border-gray-300 rounded"
+    >
+      {value}
     </div>
   );
 }
