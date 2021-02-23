@@ -2,7 +2,7 @@ import { ChangeEvent } from "react";
 
 interface IFormInputProps {
   type: "text" | "number";
-  placeholder: string;
+  placeholder?: string;
   state: string;
   setState: React.Dispatch<React.SetStateAction<string>>;
 }
