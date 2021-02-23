@@ -190,23 +190,23 @@ function CloseButton({ onClose }: { onClose: () => void }) {
   return (
     <button
       type="button"
-      className="absolute top-2 right-2 bg-gray-50 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+      className="absolute inline-flex items-center justify-center p-2 text-gray-400 rounded-md top-2 right-2 bg-gray-50 hover:text-gray-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
       aria-controls="mobile-menu"
       aria-expanded="false"
       onClick={() => onClose()}
     >
       <span className="sr-only">Close</span>
       <svg
-        className="h-6 w-6"
+        className="w-6 h-6"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
       >
         <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
           d="M6 18L18 6M6 6l12 12"
         />
       </svg>
@@ -260,7 +260,7 @@ function ResponsesPanel({
       }}
       initial="initial"
       animate="animate"
-      className="z-10 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50 relative"
+      className="relative z-10 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50"
     >
       <CloseButton onClose={onClose} />
 
@@ -289,7 +289,7 @@ function FormRendererPanel({ onClose }: { onClose: () => void }) {
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0, transition: { ease: "easeInOut" } }}
       exit={{ opacity: 0 }}
-      className="w-full min-h-full overflow-y-auto rounded-lg shadow-2xl sm:w-1/2 lg:w-1/2 bg-gray-50 relative"
+      className="relative w-full min-h-full overflow-y-auto rounded-lg shadow-2xl sm:w-1/2 lg:w-1/2 bg-gray-50"
     >
       <CloseButton onClose={onClose} />
 
