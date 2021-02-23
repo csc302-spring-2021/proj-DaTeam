@@ -90,7 +90,6 @@ function Form() {
         </div>
       </div>
       {RenderNode(sdcform)}
-      {console.log("render", sdcform)}
     </div>
   );
 }

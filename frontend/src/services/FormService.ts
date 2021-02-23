@@ -8,7 +8,7 @@ import { Model } from "@dateam/shared";
  */
 async function read(formId: number): Promise<Model.SDCForm> {
   try {
-    const formResponse = await fetch(`${process.env.REACT_APP_API}/api/v1/form/${formId}`, {
+    const formResponse = await fetch(`/api/v1/form/${formId}`, {
       method: "GET",
     });
     

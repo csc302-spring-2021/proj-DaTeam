@@ -8,4 +8,14 @@ module.exports = {
         ],
       },
     },
+    webpack: {
+      configure: {
+        optimization: {
+          minimize: false
+        }
+      },
+      plugins: {
+        remove: ["TerserPlugin"]
+      }
+    }
   }

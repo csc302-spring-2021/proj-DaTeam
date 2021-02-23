@@ -2,15 +2,22 @@ version: "3"
 services:
   frontend:
     image: frontend
+    container_name: frontend-local
     build:
       dockerfile: ./frontend/Dockerfile
       context: .
     environment:
       - PORT=3000
+      - API_HOST=http://backend-local:3001
     ports:
       - 3000:3000
+    networks:
+      - dateam-app
+    depends_on:
+      - backend
   backend:
     image: backend
+    container_name: backend-local
     build:
       dockerfile: ./backend/Dockerfile
       context: .
