@@ -16,6 +16,7 @@
     "build:backend": "cd backend/ && npm run build",
     "build:shared": "cd shared/ && npm run build",
     "start": "cd ./backend && npm start",
+    "pretest": "npm run build",
     "test": "npm run test:frontend && npm run test:backend",
     "test:frontend": "cd frontend/ && npm run test",
     "test:backend": "cd backend/ && npm run test",
