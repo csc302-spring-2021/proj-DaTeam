@@ -2,7 +2,7 @@ name: Deploy to Heroku
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, "fix/deployment" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -59,13 +59,15 @@ jobs:
         with:
           name: build-artifacts
 
+      - name: Copy Dockerfile to root
+        run: cp frontend/Dockerfile .
+
       - uses: akhileshns/heroku-deploy@v3.11.10
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "dateam-frontend"
           heroku_email: "umar.ahmed@mail.utoronto.ca"
           usedocker: true
-          appdir: "frontend"
   
   deploy-backend:
     runs-on: ubuntu-latest
@@ -78,10 +80,12 @@ jobs:
         with:
           name: build-artifacts
 
+      - name: Copy Dockerfile to root
+        run: cp backend/Dockerfile .
+
       - uses: akhileshns/heroku-deploy@v3.11.10
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "dateam-backend"
           heroku_email: "umar.ahmed@mail.utoronto.ca"
           usedocker: true
-          appdir: "backend"
