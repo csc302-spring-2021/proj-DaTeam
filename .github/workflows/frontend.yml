@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [dev]
 
-defaults:
-  run:
-    working-directory: frontend
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,6 +17,9 @@ jobs:
           node-version: "14.x"
 
       - run: npm i -g npm@7
+
+      - name: Start with a clean build
+        run: npm run clean:ci
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -34,11 +33,14 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
       - name: Install Node Dependencies
         run: npm install
 
       - name: Build
-        run: npm run-script build
+        run: |
+          npm run build:shared
+          npm run build:frontend
 
       - name: Test
-        run: npm run-script test
+        run: npm run test:frontend

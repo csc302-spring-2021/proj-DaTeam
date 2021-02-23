@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/csc302-spring-2021/proj-DaTeam#readme",
   "dependencies": {
-    "@dateam/shared": "file:../shared",
     "cors": "^2.8.5",
     "debug": "^2.6.9",
     "dotenv": "^8.2.0",

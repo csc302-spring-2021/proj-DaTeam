@@ -18,6 +18,9 @@ jobs:
 
       - run: npm i -g npm@7
 
+      - name: Start with a clean build
+        run: npm run clean:ci
+
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -30,12 +33,14 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      # Change however you see fit
+
       - name: Install Node Dependencies
         run: npm install
 
       - name: Build
-        run: npm run-script build
+        run: |
+          npm run build:shared
+          npm run build:backend
 
       - name: Test
-        run: npm run-script test
+        run: npm run test:backend
