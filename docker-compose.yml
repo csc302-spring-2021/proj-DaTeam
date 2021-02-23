@@ -8,6 +8,7 @@ services:
       context: .
     environment:
       - PORT=3000
+      - API_HOST=http://backend-local:3001
     ports:
       - 3000:3000
     networks:
