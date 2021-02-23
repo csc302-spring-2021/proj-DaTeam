@@ -11,7 +11,8 @@
     "npm": ">=7.0.0"
   },
   "scripts": {
-    "postinstall": "npm run build",
+    "docker:backend-build": "docker build -f ./backend/Dockerfile -t backend .",
+    "docker:backend-run": "docker run -it -p 3001:3001 -e PORT=3001 backend",
     "build": "cd ./shared && npm run build && cd ../frontend && npm run build && cd .. && cd ./backend && npm run build ",
     "start": "cd ./backend && npm start",
     "test": "echo 'Whoops! You need to cd into either frontend/ or backend/ to run scripts'",
