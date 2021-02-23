@@ -58,10 +58,17 @@ function Form() {
     FormService.read(123)
       .then((sdcform) => {
         setSdcform(sdcform);
+        /* Remove to use actual patient */
+        const patient = new Model.Patient({});
+        patient.id = "111";
+        patient.name = "Arnav Verma";
+        patient.uid = "testuuid";
+        setPatient(patient);
       })
       .catch((err) => notify.error(err));
   }, []);
-  if (!sdcform) {
+
+  if (!sdcform || !patient) {
     return <NotFound />;
   }
 
@@ -69,16 +76,14 @@ function Form() {
     <div data-testid="form" className="p-12 space-y-8">
       <h2 data-testid="form-title" className="text-3xl tracking-tighter">
         Response of <span className="font-bold">{sdcform?.title}</span> for{" "}
-        <span className="font-bold"> {"Arnav Verma"}</span>
+        <span className="font-bold"> {patient.name}</span>
       </h2>
-      <div className="flex justify-between space-x-4">
+      <div className="flex flex-col justify-between space-x-4 md:flex-row">
         <div className="w-1/2" data-testid="input-form-patientid">
-          <label className="text-lg font-bold uppercase">OHIP number:</label>
-          <ValueBlock id="patientid" value={sdcform.id} />
+          <ValueBlock id="patientid" value={sdcform.id} label="OHIP number" />
         </div>
         <div className="w-1/2" data-testid="input-form-patientname">
-          <label className="text-lg font-bold uppercase">Patient Name:</label>
-          <ValueBlock id="patientname" value={"Arnav"} />
+          <ValueBlock id="patientname" value={patient.name} label="Patient Name" />
         </div>
       </div>
 
@@ -87,14 +92,27 @@ function Form() {
   );
 }
 
-function ValueBlock({ value, id }: { value: string; id: string }) {
+function ValueBlock({
+  value,
+  id,
+  label,
+}: {
+  value: string;
+  id: string;
+  label: string;
+}) {
   return (
-    <div
-      id={id}
-      className="block w-full px-3 py-3 my-2 text-xl bg-gray-200 border-gray-300 rounded"
-    >
-      {value}
-    </div>
+    <>
+      <label className="text-lg font-bold tracking-wide uppercase">
+        {label}:
+      </label>
+      <div
+        id={id}
+        className="block w-full px-3 py-2 my-1 text-xl bg-gray-200 border-gray-300 rounded"
+      >
+        {value}
+      </div>
+    </>
   );
 }
 
