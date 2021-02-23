@@ -1,5 +1,5 @@
 import { Children, useEffect, useState, ReactNode } from "react";
-import { Model } from "@dateam/shared";
+import { GenericJsonSerializer, Model } from "@dateam/shared";
 import { Section } from "../../components/Section";
 import { DisplayItem } from "../../components/DisplayItem";
 import FormService from "../../services/FormService";
@@ -14,28 +14,31 @@ function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
   const childNodes = sdcnode.children.map((childnode, i) => {
     return <div key={childnode.id}>{RenderNode(childnode)}</div>;
   });
-  switch (sdcnode.__class) {
-    case "SDCSection":
-      return <Section sdcSection={sdcnode}>{childNodes}</Section>;
-    case "SDCDisplayItem":
-      return <DisplayItem sdcDisplayitem={sdcnode} />;
-    case "SDCTextField":
-      return (
-        <div>
-          <label data-testid={"question-" + sdcnode.id}>{sdcnode.title}</label>
-          <div className="py-2">
-            <input
-              type="text"
-              className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-          </div>
-          {childNodes}
+  const decodedSdcNode = GenericJsonSerializer.decode(sdcnode, Model.SDCNode);
+
+  if (decodedSdcNode instanceof Model.SDCSection) {
+    return (
+      <Section sdcSection={sdcnode as Model.SDCSection}>{childNodes}</Section>
+    );
+  } else if (decodedSdcNode instanceof Model.SDCDisplayItem) {
+    return <DisplayItem sdcDisplayitem={sdcnode as Model.SDCDisplayItem} />;
+  } else if (decodedSdcNode instanceof Model.SDCTextField) {
+    return (
+      <div>
+        <label data-testid={"question-" + sdcnode.id}>{sdcnode.title}</label>
+        <div className="py-2">
+          <input
+            type="text"
+            className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
         </div>
-      );
-    case "SDCListField":
-      return <>{childNodes}</>;
-    default:
-      return <>{childNodes}</>;
+        {childNodes}
+      </div>
+    );
+  } else if (decodedSdcNode instanceof Model.SDCListField) {
+    return <>{childNodes}</>;
+  } else {
+    return <>{childNodes}</>;
   }
 }
 
