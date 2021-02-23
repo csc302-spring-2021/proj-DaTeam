@@ -64,7 +64,7 @@ function Form() {
         patient.uid = "testuuid";
         setPatient(patient);
       })
-      .catch((err) => notify.error(err));
+      .catch((err) => notify.error(err.message));
   }, []);
 
   if (!sdcform || !patient) {
