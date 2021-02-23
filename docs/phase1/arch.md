@@ -26,8 +26,8 @@ For styling, we use TailwindCSS to provide responsive, theme-aware, and ergonomi
 
 Our backend is broken up into the following groups:
 
-- **Database Management:** Provides an interface over a Postgres database
-- **XML Parser:** Parses SDC Form XML to our internal domain object classes
+- **Database Management:** Provides an interface over a Postgres database.
+- **XML Parser:** Parses SDC Form XML to our internal domain object classes using fast-xml-parser.
 - **Services Layer:** Express.js handlers for different routes documented by our OpenAPI spec
 
 Our Frontend app communicates with our Backend app by performing XHR requests in the client's browser.

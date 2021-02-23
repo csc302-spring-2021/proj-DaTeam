@@ -35,7 +35,7 @@ at the same time regardless of the version of the form.
 
 ## Database object diagram
 
-The diagram below shows an exmaple of:
+The diagram below shows an example of:
 - How multiple versions of the form can be saved in the database at the save time
 - How list field questions are stored
 - How to fetch all answers to a question regardless of version
