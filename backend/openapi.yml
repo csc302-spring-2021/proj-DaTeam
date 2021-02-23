@@ -91,7 +91,7 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
-  /form/parser:
+  /form/parse:
     post:
       tags:
         - parser
