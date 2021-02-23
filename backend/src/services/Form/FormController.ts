@@ -24,4 +24,11 @@ export const FormController = {
     res.sendStatus(HttpCode.NOT_IMPLEMENTED);
     //res.status(HttpCode.OK).send();
   },
+
+  parse: function (req: Request, res: Response) {
+    const sdcForm = Mocks.buildFormComplete();
+    const serialized = GenericJsonSerializer.encode(sdcForm, Model.SDCForm)
+
+    res.status(HttpCode.OK).send(serialized);
+  }
 };

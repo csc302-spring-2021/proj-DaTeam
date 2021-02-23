@@ -11,6 +11,7 @@ export class FormAPI {
   public returnRouter() {
     this.getForm();
     this.postForm();
+    this.parseForm();
     return this.router;
   }
 
@@ -22,5 +23,9 @@ export class FormAPI {
   /* POST /form/{formId} */
   private postForm() {
     this.router.post("/form", FormController.create);
+  }
+
+  private parseForm() {
+    this.router.post("/form/parse", FormController.parse);
   }
 }
