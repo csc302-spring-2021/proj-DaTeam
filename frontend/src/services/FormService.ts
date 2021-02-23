@@ -1,14 +1,14 @@
 import { Model } from "@dateam/shared";
 
 /**
- * Preform a GET request to the /api/v1/form/:formId route
+ * Preform a GET request to the /api/form/:formId route
  *
  * @param formId An ID for the SDC form that is to be recived.
  * @returns A SDC Form Object
  */
 async function read(formId: number): Promise<Model.SDCForm> {
   try {
-    const formResponse = await fetch(`${process.env.REACT_APP_API}/api/v1/form/${formId}`, {
+    const formResponse = await fetch(`/api/v1/form/${formId}`, {
       method: "GET",
     });
     
