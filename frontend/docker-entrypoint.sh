@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 set -eu
 
 envsubst '${PORT} ${API_HOST}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
