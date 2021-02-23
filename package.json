@@ -11,12 +11,22 @@
     "npm": ">=7.0.0"
   },
   "scripts": {
-    "build": "cd ./shared && npm run build && cd ../frontend && npm run build && cd ../backend && npm run build ",
+    "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
+    "build:frontend": "cd frontend/ && npm run build",
+    "build:backend": "cd backend/ && npm run build",
+    "build:shared": "cd shared/ && npm run build",
     "start": "cd ./backend && npm start",
     "test": "echo 'Whoops! You need to cd into either frontend/ or backend/ to run scripts'",
+    "clean": "rm -rf ./**/build ./**/*.tsbuildinfo",
+    "clean:hard": "npm run clean && rm -rf ./node_modules ./**/node_modules",
     "docker:up": "docker-compose --env-file .env up",
+    "docker:down": "docker-compose --env-file .env down",
+    "predocker:build": "npm run build",
+    "docker:build": "docker-compose --env-file .env build",
+    "predocker:backend-build": "npm run build:shared && npm run build:backend",
     "docker:backend-build": "docker build -f ./backend/Dockerfile -t backend .",
     "docker:backend-run": "docker run -it -p 3001:3001 -e PORT=3001 backend",
+    "predocker:frontend-build": "npm run build:shared && npm run build:frontend",
     "docker:frontend-build": "docker build -f ./frontend/Dockerfile -t frontend .",
     "docker:frontend-run": "docker run -it -p 3000:3000 -e PORT=3000 frontend"
   }
