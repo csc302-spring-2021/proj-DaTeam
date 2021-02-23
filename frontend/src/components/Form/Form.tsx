@@ -21,19 +21,23 @@ function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
       <Section sdcSection={sdcnode as Model.SDCSection}>{childNodes}</Section>
     );
   } else if (decodedSdcNode instanceof Model.SDCDisplayItem) {
-    return <DisplayItem sdcDisplayitem={sdcnode as Model.SDCDisplayItem} />;
+    return <></>
+    //return <DisplayItem sdcDisplayitem={sdcnode as Model.SDCDisplayItem} />;
   } else if (decodedSdcNode instanceof Model.SDCTextField) {
+    const sdcTextField = decodedSdcNode as Model.SDCTextField;
     return (
-      <div>
-        <label data-testid={"question-" + sdcnode.id}>{sdcnode.title}</label>
-        <div className="py-2">
-          <input
-            type="text"
-            className="block w-full px-3 py-3 bg-gray-200 border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      sdcTextField.title &&
+      sdcTextField.textAfterResponse && (
+        <div>
+          <ValueBlock
+            id={"question-" + sdcnode.id}
+            label={sdcTextField.title}
+            value={60 + " " + sdcTextField.textAfterResponse}
           />
+
+          {childNodes}
         </div>
-        {childNodes}
-      </div>
+      )
     );
   } else if (decodedSdcNode instanceof Model.SDCListField) {
     return <>{childNodes}</>;
@@ -83,7 +87,7 @@ function Form() {
         </div>
       </div>
       {RenderNode(sdcform)}
-      {console.log("render", RenderNode(sdcform))}
+      {console.log("render", sdcform)}
     </div>
   );
 }
