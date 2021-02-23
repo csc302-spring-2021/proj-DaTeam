@@ -24,10 +24,11 @@
     "url": "https://github.com/csc302-spring-2021/proj-DaTeam/issues"
   },
   "homepage": "https://github.com/csc302-spring-2021/proj-DaTeam#readme",
-  "dependencies": {},
+  "dependencies": {
+    "uuid": "^8.3.2"
+  },
   "devDependencies": {
     "@types/node": "^14.14.27",
-    "@types/uuid": "^8.3.0",
-    "uuid": "^8.3.2"
+    "@types/uuid": "^8.3.0"
   }
 }
