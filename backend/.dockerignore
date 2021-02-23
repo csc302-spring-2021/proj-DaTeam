@@ -1,4 +1,0 @@
-./**/*
-!./build/
-!./openapi.yml
-!./package*.json

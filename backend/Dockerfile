@@ -3,7 +3,9 @@ RUN npm install -g npm@7
 
 WORKDIR /usr/src/app
 
-COPY shared/ shared/
+# Copy build files for shared and backend
+COPY shared/package*.json shared/
+COPY shared/build/ shared/build
 COPY backend/package*.json backend/openapi.yml backend/
 COPY backend/build/ backend/build
 
