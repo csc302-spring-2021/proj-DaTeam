@@ -3,7 +3,7 @@
  * For front end text field formate validation, use classMeta.textFieldTypeMeta.validator
  */
 
-import { StackUtil, ValidationError, AnswerValidationError } from "./Utils"
+import { ValidationError, AnswerValidationError } from "./Utils"
 import * as Model from "./ClassDef"
 import { classMeta } from "./ClassMeta"
 import { textFieldTypeMeta } from "./TextFieldTypeMeta"
@@ -16,6 +16,15 @@ class ValidationFlag{
       * Validation will be skipped for all field names for object with that UID
       */
      byPassUIDField: { [uid : string] : [string] } = {}
+
+     /**
+      * Mark the uid and field to be by passed
+      * @param uid 
+      * @param field 
+      */
+     addByPassUIDField(uid: string, field: string){
+          // TODO
+     }
 }
 
 // For front end text field formate validation, use classMeta.textFieldTypeMeta.validator
@@ -83,6 +92,7 @@ export class FormResponseValidator {
                // Fatal error
                throw new ValidationError("Multiple responses submitted for question " + question.id)
           }
+          // TODO
      }
 
      /**
@@ -91,6 +101,7 @@ export class FormResponseValidator {
       */
      protected validateListField(question: Model.SDCListField){
           const answer = this.findAnswer(question)
+          // TODO
      }
 
      /**
