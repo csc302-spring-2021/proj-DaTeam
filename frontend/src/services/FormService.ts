@@ -1,17 +1,17 @@
 import { Model } from "@dateam/shared";
 
 /**
- * Preform a GET request to the /api/v1/form/:formId route
+ * Preform a GET request to the /api/v1/forms/:formId route
  *
  * @param formId An ID for the SDC form that is to be recived.
  * @returns A SDC Form Object
  */
 async function read(formId: number): Promise<Model.SDCForm> {
   try {
-    const formResponse = await fetch(`/api/v1/form/${formId}`, {
+    const formResponse = await fetch(`/api/v1/forms/${formId}`, {
       method: "GET",
     });
-    
+
     if (formResponse.status != 200) {
       throw Error(
         `Could not get form by ID. Error: ${formResponse.statusText}`

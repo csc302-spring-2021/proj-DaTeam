@@ -15,17 +15,17 @@ export class FormAPI {
     return this.router;
   }
 
-  /* GET /form/{formId} */
+  /* GET /forms/{formId} */
   private getForm() {
-    this.router.get("/form/:formId", FormController.read);
+    this.router.get("/forms/:formId", FormController.read);
   }
 
-  /* POST /form/{formId} */
+  /* POST /forms/{formId} */
   private postForm() {
-    this.router.post("/form", FormController.create);
+    this.router.post("/forms", FormController.create);
   }
 
   private parseForm() {
-    this.router.post("/form/parse", FormController.parse);
+    this.router.post("/forms/parse", FormController.parse);
   }
 }

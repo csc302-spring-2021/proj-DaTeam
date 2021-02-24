@@ -23,7 +23,7 @@ externalDocs:
   description: "Find out more about our project"
   url: "https://umar-ahmed.gitbook.io/project-dateam/"
 paths:
-  /patient/search:
+  /patients/search:
     get:
       description: "Search for a patient by ID or legal name"
       tags:
@@ -44,7 +44,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Patient"
 
-  /patient/{patientId}:
+  /patients/{patientId}:
     get:
       description: "Get a specific patient"
       tags:
@@ -68,7 +68,7 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
-  /procedure/{procedureId}:
+  /procedures/{procedureId}:
     get:
       description: Get a specific procedure
       tags:
@@ -91,7 +91,7 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
-  /form/parse:
+  /forms/parse:
     post:
       tags:
         - parser
@@ -115,7 +115,7 @@ paths:
         400:
           $ref: "#/components/responses/BadRequest"
 
-  /form:
+  /forms:
     post:
       tags:
         - form
@@ -127,7 +127,7 @@ paths:
         400:
           $ref: "#/components/responses/BadRequest"
 
-  /form/{formId}:
+  /forms/{formId}:
     get:
       description: Get a specific form
       tags:
@@ -151,7 +151,7 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
-  /response:
+  /responses:
     post:
       description: Create a new response
       tags:
@@ -164,7 +164,7 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
-  /response/{responseId}:
+  /responses/{responseId}:
     get:
       description: Get a specific form response
       tags:
