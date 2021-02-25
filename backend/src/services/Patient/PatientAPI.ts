@@ -14,13 +14,13 @@ export class PatientAPI {
     return this.router;
   }
 
-  /* GET /patient/{patientId} */
+  /* GET /patients/{patientId} */
   private getPatient() {
-    this.router.get("/patient/:patientId", PatientController.read);
-    this.router.get("/patient/search", PatientController.search);
+    this.router.get("/patients/:patientId", PatientController.read);
+    this.router.get("/patients/search", PatientController.search);
   }
 
-  /* POST /patient/{patientId} */
+  /* POST /patients/{patientId} */
   private postPatient() {
     //this.router.post("/patient", Patient.create);
   }
