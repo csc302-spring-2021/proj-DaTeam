@@ -15,17 +15,18 @@ export class ResponseAPI {
     return this.router;
   }
 
-  /* GET /response/{responseId} */
+  /* GET /responses/{responseId} */
   private getResponse() {
-    this.router.get("/response/:responseId", ResponseController.read);
+    this.router.get("/responses/:responseId", ResponseController.read);
   }
 
-  /* POST /response/{responseId} */
+  /* POST /responses */
   private postResponse() {
-    this.router.post("/response", ResponseController.create);
+    this.router.post("/responses", ResponseController.create);
   }
 
+  /* PUT /responses/{responseId} */
   private putResponse() {
-    this.router.put("/response/:responseId", ResponseController.update);
+    this.router.put("/responses/:responseId", ResponseController.update);
   }
 }

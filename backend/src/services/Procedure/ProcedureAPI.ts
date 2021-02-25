@@ -15,10 +15,10 @@ export class ProcedureAPI {
   }
 
   private getProcedure() {
-    this.router.get("/procedure/:procedureId", ProcedureController.read);
+    this.router.get("/procedures/:procedureId", ProcedureController.read);
   }
 
   private postProcedure() {
-    this.router.post("/procedure", ProcedureController.create);
+    this.router.post("/procedures", ProcedureController.create);
   }
 }

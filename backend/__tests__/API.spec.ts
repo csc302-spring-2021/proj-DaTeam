@@ -51,14 +51,14 @@ describe.only("GET /mock", () => {
  * Add a new test block for each API end point
  */
 
-describe("GET /api/patient/search: Search for a patient by ID or legal name", () => {
+describe("GET /api/patients/search: Search for a patient by ID or legal name", () => {
     var mockPatient = Mock.getMockPatient();
     var patientId = mockPatient.id;
     var patientName = mockPatient.name;
 
     test("Search by ID that exists", done => {
         request
-            .get(`/api/patient/search?query=${patientId}`)
+            .get(`/api/patients/search?query=${patientId}`)
             .expect('Content-Type', /json/)
             .expect(HttpCode.OK)
             .then(response => {
@@ -72,7 +72,7 @@ describe("GET /api/patient/search: Search for a patient by ID or legal name", ()
     });
     test("Search by name that exists", done => {
         request
-            .get(`/api/patient/search?query=${patientName}`)
+            .get(`/api/patients/search?query=${patientName}`)
             .expect('Content-Type', /json/)
             .expect(HttpCode.OK)
             .then(response => {
@@ -86,7 +86,7 @@ describe("GET /api/patient/search: Search for a patient by ID or legal name", ()
     });
     test("Search by name that does not exist", done => {
         request
-            .get("/api/patient/search?query=FakeName")
+            .get("/api/patients/search?query=FakeName")
             .expect('Content-Type', /json/)
             .expect(HttpCode.OK)
             .then(response => {
@@ -98,7 +98,7 @@ describe("GET /api/patient/search: Search for a patient by ID or legal name", ()
     });
     test("Search by ID that does not exist", done => {
         request
-            .get("/api/patient/search?query=FakeID")
+            .get("/api/patients/search?query=FakeID")
             .expect('Content-Type', /json/)
             .expect(HttpCode.OK)
             .then(response => {
@@ -110,10 +110,10 @@ describe("GET /api/patient/search: Search for a patient by ID or legal name", ()
     });
 });
 
-describe("GET /api/patient/{patientId}: Get a specific patient", () => {
+describe("GET /api/patients/{patientId}: Get a specific patient", () => {
     test("Return the specified patient", done => {
         request
-            .get("/api/patient/{patientId}")
+            .get("/api/patients/{patientId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -122,7 +122,7 @@ describe("GET /api/patient/{patientId}: Get a specific patient", () => {
     });
     test("Bad Request", done => {
         request
-            .get("/api/patient/{patientId}")
+            .get("/api/patients/{patientId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -131,7 +131,7 @@ describe("GET /api/patient/{patientId}: Get a specific patient", () => {
     });
     test("Not Found", done => {
         request
-            .get("/api/patient/{patientId}")
+            .get("/api/patients/{patientId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -140,10 +140,10 @@ describe("GET /api/patient/{patientId}: Get a specific patient", () => {
     });
 });
 
-describe("GET /api/procedure/{procedureId}: Get a specific procedure", () => {
+describe("GET /api/procedures/{procedureId}: Get a specific procedure", () => {
     test("Returns the requested procedure", done => {
         request
-            .get("/api/procedure/{procedureId}")
+            .get("/api/procedures/{procedureId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -152,7 +152,7 @@ describe("GET /api/procedure/{procedureId}: Get a specific procedure", () => {
     });
     test("Bad Request", done => {
         request
-            .get("/api/procedure/{procedureId}")
+            .get("/api/procedures/{procedureId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -161,7 +161,7 @@ describe("GET /api/procedure/{procedureId}: Get a specific procedure", () => {
     });
     test("Not Found", done => {
         request
-            .get("/api/procedure/{procedureId}")
+            .get("/api/procedures/{procedureId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -170,10 +170,10 @@ describe("GET /api/procedure/{procedureId}: Get a specific procedure", () => {
     });
 });
 
-describe("POST /api/form: Create a new form from an XML document", () => {
+describe("POST /api/forms: Create a new form from an XML document", () => {
     test("Successfully created form", done => {
         request
-            .post("/api/form")
+            .post("/api/forms")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -182,7 +182,7 @@ describe("POST /api/form: Create a new form from an XML document", () => {
     });
     test("Bad Request", done => {
         request
-            .post("/api/form")
+            .post("/api/forms")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -191,13 +191,13 @@ describe("POST /api/form: Create a new form from an XML document", () => {
     });
 });
 
-describe.only("GET /api/form/{formId}: Get a specific form", () => {
+describe.only("GET /api/forms/{formId}: Get a specific form", () => {
     var mockForm = Mock.getMockForm();
     var formId = mockForm.uid;
 
     test.only("Return Form matching query", done => {
         request
-            .get(`/api/form/${formId}`)
+            .get(`/api/forms/${formId}`)
             .expect('Content-Type', /json/)
             .expect(HttpCode.OK)
             .then(response => {
@@ -209,7 +209,7 @@ describe.only("GET /api/form/{formId}: Get a specific form", () => {
     });
     test("Bad Request", done => {
         request
-            .get("/api/form/{formId}")
+            .get("/api/forms/{formId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -218,7 +218,7 @@ describe.only("GET /api/form/{formId}: Get a specific form", () => {
     });
     test("Not Found", done => {
         request
-            .get("/api/form/{formId}")
+            .get("/api/forms/{formId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -227,10 +227,10 @@ describe.only("GET /api/form/{formId}: Get a specific form", () => {
     });
 });
 
-describe("POST /api/response: Create a new response", () => {
+describe("POST /api/responses: Create a new response", () => {
     test("Response created successfully", done => {
         request
-            .post("/api/response")
+            .post("/api/responses")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -239,7 +239,7 @@ describe("POST /api/response: Create a new response", () => {
     });
     test("Bad Request", done => {
         request
-            .post("/api/response")
+            .post("/api/responses")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -248,7 +248,7 @@ describe("POST /api/response: Create a new response", () => {
     });
     test("Not Found", done => {
         request
-            .post("/api/response")
+            .post("/api/responses")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -257,10 +257,10 @@ describe("POST /api/response: Create a new response", () => {
     });
 });
 
-describe("GET /api/response/{responseId}: Get a specific form response", () => {
+describe("GET /api/responses/{responseId}: Get a specific form response", () => {
     test("Returns the requested response", done => {
         request
-            .get("/api/response/{responseId}")
+            .get("/api/responses/{responseId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -269,7 +269,7 @@ describe("GET /api/response/{responseId}: Get a specific form response", () => {
     });
     test("Bad Request", done => {
         request
-            .get("/api/response/{responseId}")
+            .get("/api/responses/{responseId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -278,7 +278,7 @@ describe("GET /api/response/{responseId}: Get a specific form response", () => {
     });
     test("Not Found", done => {
         request
-            .get("/api/response/{responseId}")
+            .get("/api/responses/{responseId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -287,10 +287,10 @@ describe("GET /api/response/{responseId}: Get a specific form response", () => {
     });
 });
 
-describe("PUT /api/response/{responseId}: Update a response", () => {
+describe("PUT /api/responses/{responseId}: Update a response", () => {
     test("Response created successfully", done => {
         request
-            .put("/api/response/{responseId}")
+            .put("/api/responses/{responseId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -299,7 +299,7 @@ describe("PUT /api/response/{responseId}: Update a response", () => {
     });
     test("Bad Request", done => {
         request
-            .put("/api/response/{responseId}")
+            .put("/api/responses/{responseId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -308,7 +308,7 @@ describe("PUT /api/response/{responseId}: Update a response", () => {
     });
     test("Not Found", done => {
         request
-            .put("/api/response/{responseId}")
+            .put("/api/responses/{responseId}")
             .expect(HttpCode.NOT_IMPLEMENTED)
             .end(function(err, res) {
                 if (err) return done(err);
