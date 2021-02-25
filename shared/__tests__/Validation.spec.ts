@@ -9,3 +9,21 @@ describe("Mock Data Validator Test", () => {
         });
     }
 });
+
+describe.skip("Verify Invalid Cases", () => {
+    test("Root level property invalid" , done => {
+        done();
+    });
+    test("Super class property invalid" , done => {
+        done();
+    });
+    test("Sub level missing attribute" , done => {
+        done();
+    });
+    test("Child of child is invalid" , done => {
+        done();
+    });
+    test("Attribute validator failed" , done => {
+        done();
+    });
+});
