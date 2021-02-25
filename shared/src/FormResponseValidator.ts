@@ -110,7 +110,21 @@ export class FormResponseValidator {
       */
      protected validateListField(question: Model.SDCListField){
           const answer = this.findAnswer(question)
-          // TODO
+
+          // Check for out-of-bounds.
+          if (answer.responses.length > question.maxSelections) {
+               this.errors.push(new AnswerValidationError(question, "Selection count above maximum."))
+          } else if (answer.responses.length < question.minSelections) {
+               this.errors.push(new AnswerValidationError(question, "Selection count below minimum."))
+          }
+          // Check for validity of ids.
+          let idCheck = answer.responses.every(response => {
+               question.options.some(listFieldItem => listFieldItem.id === response);
+          })
+          if (!idCheck) {
+               throw new ValidationError("Invalid ID provided for question " + question.id);
+          }
+
      }
 
      /**
