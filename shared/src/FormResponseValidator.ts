@@ -91,8 +91,17 @@ export class FormResponseValidator {
           } else if (answer.responses.length > 1){
                // Fatal error
                throw new ValidationError("Multiple responses submitted for question " + question.id)
+          } else if (!textFieldTypeMeta[question.type] || !textFieldTypeMeta[question.type].parser) {
+               // Parser unavailable
+               throw new ValidationError("Parser is not available for object of type " + question.type);
           }
-          // TODO
+          const theAnswer = answer.responses[0];
+          const parse = textFieldTypeMeta[question.type].parser!; // ! operator because we are checking above whether or not a parser exists.
+          const result = parse(theAnswer);
+          if (!result) {
+               this.errors.push(new AnswerValidationError(question, "Answer is formatted incorrectly."));
+          }
+          return;
      }
 
      /**
