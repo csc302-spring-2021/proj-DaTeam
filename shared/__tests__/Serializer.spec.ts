@@ -1,4 +1,4 @@
-describe.only("test", () => {
+describe("test", () => {
     test("test", done => {
         done();
     });
