@@ -154,7 +154,7 @@ export class FormResponseValidator {
                     }
                })
                if (!exists) {
-                    this.validationFlag.addByPassUIDField(option.uid, 'textResponse');
+                    this.validationFlag.addByPassUIDField(option.uid!, 'textResponse');
                }
           }
           
