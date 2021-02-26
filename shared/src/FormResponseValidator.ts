@@ -8,6 +8,7 @@ import * as Model from "./ClassDef"
 import { classMeta } from "./ClassMeta"
 import { textFieldTypeMeta } from "./TextFieldTypeMeta"
 import { GenericClassValidator } from "./ClassValidator"
+import { resourceUsage } from "process"
 
 /** Contains flags that can change the behaviour of the recursive validation process */
 class ValidationFlag{
@@ -24,6 +25,7 @@ class ValidationFlag{
       */
      addByPassUIDField(uid: string, field: string){
           // TODO
+          this.byPassUIDField[uid] = [field];
      }
 }
 
@@ -96,8 +98,7 @@ export class FormResponseValidator {
                throw new ValidationError("Parser is not available for object of type " + question.type);
           }
           const theAnswer = answer.responses[0];
-          const parse = textFieldTypeMeta[question.type].parser!; // ! operator because we are checking above whether or not a parser exists.
-          const result = parse(theAnswer);
+          const result = textFieldTypeMeta[question.type].parser!(answer.responses[0]); // ! operator because we are already checking above whether or not a parser exists.
           if (!result) {
                this.errors.push(new AnswerValidationError(question, "Answer is formatted incorrectly."));
           }
@@ -119,11 +120,53 @@ export class FormResponseValidator {
           }
           // Check for validity of ids.
           let idCheck = answer.responses.every(response => {
+               // Assuming I should be checking listFieldItem.id. Might need to change?
                question.options.some(listFieldItem => listFieldItem.id === response);
-          })
+          });
           if (!idCheck) {
                throw new ValidationError("Invalid ID provided for question " + question.id);
           }
+          // selectionDeselectsSiblings and selectionDisablesChildren checks
+          for (let response of answer.responses) {
+               for (let option of question.options) {
+                    if (response === option.id) {
+                         if (option.selectionDeselectsSiblings && answer.responses.length > 1) {
+                              this.errors.push(new AnswerValidationError(question, "Multiple selections while selectionDeselectsSiblings enabled on response " + response));
+                         }
+                         if (option.selectionDisablesChildren) {
+                              // Can we assume uid is non-null? Forcing it with ! operator here.
+                              this.validationFlag.addByPassUIDField(option.uid!, 'children');
+                         }
+                    }
+               }
+               let filteredItems = question.options.filter(listFieldItem => {
+                    if (listFieldItem.id === response) {
+                         return true;
+                    }
+                    return false;
+               })
+          }
+
+          for (let option of question.options) {
+               let exists = answer.responses.filter(response => {
+                    if (option.id === response) {
+                         return true;
+                    }
+               })
+               if (!exists) {
+                    this.validationFlag.addByPassUIDField(option.uid, 'textResponse');
+               }
+          }
+          
+          // for (let response of answer.responses) {
+          //      // ID validity check
+          //      let idCheck = false;
+          //      for (let option of question.options) {
+          //           if (option.id === response) {
+          //                idCheck = true;
+          //           }
+          //      }
+          // }
 
      }
 
