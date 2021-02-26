@@ -99,7 +99,9 @@ export class FormResponseValidator {
           }
           const theAnswer = answer.responses[0];
           const result = textFieldTypeMeta[question.type].parser!(answer.responses[0]); // ! operator because we are already checking above whether or not a parser exists.
-          if (!result) {
+          if (result) {
+               this.validatedAnswers.push(answer);
+          } else {
                this.errors.push(new AnswerValidationError(question, "Answer is formatted incorrectly."));
           }
           return;
@@ -118,56 +120,47 @@ export class FormResponseValidator {
           } else if (answer.responses.length < question.minSelections) {
                this.errors.push(new AnswerValidationError(question, "Selection count below minimum."))
           }
+          let invalidAnswers: Model.SDCListFieldItem[] = [];
+
           // Check for validity of ids.
           let idCheck = answer.responses.every(response => {
-               // Assuming I should be checking listFieldItem.id. Might need to change?
+               // Assuming I should be checking listFieldItem.id. Might need to change to uid?
                question.options.some(listFieldItem => listFieldItem.id === response);
           });
           if (!idCheck) {
                throw new ValidationError("Invalid ID provided for question " + question.id);
           }
-          // selectionDeselectsSiblings and selectionDisablesChildren checks
-          for (let response of answer.responses) {
-               for (let option of question.options) {
-                    if (response === option.id) {
-                         if (option.selectionDeselectsSiblings && answer.responses.length > 1) {
-                              this.errors.push(new AnswerValidationError(question, "Multiple selections while selectionDeselectsSiblings enabled on response " + response));
-                         }
-                         if (option.selectionDisablesChildren) {
-                              // Can we assume uid is non-null? Forcing it with ! operator here.
-                              this.validationFlag.addByPassUIDField(option.uid!, 'children');
-                         }
-                    }
-               }
-               let filteredItems = question.options.filter(listFieldItem => {
-                    if (listFieldItem.id === response) {
-                         return true;
-                    }
-                    return false;
-               })
-          }
 
-          for (let option of question.options) {
-               let exists = answer.responses.filter(response => {
-                    if (option.id === response) {
+          // Filtering out unselected options, and checking validity along the way
+          let selectedListFieldItems: Model.SDCListFieldItem[] = question.options.filter(listFieldItem => {
+               for (let response in answer.responses) {
+                    if (response === listFieldItem.id) {
+                         // Check for selectionDeselectsSiblings
+                         if (listFieldItem.selectionDeselectsSiblings && answer.responses.length > 1) {
+                              this.errors.push(new AnswerValidationError(question, "Multiple selections while selectionDeselectsSiblings is enabled on response " + response));
+                              invalidAnswers.push(listFieldItem);
+                         }
+
+                         // Check for selectionDisablesChildren
+                         if (listFieldItem.selectionDisablesChildren) {
+                              // Can we assume uid is non-null? Forcing it with ! operator here.
+                              this.validationFlag.addByPassUIDField(listFieldItem.uid!, 'children');
+                         }
                          return true;
                     }
-               })
-               if (!exists) {
-                    this.validationFlag.addByPassUIDField(option.uid!, 'textResponse');
                }
+               this.validationFlag.addByPassUIDField(listFieldItem.uid!, 'textResponse');
+               return false;
+          });
+
+          // Sanity check: if the lengths are not equal, there must be a duplicate response.
+          if (selectedListFieldItems.length != answer.responses.length) {
+               throw new ValidationError("Duplicate response detected in FormResponse.");
           }
           
-          // for (let response of answer.responses) {
-          //      // ID validity check
-          //      let idCheck = false;
-          //      for (let option of question.options) {
-          //           if (option.id === response) {
-          //                idCheck = true;
-          //           }
-          //      }
-          // }
-
+          if (invalidAnswers.length == 0) {
+               this.validatedAnswers.push(answer);
+          }
      }
 
      /**
