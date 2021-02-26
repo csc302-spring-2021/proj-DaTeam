@@ -16,14 +16,6 @@ For Phase 2, we plan on implementing the following use-cases:
 
 ![Structure](https://user-images.githubusercontent.com/8302959/109045932-2c016300-76a2-11eb-9ba1-4c8ed6e94bd7.png)
 
-### View Response
-
-> As a form filler, I want to generate a unique, persistent URL to the form response so that I can share the link with others
-
-> As a form receiver, I want to be able to view a persistent page with a form response so that I can review the results to make a prognosis
-
-![Persistent URL](https://user-images.githubusercontent.com/8302959/109046656-ff018000-76a2-11eb-8909-58c281890400.png)
-
 ## What We Actually Built
 
 - **TODO:** What did you actually build during this phase?
