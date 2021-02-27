@@ -38,11 +38,31 @@ class DatabaseManager {
       });
   }
 
-  testQuery() {
-    this.db
-      .one("select count(*) from item")
-      .then((r) => console.log(r))
-      .catch((e) => console.log(e));
+  /**
+   * Save an object into the database, return its primary key if defined
+   * @param obj object to store
+   * @param targetClass object class
+   */
+  async genericCreate(obj: any, targetClass: new() => any): Promise<string> {
+    return {} as any
+  }
+
+  /**
+   * Load an object from the database with the given primary key
+   * @param pk key to search with
+   * @param targetClass expected object class
+   */
+  async genericRead(pk: string, targetClass: new() => any): Promise<any>  {
+    return {} as any
+  }
+
+  /**
+   * Delete an object from the database with the given primary key
+   * @param pk key to search with
+   * @param targetClass object class
+   */
+  async genericDelete(pk: string, targetClass: new() => any): Promise<string | undefined>  {
+    return {} as any
   }
 }
 
