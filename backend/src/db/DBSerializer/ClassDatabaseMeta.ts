@@ -3,11 +3,12 @@ import {
   nothing,
   just,
   remap,
-  refToChild,
+  refForChild,
   childRef,
 } from "./DatabaseMetaInterface";
 import { Model } from "@dateam/shared";
 
+/** Dictionary containing database meta info */
 export const classDatabaseMeta: { [id: string]: ClassDatabaseMetaType } = {
   Procedure: {
     pk: "uid",
@@ -36,7 +37,7 @@ export const classDatabaseMeta: { [id: string]: ClassDatabaseMetaType } = {
     fields: {
       parentId: just, // db save temp field needs to be specified
       order: remap("displayOrder"),
-      children: refToChild("uid", "parentId"),
+      children: refForChild("uid", "parentId"),
     },
   },
   SDCForm: {
@@ -44,7 +45,7 @@ export const classDatabaseMeta: { [id: string]: ClassDatabaseMetaType } = {
     table: "form",
     fields: {
       uid: just,
-      formProperties: refToChild("uid", "formId"),
+      formProperties: refForChild("uid", "formId"),
     },
   },
   SDCFormProperty: {
@@ -59,7 +60,7 @@ export const classDatabaseMeta: { [id: string]: ClassDatabaseMetaType } = {
     table: "listField",
     fields: {
       uid: just,
-      options: refToChild("uid", "listId"),
+      options: refForChild("uid", "listId"),
     },
   },
   SDCListFieldItem: {
@@ -83,7 +84,7 @@ export const classDatabaseMeta: { [id: string]: ClassDatabaseMetaType } = {
     pk: "uid",
     table: "formResponse",
     fields: {
-      answers: refToChild("uid", "responseId"),
+      answers: refForChild("uid", "responseId"),
     },
   },
   SDCAnswer: {
