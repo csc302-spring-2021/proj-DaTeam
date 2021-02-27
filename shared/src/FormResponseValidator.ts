@@ -26,6 +26,7 @@ class ValidationFlag{
      addByPassUIDField(uid: string, field: string){
           // TODO
           this.byPassUIDField[uid] = [field];
+
      }
 }
 
@@ -97,7 +98,6 @@ export class FormResponseValidator {
                // Parser unavailable
                throw new ValidationError("Parser is not available for object of type " + question.type);
           }
-          const theAnswer = answer.responses[0];
           const result = textFieldTypeMeta[question.type].parser!(answer.responses[0]); // ! operator because we are already checking above whether or not a parser exists.
           if (result) {
                this.validatedAnswers.push(answer);
@@ -115,10 +115,13 @@ export class FormResponseValidator {
           const answer = this.findAnswer(question)
 
           // Check for out-of-bounds.
+          // Do we throw or return here?
           if (answer.responses.length > question.maxSelections) {
-               this.errors.push(new AnswerValidationError(question, "Selection count above maximum."))
+               //this.errors.push(new AnswerValidationError(question, "Selection count above maximum."));
+               throw new ValidationError("Selection count above maximum.");
           } else if (answer.responses.length < question.minSelections) {
-               this.errors.push(new AnswerValidationError(question, "Selection count below minimum."))
+               //this.errors.push(new AnswerValidationError(question, "Selection count below minimum."))
+               throw new ValidationError("Selection count below minimum.");
           }
           let invalidAnswers: Model.SDCListFieldItem[] = [];
 
@@ -143,7 +146,7 @@ export class FormResponseValidator {
 
                          // Check for selectionDisablesChildren
                          if (listFieldItem.selectionDisablesChildren) {
-                              // Can we assume uid is non-null? Forcing it with ! operator here.
+                              // Can we assume uid is non-null? It is nullable so probably not, Forcing it with ! operator for now.
                               this.validationFlag.addByPassUIDField(listFieldItem.uid!, 'children');
                          }
                          return true;
@@ -154,6 +157,7 @@ export class FormResponseValidator {
           });
 
           // Sanity check: if the lengths are not equal, there must be a duplicate response.
+          // TODO: Do we need to throw or return here? Assuming throw, since a duplicate response shouldn't be possible.
           if (selectedListFieldItems.length != answer.responses.length) {
                throw new ValidationError("Duplicate response detected in FormResponse.");
           }
