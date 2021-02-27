@@ -30,8 +30,10 @@ class DatabaseManager {
 
   testConnection() {
     this.db
-      .connect()
-      .then((obj) => obj.done())
+      .one("SELECT count(*) FROM " + process.env.DB_TEST_TABLE)
+      .then(() => {
+        console.log("Dabase is setup");
+      })
       .catch((e) => {
         console.log(e);
         process.exit(1);
@@ -43,8 +45,8 @@ class DatabaseManager {
    * @param obj object to store
    * @param targetClass object class
    */
-  async genericCreate(obj: any, targetClass: new() => any): Promise<string> {
-    return {} as any
+  async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
+    return {} as any;
   }
 
   /**
@@ -52,8 +54,8 @@ class DatabaseManager {
    * @param pk key to search with
    * @param targetClass expected object class
    */
-  async genericRead(pk: string, targetClass: new() => any): Promise<any>  {
-    return {} as any
+  async genericRead(pk: string, targetClass: new () => any): Promise<any> {
+    return {} as any;
   }
 
   /**
@@ -61,8 +63,11 @@ class DatabaseManager {
    * @param pk key to search with
    * @param targetClass object class
    */
-  async genericDelete(pk: string, targetClass: new() => any): Promise<string | undefined>  {
-    return {} as any
+  async genericDelete(
+    pk: string,
+    targetClass: new () => any
+  ): Promise<string | undefined> {
+    return {} as any;
   }
 }
 
