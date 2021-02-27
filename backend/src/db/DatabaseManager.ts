@@ -1,5 +1,6 @@
 import pgPromise from "pg-promise";
 import * as promise from "bluebird";
+import { GenericDatabaseSerializer } from "./DBSerializer";
 
 class DatabaseManager {
   protected db: pgPromise.IDatabase<{}>;
@@ -46,7 +47,9 @@ class DatabaseManager {
    * @param targetClass object class
    */
   async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
-    return {} as any;
+    if (!(obj instanceof targetClass))
+      throw new Error("Object is not " + targetClass.name);
+    return await this.db.tx((tx) => GenericDatabaseSerializer.create(obj, tx));
   }
 
   /**
