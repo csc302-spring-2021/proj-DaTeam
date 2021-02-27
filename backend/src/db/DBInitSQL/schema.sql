@@ -7,6 +7,7 @@ CREATE TYPE sdcItemType AS ENUM (
   'displayItem',
   'section',
   'listField',
+  'listFieldItem',
   'textField'
 );
 
@@ -50,10 +51,10 @@ CREATE TYPE textFieldType AS ENUM (
   'yearMonthDuration'
 );
 
-CREATE TABLE prodecure (
+CREATE TABLE procedure (
   uid uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   id text UNIQUE NOT NULL,
-  assignedFormID uuid,
+  assignedFormId uuid,
   creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -67,7 +68,7 @@ CREATE TABLE patient (
 CREATE TABLE item (
   uid uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   id text NOT NULL,
-  parent_id uuid,
+  parentId uuid,
   itemType sdcItemType NOT NULL,
   title text,
   displayOrder integer,
@@ -120,15 +121,14 @@ CREATE TABLE formResponse (
 );
 
 CREATE TABLE answer (
-  uid uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   responseId uuid NOT NULL,
   questionId text NOT NULL,
   response text NOT NULL
 );
 
-ALTER TABLE prodecure ADD FOREIGN KEY (assignedFormID) REFERENCES form (uid);
+ALTER TABLE procedure ADD FOREIGN KEY (assignedFormId) REFERENCES form (uid);
 
-ALTER TABLE item ADD FOREIGN KEY (parent_id) REFERENCES item (uid);
+ALTER TABLE item ADD FOREIGN KEY (parentId) REFERENCES item (uid);
 
 ALTER TABLE form ADD FOREIGN KEY (uid) REFERENCES item (uid);
 
@@ -150,13 +150,13 @@ ALTER TABLE formResponse ADD FOREIGN KEY (patientId) REFERENCES patient (uid);
 
 ALTER TABLE answer ADD FOREIGN KEY (responseId) REFERENCES formResponse (uid);
 
-CREATE INDEX ON prodecure (id);
+CREATE INDEX ON procedure (id);
 
 CREATE INDEX ON patient (id);
 
-CREATE UNIQUE INDEX ON item (id, parent_id);
+CREATE UNIQUE INDEX ON item (id, parentId);
 
-CREATE INDEX ON item (parent_id);
+CREATE INDEX ON item (parentId);
 
 CREATE UNIQUE INDEX ON form (lineage, version);
 
