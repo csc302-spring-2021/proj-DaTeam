@@ -7,7 +7,10 @@
     "build": "npx tsc",
     "start": "node ./build/Server.js",
     "test": "jest --detectOpenHandles",
-    "dev": "npx nodemon ./src/Server.ts"
+    "dev": "npx nodemon ./src/Server.ts",
+    "db:up": "docker-compose -f docker-compose-db.yml --env-file ../.env up",
+    "db:down": "docker-compose -f docker-compose-db.yml --env-file ../.env down",
+    "db:rm": "docker volume rm backend_postgres-data"
   },
   "repository": {
     "type": "git",
