@@ -25,8 +25,12 @@ class ValidationFlag{
       */
      addByPassUIDField(uid: string, field: string){
           // TODO
-          this.byPassUIDField[uid] = [field];
-
+          if (typeof this.byPassUIDField[uid] != 'undefined' && this.byPassUIDField[uid] instanceof Array) {
+               this.byPassUIDField[uid].push(field);
+          } else {
+               this.byPassUIDField[uid] = [field];
+          }
+                                                
      }
 }
 
@@ -94,7 +98,7 @@ export class FormResponseValidator {
           } else if (answer.responses.length > 1){
                // Fatal error
                throw new ValidationError("Multiple responses submitted for question " + question.id)
-          } else if (!textFieldTypeMeta[question.type] || !textFieldTypeMeta[question.type].parser) {
+          } else if (typeof textFieldTypeMeta[question.type].parser == 'undefined' || typeof textFieldTypeMeta[question.type].parser != 'function') {
                // Parser unavailable
                throw new ValidationError("Parser is not available for object of type " + question.type);
           }
@@ -102,7 +106,7 @@ export class FormResponseValidator {
           if (result) {
                this.validatedAnswers.push(answer);
           } else {
-               this.errors.push(new AnswerValidationError(question, "Answer is formatted incorrectly."));
+               this.errors.push(new AnswerValidationError(question, "Answer for question " + question.id + " is formatted incorrectly."));
           }
           return;
      }
@@ -113,25 +117,26 @@ export class FormResponseValidator {
       */
      protected validateListField(question: Model.SDCListField){
           const answer = this.findAnswer(question)
-
+          let valid = true;
           // Check for out-of-bounds.
           // Do we throw or return here?
           if (answer.responses.length > question.maxSelections) {
-               //this.errors.push(new AnswerValidationError(question, "Selection count above maximum."));
-               throw new ValidationError("Selection count above maximum.");
+               this.errors.push(new AnswerValidationError(question, "Selection count above maximum."));
+               valid = false;
+               //throw new ValidationError("Selection count above maximum.");
           } else if (answer.responses.length < question.minSelections) {
-               //this.errors.push(new AnswerValidationError(question, "Selection count below minimum."))
-               throw new ValidationError("Selection count below minimum.");
+               this.errors.push(new AnswerValidationError(question, "Selection count below minimum."));
+               valid = false;
+               //throw new ValidationError("Selection count below minimum.");
           }
-          let invalidAnswers: Model.SDCListFieldItem[] = [];
 
           // Check for validity of ids.
           let idCheck = answer.responses.every(response => {
-               // Assuming I should be checking listFieldItem.id. Might need to change to uid?
+               // Assuming I should be checking listFieldItem.id. Should it be id or uid?
                question.options.some(listFieldItem => listFieldItem.id === response);
           });
           if (!idCheck) {
-               throw new ValidationError("Invalid ID provided for question " + question.id);
+               throw new ValidationError("Response with invalid ID selected for question " + question.id);
           }
 
           // Filtering out unselected options, and checking validity along the way
@@ -141,13 +146,16 @@ export class FormResponseValidator {
                          // Check for selectionDeselectsSiblings
                          if (listFieldItem.selectionDeselectsSiblings && answer.responses.length > 1) {
                               this.errors.push(new AnswerValidationError(question, "Multiple selections while selectionDeselectsSiblings is enabled on response " + response));
-                              invalidAnswers.push(listFieldItem);
+                              valid = false;
                          }
-
+                         
                          // Check for selectionDisablesChildren
                          if (listFieldItem.selectionDisablesChildren) {
-                              // Can we assume uid is non-null? It is nullable so probably not, Forcing it with ! operator for now.
-                              this.validationFlag.addByPassUIDField(listFieldItem.uid!, 'children');
+                              if (typeof listFieldItem.uid != "undefined" && typeof listFieldItem.uid == "string") {
+                                   this.validationFlag.addByPassUIDField(listFieldItem.uid!, 'children');
+                              } else {
+                                   throw new ValidationError("UID not found for item " + response);
+                              }
                          }
                          return true;
                     }
@@ -155,14 +163,14 @@ export class FormResponseValidator {
                this.validationFlag.addByPassUIDField(listFieldItem.uid!, 'textResponse');
                return false;
           });
-
+          
           // Sanity check: if the lengths are not equal, there must be a duplicate response.
           // TODO: Do we need to throw or return here? Assuming throw, since a duplicate response shouldn't be possible.
           if (selectedListFieldItems.length != answer.responses.length) {
                throw new ValidationError("Duplicate response detected in FormResponse.");
           }
           
-          if (invalidAnswers.length == 0) {
+          if (valid) {
                this.validatedAnswers.push(answer);
           }
      }
