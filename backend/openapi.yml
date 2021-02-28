@@ -102,7 +102,7 @@ paths:
         content:
           application/xml:
             schema:
-              $ref: "#/components/schemas/SDXML"
+              $ref: "#/components/schemas/SDCXML"
             examples:
               lung:
                 $ref: "#/components/examples/lung"
@@ -110,12 +110,28 @@ paths:
                 $ref: "#/components/examples/stroke"
       responses:
         201:
-          description: Successfully created form
-          content: {}
+          description: Successfully parsed XML
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Form"
         400:
           $ref: "#/components/responses/BadRequest"
 
   /forms:
+    get:
+      tags:
+        - form
+      description: Get all forms
+      responses:
+        200:
+          description: Forms fetched successfully
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Form"
     post:
       tags:
         - form
@@ -151,11 +167,36 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
+  /forms/{formId}/responses:
+    get:
+      description: Get responses for a form
+      tags:
+        - response
+      responses:
+        200:
+          description: Returns array of responses
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FormResponsePartial"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+
   /responses:
     post:
       description: Create a new response
       tags:
         - response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormResponseRequestBody"
       responses:
         204:
           description: Response created successfully
@@ -237,11 +278,11 @@ components:
     Patient:
       type: object
       properties:
-        id:
+        uid:
           type: string
           description: Unique identifier for this patient
           format: uuid
-        external_id:
+        id:
           type: string
           description: External ID (typically OHIP) for identifying the patient
           example: "5584-486-674-YM"
@@ -268,7 +309,14 @@ components:
     Form:
       type: object
       properties:
+        __class:
+          type: string
+          default: "SDCForm"
         id:
+          type: string
+          description: Unique identifier of this form
+          example: "covid-19-test-55728d"
+        uid:
           type: string
           description: Unique identifier of this form
           format: uuid
@@ -276,16 +324,112 @@ components:
           type: string
           description: The title of the form
           example: "Lung Biopsy Analysis"
-
-    FormResponse:
+        order:
+          type: number
+          description: Order of this item in form
+        children:
+          type: array
+          items:
+            $ref: "#/components/schemas/Section"
+        
+    Section:
       type: object
       properties:
+        __class:
+          type: string
+          default: "SDCSection"
         id:
+          type: string
+          description: Unique identifier of this section
+          example: "section-f3a5dd"
+        uid:
+          type: string
+          description: Unique identifier of this section
+          format: uuid
+        title:
+          type: string
+          description: The title of the section
+          example: "Main Section"
+        order:
+          type: number
+          description: Order of this item in form
+
+    FormResponsePartial:
+      type: object
+      properties:
+        form_id:
+          type: string
+          description: ID of form
+          format: uuid
+        uid:
           type: string
           description: Unique identifier of this form response
           format: uuid
+        patient:
+          $ref: "#/components/schemas/Patient"
 
-    SDXML:
+    FormResponseRequestBody:
+      type: object
+      properties:
+        form_id:
+          type: string
+          description: ID of form
+          format: uuid
+        patient_id:
+          type: string
+          description: ID of patient
+          format: uuid
+        answers:
+          type: array
+          items:
+            type: object
+            properties:
+              question_id:
+                type: string
+                description: ID of question
+              responses:
+                type: array
+                items:
+                  type: string
+
+    FormResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/FormResponsePartial"
+        - type: object
+          properties:
+            answers:
+              type: array
+              items:
+                type: object
+                properties:
+                  question_id:
+                    type: string
+                    description: ID of question
+                  responses:
+                    type: array
+                    items:
+                      type: string
+
+    SDCJSON:
+      type: object
+      properties:
+        __class:
+          type: string
+          default: "SDCForm"
+        id:
+          type: string
+          description: Unique identifier of this form
+          example: "covid-19-test-55728d"
+        title:
+          type: string
+          description: The title of the form
+          example: "Lung Biopsy Analysis"
+        order:
+          type: number
+          description: Order of this item in form
+
+    SDCXML:
       type: object
       properties:
         XMLPackage:
