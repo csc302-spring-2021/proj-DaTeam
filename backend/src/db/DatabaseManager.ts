@@ -1,6 +1,10 @@
 import pgPromise from "pg-promise";
 import * as promise from "bluebird";
+import { GenericDatabaseSerializer } from "./DBSerializer";
 
+/**
+ * Connects with database and handle query requests
+ */
 class DatabaseManager {
   protected db: pgPromise.IDatabase<{}>;
 
@@ -28,6 +32,10 @@ class DatabaseManager {
     this.db = pgp(cn);
   }
 
+  /**
+   * Test to see if the dabase is correctly setup.
+   * Exit the program with code 1 if failed
+   */
   testConnection() {
     this.db
       .one("SELECT count(*) FROM " + process.env.DB_TEST_TABLE)
@@ -46,7 +54,9 @@ class DatabaseManager {
    * @param targetClass object class
    */
   async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
-    return {} as any;
+    if (!(obj instanceof targetClass))
+      throw new Error("Object is not " + targetClass.name);
+    return await this.db.tx((tx) => GenericDatabaseSerializer.create(obj, tx));
   }
 
   /**

@@ -276,7 +276,7 @@ export function buildFormResponseComplete(): Model.SDCFormResponse {
 
      answer = genAnswer()
      answer.questionID = "list-1"
-     answer.responses = ["list-1-t"]
+     answer.responses = ["list-1-t", "list-1-1", "list-1-2"]
      response.answers.push(answer)
 
      answer = genAnswer()
