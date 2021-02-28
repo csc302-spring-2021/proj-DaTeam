@@ -23,20 +23,14 @@ externalDocs:
   description: "Find out more about our project"
   url: "https://umar-ahmed.gitbook.io/project-dateam/"
 paths:
-  /patients/search:
+  /patients:
     get:
-      description: "Search for a patient by ID or legal name"
+      description: "Get all patients"
       tags:
         - patient
-      parameters:
-        - name: query
-          in: query
-          description: "Partial ID or name of patient to search for"
-          schema:
-            type: string
       responses:
         200:
-          description: "Return patients matching query"
+          description: Return all patients
           content:
             "application/json":
               schema:
@@ -114,7 +108,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Form"
+                $ref: "#/components/schemas/FormRequestBody"
         400:
           $ref: "#/components/responses/BadRequest"
 
@@ -122,7 +116,7 @@ paths:
     get:
       tags:
         - form
-      description: Get all forms
+      description: Get information about all forms
       responses:
         200:
           description: Forms fetched successfully
@@ -131,15 +125,24 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/Form"
+                  $ref: "#/components/schemas/FormPartial"
     post:
       tags:
         - form
       description: Create a new form
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormRequestBody"
       responses:
         201:
           description: Successfully created form
-          content: {}
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Form"
         400:
           $ref: "#/components/responses/BadRequest"
 
@@ -172,6 +175,13 @@ paths:
       description: Get responses for a form
       tags:
         - response
+      parameters:
+        - name: formId
+          description: "UID of form"
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Returns array of responses
@@ -238,12 +248,8 @@ paths:
           schema:
             type: string
       responses:
-        200:
-          description: Response created successfully
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/FormResponse"
+        204:
+          description: Response updated successfully
         400:
           $ref: "#/components/responses/BadRequest"
         404:
@@ -306,12 +312,9 @@ components:
           description: The name of the procedure
           example: "Lung Biopsy"
 
-    Form:
+    FormPartial:
       type: object
       properties:
-        __class:
-          type: string
-          default: "SDCForm"
         id:
           type: string
           description: Unique identifier of this form
@@ -324,36 +327,44 @@ components:
           type: string
           description: The title of the form
           example: "Lung Biopsy Analysis"
+        num_responses:
+          type: number
+          description: Total number of responses for this form
+          example: 4
+
+    FormRequestBody:
+      type: object
+      properties:
+        __class:
+          type: string
+          default: "SDCForm"
+        id:
+          type: string
+          description: Unique identifier of this form
+          example: "covid-19-test-55728d"
+        title:
+          type: string
+          description: The title of the form
+          example: "Lung Biopsy Analysis"
         order:
           type: number
           description: Order of this item in form
         children:
           type: array
           items:
-            $ref: "#/components/schemas/Section"
-        
-    Section:
-      type: object
-      properties:
-        __class:
-          type: string
-          default: "SDCSection"
-        id:
-          type: string
-          description: Unique identifier of this section
-          example: "section-f3a5dd"
-        uid:
-          type: string
-          description: Unique identifier of this section
-          format: uuid
-        title:
-          type: string
-          description: The title of the section
-          example: "Main Section"
-        order:
-          type: number
-          description: Order of this item in form
+            type: object
 
+    Form:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/FormRequestBody"
+        - type: object
+          properties:
+            uid:
+              type: string
+              description: Unique identifier of this form
+              format: uuid
+        
     FormResponsePartial:
       type: object
       properties:
