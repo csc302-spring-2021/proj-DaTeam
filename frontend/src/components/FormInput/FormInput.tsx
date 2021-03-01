@@ -5,6 +5,7 @@ interface IFormInputProps {
   placeholder?: string;
   state: string;
   setState: React.Dispatch<React.SetStateAction<string>>;
+  className?: string;
 }
 
 function FormInput(props: IFormInputProps) {
@@ -18,7 +19,7 @@ function FormInput(props: IFormInputProps) {
       onChange={valueSetter}
       type={props.type}
       placeholder={props.placeholder}
-      className="w-full h-6 px-4 py-5 bg-gray-200 rounded"
+      className={props.className + " w-full h-6 px-4 py-5 bg-gray-200 rounded"}
     />
   );
 }
