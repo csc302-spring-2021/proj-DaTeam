@@ -228,6 +228,14 @@ export function buildFormComplete(): Model.SDCForm {
      for (let i = 0; i < 4; i++){
           const listOption = genListFieldItemComplete()
           listOption.id = "list-1-" + i
+          const listOptionChild = genListFieldComplete();
+          listOptionChild.id = "list-1" + i
+          for(let j = 0; j < i; j++){
+            const listoptions2 = genListFieldItemComplete()
+            listoptions2.id = "list-1" + i + "-" + j
+            listOptionChild.options.push(listoptions2);
+          }
+          listOption.children.push(listOptionChild)
           listQuestion.options.push(listOption)
      }
 
