@@ -17,7 +17,6 @@ function ListField(props: { optionNodes:any[]; children?: any; sdcListField: Mod
         if(props.sdcListField.maxSelections !== 1){
             setIsMultiSelect(true);
         }
-        setIsMultiSelect(true);
 
         setSelected(selectedOptionsList);
     },[props.optionNodes]);
