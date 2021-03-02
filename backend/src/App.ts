@@ -8,6 +8,9 @@ import YAML from "yamljs";
 import logger from "./utils/Logger";
 import { HttpCode } from "./utils/Error";
 import { ServicesAPI } from "./services";
+import { databaseManager } from "./db";
+
+if (!process.env.CI) databaseManager.testConnection()
 
 const app = express();
 

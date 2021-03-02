@@ -7,7 +7,10 @@
     "build": "npx tsc",
     "start": "node ./build/Server.js",
     "test": "jest --detectOpenHandles",
-    "dev": "npx nodemon ./src/Server.ts"
+    "dev": "npx nodemon ./src/Server.ts",
+    "db:up": "docker-compose -f docker-compose-db.yml --env-file ../.env up",
+    "db:down": "docker-compose -f docker-compose-db.yml --env-file ../.env down",
+    "db:rm": "docker volume rm backend_postgres-data"
   },
   "repository": {
     "type": "git",
@@ -23,11 +26,13 @@
   },
   "homepage": "https://github.com/csc302-spring-2021/proj-DaTeam#readme",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "debug": "^2.6.9",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
+    "pg-monitor": "^1.4.1",
     "pg-promise": "^10.9.2",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3",
@@ -45,7 +50,6 @@
     "@types/swagger-ui-express": "^4.1.2",
     "@types/yamljs": "^0.2.31",
     "babel-jest": "26.6.0",
-    "bluebird": "^3.7.2",
     "jest": "26.6.0",
     "nodemon": "^2.0.7",
     "superagent": "^6.1.0",
