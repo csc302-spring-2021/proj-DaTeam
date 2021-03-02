@@ -26,21 +26,7 @@ function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
     } else if (sdcnode instanceof Model.SDCDisplayItem) {
         return <DisplayItem sdcDisplayitem={sdcnode as Model.SDCDisplayItem} />;
     } else if (sdcnode instanceof Model.SDCTextField) {
-        const sdcTextField = sdcnode as Model.SDCTextField;
-        return (
-            sdcTextField.title &&
-            sdcTextField.textAfterResponse && (
-                <div className="py-4">
-                    <ValueBlock
-                        id={"question-" + sdcnode.id}
-                        label={sdcTextField.title}
-                        value={60 + " " + sdcTextField.textAfterResponse}
-                    />
-
-                    {childNodes}
-                </div>
-            )
-        );
+        return <><TextField sdcTextField={sdcnode}>{childNodes}</TextField></>
     } else if (sdcnode instanceof Model.SDCListField) {
         const optionsNodes = sdcnode.options.map((optionnode) => {            
             const optionChild = optionnode.children.map((childnode) => {
@@ -103,6 +89,10 @@ function Form() {
     );
 }
 
+
+export default Form;
+
+
 function ValueBlock({
     value,
     id,
@@ -126,5 +116,3 @@ function ValueBlock({
         </>
     );
 }
-
-export default Form;
