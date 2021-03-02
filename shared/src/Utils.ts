@@ -1,3 +1,5 @@
+import * as Model from "./ClassDef"
+
 /** Offers call stack support for error */
 export class StackUtil {
 
@@ -41,3 +43,16 @@ export const nativeTypes = [
 
 export class ValidationError extends Error {}
 export class ParsingError extends Error {}
+
+export class AnswerValidationError extends ValidationError {
+
+     question: Model.SDCQuestion
+     debugMessage: string
+     
+     constructor(question: Model.SDCQuestion, message: string , debugMessage?: string){
+          super()
+          this.question = question
+          this.message = message
+          this.debugMessage = debugMessage || ""
+     }
+}

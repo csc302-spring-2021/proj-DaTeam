@@ -3,7 +3,8 @@
  */
 class TextFieldTypeMetaType{
      processor?: (base: string) => string // formate a field, e.g. strip
-     parsor?: (field: string) => boolean // validate the field
+     parser?: (field: string) => any // validate the field
+     pattern?: (base: string) => string
 }
 
 // TODO
@@ -18,11 +19,11 @@ export const textFieldTypeMeta: { [id: string]: TextFieldTypeMetaType } = {
      },
      "int" : {
           processor: String.prototype.trim,
-          parsor: new RegExp("^-?[0-9]*$").test
+          parser: (t) => { let re = new RegExp("^-?[0-9]*$"); return re.test(t) },
      },
      "integer" : {
           processor: String.prototype.trim,
-          parsor: new RegExp("^-?[0-9]*$").test
+          parser: (t) => { let re = new RegExp("^-?[0-9]*$"); return re.test(t) },
      },
      "byte" : {},
      "date" : {},
