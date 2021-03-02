@@ -102,6 +102,8 @@ export class FormResponseValidator {
                // Parser unavailable
                throw new ValidationError("Parser is not available for object of type " + question.type);
           }
+          //console.log(textFieldTypeMeta[question.type].parser!(answer.responses[0]));
+          //throw new ValidationError("Test: " + textFieldTypeMeta[question.type].toString() + " " + question.type + " ");// + textFieldTypeMeta[question.type].parser!.call(textFieldTypeMeta[question.type].parser!, answer.responses[0]));
           const result = textFieldTypeMeta[question.type].parser!(answer.responses[0]); // ! operator because we are already checking above whether or not a parser exists.
           if (result) {
                this.validatedAnswers.push(answer);
@@ -133,16 +135,20 @@ export class FormResponseValidator {
           // Check for validity of ids.
           let idCheck = answer.responses.every(response => {
                // Assuming I should be checking listFieldItem.id. Should it be id or uid?
-               question.options.some(listFieldItem => listFieldItem.id === response);
+               return question.options.some(listFieldItem => listFieldItem.id === response);
           });
+          //console.log(answer.responses);
+          //console.log(question.options);
           if (!idCheck) {
                throw new ValidationError("Response with invalid ID selected for question " + question.id);
           }
 
           // Filtering out unselected options, and checking validity along the way
           let selectedListFieldItems: Model.SDCListFieldItem[] = question.options.filter(listFieldItem => {
-               for (let response in answer.responses) {
+               for (let response of answer.responses) {
+                    
                     if (response === listFieldItem.id) {
+                         
                          // Check for selectionDeselectsSiblings
                          if (listFieldItem.selectionDeselectsSiblings && answer.responses.length > 1) {
                               this.errors.push(new AnswerValidationError(question, "Multiple selections while selectionDeselectsSiblings is enabled on response " + response));
@@ -160,6 +166,7 @@ export class FormResponseValidator {
                          return true;
                     }
                }
+               // If we get here, no matching response was found, so we can assume this is deselected.
                this.validationFlag.addByPassUIDField(listFieldItem.uid!, 'textResponse');
                return false;
           });

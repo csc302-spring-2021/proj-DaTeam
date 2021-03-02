@@ -2,6 +2,7 @@ import * as Mocks from "./MockData"
 import { GenericClassValidator } from "./ClassValidator"
 import util from "util"
 import { GenericJsonSerializer } from "./ClassJsonSerializer"
+import { FormResponseValidator } from './FormResponseValidator'
 import * as Model from "./ClassDef"
 import * as assert from "assert"
 
@@ -67,6 +68,16 @@ try{
 }catch(e){
      log(e.message)
 }
+
+try {
+     log("FormResponseValidator, verify form with textfield and listfield");
+     const response = Mocks.buildFormResponseComplete();
+     const form = Mocks.buildFormComplete();
+     const validation = FormResponseValidator.validate(response, form);
+} catch(e) {
+     log(e.message);
+}
+
 
 // *** Testing for the serializer ***
 
