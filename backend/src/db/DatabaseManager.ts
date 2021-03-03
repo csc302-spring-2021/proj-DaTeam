@@ -54,8 +54,9 @@ class DatabaseManager {
    * @param targetClass object class
    */
   async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
-    if (!(obj instanceof targetClass))
-      throw new Error("Object is not " + targetClass.name);
+    if (!(obj instanceof targetClass)){
+      throw new Error("Input object is not " + targetClass.name);
+    }
     return await this.db.tx((tx) => GenericDatabaseSerializer.create(obj, tx));
   }
 
@@ -65,7 +66,13 @@ class DatabaseManager {
    * @param targetClass expected object class
    */
   async genericRead(pk: string, targetClass: new () => any): Promise<any> {
-    return {} as any;
+    const result = await this.db.tx((tx) =>
+      GenericDatabaseSerializer.read(pk, targetClass, tx)
+    );
+    if (!(result instanceof targetClass)){
+      throw new Error("Output object is not " + targetClass.name);
+    }
+    return result
   }
 
   /**
