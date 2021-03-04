@@ -50,12 +50,12 @@ export abstract class IClassDatabaseSerializer {
    * reconstruct the object with the correct class.
    * The initial call should be called with `className`
    * being the root class where `classDatabaseMeta` is not null
-   * @param obj
-   * @param className
-   * @param queriedClasses
+   * @param dbObj database intermediate object (partial result)
+   * @param className class of the object trying to build
+   * @param queriedClasses a list of classes of the object that has been queried
    */
   async build(
-    obj: any,
+    dbObj: any,
     className: string,
     queriedClasses: string[]
   ): Promise<any> {}
@@ -66,10 +66,10 @@ export abstract class IClassDatabaseSerializer {
    * populate all attributes on the object.
    * The initial call should be called with `className`
    * being the leave class
-   * @param baseObj
-   * @param dbObj
-   * @param className
-   * @param queriedClasses
+   * @param baseObj the base object which has the correct type
+   * @param dbObj database intermediate object (partial result)
+   * @param className class of the object trying to build
+   * @param queriedClasses a list of classes of the object that has been queried
    */
   async buildUp(
     baseObj: any,
