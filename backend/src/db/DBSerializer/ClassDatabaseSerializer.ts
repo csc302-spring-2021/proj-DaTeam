@@ -314,15 +314,8 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
         dmField.restoreCase(id, dbObj)
       }
 
-      const fields = Object.keys(cm.fields);
-      Object.keys(dm.fields).forEach((k) => {
-        if (!fields.includes(k)) fields.push(k);
-      });
-
-      for (let id of fields) {
-        let dmField = just;
+      for (let [id, dmField] of this.dmFields(className)) {
         const cmField = cm.fields[id];
-        if (dm.fields[id] != null) dmField = dm.fields[id];
         dmField.fromSQL(id, dbObj, baseObj);
         // reconstruct children
         if (this.recursion && dmField instanceof Ref) {
