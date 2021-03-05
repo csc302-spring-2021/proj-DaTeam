@@ -1,4 +1,10 @@
-import { ITask, as } from "pg-promise";
+import { ITask } from "pg-promise";
+
+/**
+ * Map from class name to query conditions
+ * where conditions are related to the attributes of that class
+ */
+export type SearchParam = { [className: string]: string[] };
 
 /**
  * An interface for Database Serializer.
@@ -6,28 +12,75 @@ import { ITask, as } from "pg-promise";
  * rely on ClassDatabaseSerializer
  */
 export abstract class IClassDatabaseSerializer {
-
   /**
    * A database Task object to support doing multiple
    * queries in one transaction.
    * Automatically roll back if failed
    */
   tx: ITask<{}>;
+  /**
+   * Determine if database operation should advance into children \
+   * Recursion into super/sub class is not effected
+   */
+  recursion: boolean;
 
-  constructor(task: ITask<{}>) {
+  constructor(task: ITask<{}>, recursion?: boolean) {
     this.tx = task;
+    this.recursion = recursion == null ? true : recursion;
   }
 
+  /**
+   * Recursively save the obj into the database
+   * @param obj Object to save
+   * @param className Save as the given class
+   */
   async create(obj: any, parent?: any, className?: string): Promise<any> {}
 
-  async read() {}
+  /**
+   * Recursively load the objects from the database
+   * @param className Class of the object trying to load
+   * @param seachParam Search criteria
+   */
+  async read(className: string, seachParam: SearchParam): Promise<any[]> {
+    return [];
+  }
 
-  async delete() {}
+  /**
+   * Given the database intermediate object (partial result),
+   * reconstruct the object with the correct class.
+   * The initial call should be called with `className`
+   * being the root class where `classDatabaseMeta` is not null
+   * @param dbObj database intermediate object (partial result)
+   * @param className class of the object trying to build
+   * @param queriedClasses a list of classes of the object that has been queried
+   */
+  async build(
+    dbObj: any,
+    className: string,
+    queriedClasses: string[]
+  ): Promise<any> {}
+
+  /**
+   * Given the base object and the partial
+   * database intermediate object,
+   * populate all attributes on the object.
+   * The initial call should be called with `className`
+   * being the leave class
+   * @param baseObj the base object which has the correct type
+   * @param dbObj database intermediate object (partial result)
+   * @param className class of the object trying to build
+   * @param queriedClasses a list of classes of the object that has been queried
+   */
+  async buildUp(
+    baseObj: any,
+    dbObj: any,
+    className: string,
+    queriedClasses: string[]
+  ): Promise<any> {}
 }
 
 /** Meta information about how a class is stored in the database */
 export class ClassDatabaseMetaType {
-
   /** Table that stores the class */
   table: string;
 
@@ -74,6 +127,18 @@ export abstract class FieldDatabaseMetaType {
    * @param to the resulting object
    */
   fromSQL(id: string, from: any, to: any) {}
+  /**
+   * Dabase is not case sensitive, so all the attributes are lowercase\
+   * Restore the correct case for the attribute
+   * @param dbObj
+   */
+  restoreCase(id: string, dbObj: any) {
+    const idLower = id.toLocaleLowerCase();
+    if (idLower !== id && dbObj[idLower] !== undefined) {
+      dbObj[id] = dbObj[idLower];
+      delete dbObj[idLower];
+    }
+  }
 }
 
 /** The attribute is transitent, do not save or load from database */
@@ -102,6 +167,9 @@ export class Remap extends FieldDatabaseMetaType {
   fromSQL(id: string, from: any, to: any) {
     if (from && from[this.ref] != null) to[id] = from[this.ref];
   }
+  restoreCase(id: string, dbObj: any) {
+    super.restoreCase(this.ref, dbObj);
+  }
   constructor(column: string) {
     super();
     this.ref = column;
@@ -114,40 +182,51 @@ export function remap(ref: string): Remap {
 
 /** The attribute references another object */
 export abstract class Ref extends FieldDatabaseMetaType {
-  /** generate the condition to query the */
-  genCondition(id: string, parent: any): string {
-    return "1 = 1";
-  }
-}
-
-/** This field references a field on the child of this field */
-export class ChildRef extends Ref {
-  ref: string;
-  genCondition(id: string, parent: any): string {
-    return as.format(`${this.ref} = $(${id})`, parent);
-  }
-  // In the case of ChildRef, from is the child
-  toSQL(id: string, from: any, to: any) {
-    if (from && from[this.ref] != null) to[id] = from[this.ref];
-  }
-  fromSQL(id: string, from: any, to: any) {}
-  constructor(column: string) {
-    super();
-    this.ref = column;
-  }
-}
-/** This field references a field on the child of this field */
-export function childRef(ref: string): ChildRef {
-  return new ChildRef(ref);
-}
-
-/** Child of this field references a field on this object */
-export class RefForChild extends Ref {
+  refClass: Function;
   from: string;
   to: string;
-  genCondition(id: string, parent: any): string {
-    return as.format(`${this.to} = $(${this.from})`, parent);
+  restoreCase(id: string, dbObj: any) {
+    super.restoreCase(this.from, dbObj);
   }
+  constructor(from: string, refClass: Function, to: string) {
+    super();
+    this.from = from;
+    this.refClass = refClass;
+    this.to = to;
+  }
+}
+
+/**
+ * This field stores a child where
+ * the `from` column on this object
+ * references the `to` column on the child
+ */
+export class ChildRef extends Ref {
+  toSQL(id: string, from: any, to: any) {
+    if (from && from[id] != null && from[id][this.to] != null) {
+      to[this.from] = from[id][this.to];
+    }
+  }
+}
+/**
+ * This field stores a child where
+ * the `from` column on this object
+ * references the `to` column on the child
+ */
+export function childRef(
+  from: string,
+  refClass: Function,
+  to: string
+): RefForChild {
+  return new ChildRef(from, refClass, to);
+}
+
+/**
+ * This field stores a child or a list of children where
+ * the `to` column on the children
+ * references the `from` column on this object
+ */
+export class RefForChild extends Ref {
   toSQL(id: string, from: any, to: any) {
     if (from && from[id] != null) {
       [from[id]].flat(1).map((o) => {
@@ -155,14 +234,16 @@ export class RefForChild extends Ref {
       });
     }
   }
-  fromSQL(id: string, from: any, to: any) {}
-  constructor(from: string, to: string) {
-    super();
-    this.from = from;
-    this.to = to;
-  }
 }
-/** Child of this field references a field on this object */
-export function refForChild(from: string, to: string): RefForChild {
-  return new RefForChild(from, to);
+/**
+ * This field stores a child or a list of children where
+ * the `to` column on the children
+ * references the `from` column on this object
+ */
+export function refForChild(
+  from: string,
+  refClass: Function,
+  to: string
+): RefForChild {
+  return new RefForChild(from, refClass, to);
 }

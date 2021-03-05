@@ -1,6 +1,7 @@
 import pgPromise from "pg-promise";
 import * as promise from "bluebird";
 import { GenericDatabaseSerializer } from "./DBSerializer";
+import { SearchParam } from "./DBSerializer";
 
 /**
  * Connects with database and handle query requests
@@ -54,8 +55,9 @@ class DatabaseManager {
    * @param targetClass object class
    */
   async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
-    if (!(obj instanceof targetClass))
-      throw new Error("Object is not " + targetClass.name);
+    if (!(obj instanceof targetClass)) {
+      throw new Error("Input object is not " + targetClass.name);
+    }
     return await this.db.tx((tx) => GenericDatabaseSerializer.create(obj, tx));
   }
 
@@ -65,7 +67,41 @@ class DatabaseManager {
    * @param targetClass expected object class
    */
   async genericRead(pk: string, targetClass: new () => any): Promise<any> {
-    return {} as any;
+    const result = await this.db.tx((tx) =>
+      GenericDatabaseSerializer.read(pk, targetClass.name, tx)
+    );
+    if (!(result instanceof targetClass)) {
+      throw new Error("Output object is not " + targetClass.name);
+    }
+    return result;
+  }
+
+  /**
+   *    *************************************************
+   *    **DB injection warning! Do not expose this API!**
+   *    *************************************************
+   * Load all objects matching the search criteria
+   * @param targetClass expected object class
+   * @param searchParam seach query (**the queries should be built within the server**)
+   * @param partial whether or not the complete object structure should be rebuild
+   */
+  async genericSeach(
+    targetClass: new () => any,
+    searchParam: SearchParam,
+    partial: boolean
+  ): Promise<any> {
+    const results = await this.db.tx((tx) =>
+      GenericDatabaseSerializer.search(
+        targetClass.name,
+        searchParam,
+        partial,
+        tx
+      )
+    );
+    if (!results.every((o) => o instanceof targetClass)) {
+      throw new Error("Output object is not " + targetClass.name);
+    }
+    return results;
   }
 
   /**
