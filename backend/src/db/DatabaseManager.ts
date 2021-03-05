@@ -23,7 +23,7 @@ class DatabaseManager {
       user: process.env.DB_USER || "",
       password: process.env.DB_PASSWORD || "",
       connectionString: process.env.DATABASE_URL || "",
-      ssl: process.env.DB_SSL == "true"
+      ssl: process.env.DB_SSL == "true" ? {rejectUnauthorized: false} : null
     };
 
     if (process.env.NODE_ENV === "development") {
