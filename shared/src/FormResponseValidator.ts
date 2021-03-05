@@ -8,7 +8,6 @@ import * as Model from "./ClassDef"
 import { classMeta } from "./ClassMeta"
 import { textFieldTypeMeta } from "./TextFieldTypeMeta"
 import { GenericClassValidator } from "./ClassValidator"
-import { resourceUsage } from "process"
 
 /** Contains flags that can change the behaviour of the recursive validation process */
 class ValidationFlag{
@@ -16,21 +15,12 @@ class ValidationFlag{
       * A map from UID to field names \
       * Validation will be skipped for all field names for object with that UID
       */
-     byPassUIDField: { [uid : string] : [string] } = {}
+     byPassUIDField: { [uid : string] : string[] } = {}
 
-     /**
-      * Mark the uid and field to be by passed
-      * @param uid 
-      * @param field 
-      */
+     /** Mark the uid and field to be by passed */
      addByPassUIDField(uid: string, field: string){
-          // TODO
-          if (typeof this.byPassUIDField[uid] != 'undefined' && this.byPassUIDField[uid] instanceof Array) {
-               this.byPassUIDField[uid].push(field);
-          } else {
-               this.byPassUIDField[uid] = [field];
-          }
-                                                
+          if (this.byPassUIDField[uid] == null) this.byPassUIDField[uid] = []
+          this.byPassUIDField[uid].push(field)
      }
 }
 
@@ -98,19 +88,16 @@ export class FormResponseValidator {
           } else if (answer.responses.length > 1){
                // Fatal error
                throw new ValidationError("Multiple responses submitted for question " + question.id)
-          } else if (typeof textFieldTypeMeta[question.type].parser == 'undefined' || typeof textFieldTypeMeta[question.type].parser != 'function') {
-               // Parser unavailable
-               throw new ValidationError("Parser is not available for object of type " + question.type);
           }
-          //console.log(textFieldTypeMeta[question.type].parser!(answer.responses[0]));
-          //throw new ValidationError("Test: " + textFieldTypeMeta[question.type].toString() + " " + question.type + " ");// + textFieldTypeMeta[question.type].parser!.call(textFieldTypeMeta[question.type].parser!, answer.responses[0]));
-          const result = textFieldTypeMeta[question.type].parser!(answer.responses[0]); // ! operator because we are already checking above whether or not a parser exists.
-          if (result) {
-               this.validatedAnswers.push(answer);
-          } else {
-               this.errors.push(new AnswerValidationError(question, "Answer for question " + question.id + " is formatted incorrectly."));
+          const parser = textFieldTypeMeta[question.type].parser
+          if (parser){
+               try{
+                    parser(answer.responses[0])
+               } catch(e){
+                    this.errors.push(new AnswerValidationError(question ,e.message));
+               }
           }
-          return;
+          this.validatedAnswers.push(answer);
      }
 
      /**
@@ -119,67 +106,51 @@ export class FormResponseValidator {
       */
      protected validateListField(question: Model.SDCListField){
           const answer = this.findAnswer(question)
-          let valid = true;
-          // Check for out-of-bounds.
-          // Do we throw or return here?
           if (answer.responses.length > question.maxSelections) {
                this.errors.push(new AnswerValidationError(question, "Selection count above maximum."));
-               valid = false;
-               //throw new ValidationError("Selection count above maximum.");
           } else if (answer.responses.length < question.minSelections) {
                this.errors.push(new AnswerValidationError(question, "Selection count below minimum."));
-               valid = false;
-               //throw new ValidationError("Selection count below minimum.");
           }
 
           // Check for validity of ids.
           let idCheck = answer.responses.every(response => {
-               // Assuming I should be checking listFieldItem.id. Should it be id or uid?
                return question.options.some(listFieldItem => listFieldItem.id === response);
           });
-          //console.log(answer.responses);
-          //console.log(question.options);
           if (!idCheck) {
                throw new ValidationError("Response with invalid ID selected for question " + question.id);
           }
 
           // Filtering out unselected options, and checking validity along the way
           let selectedListFieldItems: Model.SDCListFieldItem[] = question.options.filter(listFieldItem => {
+               if (listFieldItem.uid == null) {
+                    throw new ValidationError("UID not found for question " + listFieldItem.id);
+               }
                for (let response of answer.responses) {
                     
                     if (response === listFieldItem.id) {
                          
                          // Check for selectionDeselectsSiblings
                          if (listFieldItem.selectionDeselectsSiblings && answer.responses.length > 1) {
-                              this.errors.push(new AnswerValidationError(question, "Multiple selections while selectionDeselectsSiblings is enabled on response " + response));
-                              valid = false;
+                              throw new ValidationError("Multiple selections while selectionDeselectsSiblings is enabled on response " + response);
                          }
                          
                          // Check for selectionDisablesChildren
                          if (listFieldItem.selectionDisablesChildren) {
-                              if (typeof listFieldItem.uid != "undefined" && typeof listFieldItem.uid == "string") {
-                                   this.validationFlag.addByPassUIDField(listFieldItem.uid!, 'children');
-                              } else {
-                                   throw new ValidationError("UID not found for item " + response);
-                              }
+                              this.validationFlag.addByPassUIDField(listFieldItem.uid, 'children');
                          }
                          return true;
                     }
                }
                // If we get here, no matching response was found, so we can assume this is deselected.
-               this.validationFlag.addByPassUIDField(listFieldItem.uid!, 'textResponse');
+               this.validationFlag.addByPassUIDField(listFieldItem.uid, 'textResponse');
                return false;
           });
           
           // Sanity check: if the lengths are not equal, there must be a duplicate response.
-          // TODO: Do we need to throw or return here? Assuming throw, since a duplicate response shouldn't be possible.
           if (selectedListFieldItems.length != answer.responses.length) {
                throw new ValidationError("Duplicate response detected in FormResponse.");
           }
-          
-          if (valid) {
-               this.validatedAnswers.push(answer);
-          }
+          this.validatedAnswers.push(answer);
      }
 
      /**
