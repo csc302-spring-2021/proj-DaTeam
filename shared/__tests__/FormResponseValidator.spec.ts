@@ -1,5 +1,6 @@
 import {FormResponseValidator} from "../build/FormResponseValidator";
 import * as Mocks from "../build/MockData";
+import * as Model from "../build/ClassDef";
 import {ValidationError} from "../build/Utils";
 
 beforeAll(() => {
@@ -82,6 +83,36 @@ describe("Verify TextField Failures", () => {
             }
         }
         expect(errors).containsError('Input is not a valid int');
+        done();
+    });
+});
+
+describe("Verify ListField Failures", () => {
+    let form, formResponse, errors;
+    beforeEach(() => {
+        form = Mocks.buildFormComplete();
+        formResponse = Mocks.buildFormResponseComplete();
+    });
+    function validateFormResponse(){
+        errors = FormResponseValidator.validate(formResponse, form);
+    }
+    test("ListField Item w/ selectionDeselectsSiblings enabled and >1 responses Throws Validation Error", done => {
+        // Modify the all SDCListField item option to have selectionDeselectsSiblings is enabled
+        // The Mock Response already has multiple responses for the listfield
+        let qId;
+        outer:
+        for(let item of form.children){
+            for(let field of item.children){
+                if(field instanceof Model.SDCListField){
+                    qId = field.id;
+                    for(let opt of field.options){
+                       opt.selectionDeselectsSiblings = true;
+                    }
+                    break outer;
+                }
+            }
+        }
+        expect(validateFormResponse).toThrowError(ValidationError);
         done();
     });
 });
