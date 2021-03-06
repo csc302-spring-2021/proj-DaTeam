@@ -125,4 +125,12 @@ describe("Verify ListField Failures", () => {
         expect(validateFormResponse).toThrowError(ValidationError);
         done();
     });
+    test("Form Response with more responses than maxSelections returns Validation Error", done => {
+        // Original Mock data should trigger this failure since maxSelections is set to 1 and 
+        // there are originally 3 responses to the ListField: [ 'list-1-t', 'list-1-1', 'list-1-2' ]
+        validateFormResponse();
+        expect(errors).containsError("Selection count above maximum.");
+
+        done();
+    });
 });
