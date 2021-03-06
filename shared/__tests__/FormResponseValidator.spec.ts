@@ -99,12 +99,10 @@ describe("Verify ListField Failures", () => {
     test("ListField Item w/ selectionDeselectsSiblings enabled and >1 responses Throws Validation Error", done => {
         // Modify the all SDCListField item option to have selectionDeselectsSiblings is enabled
         // The Mock Response already has multiple responses for the listfield
-        let qId;
         outer:
         for(let item of form.children){
             for(let field of item.children){
                 if(field instanceof Model.SDCListField){
-                    qId = field.id;
                     for(let opt of field.options){
                        opt.selectionDeselectsSiblings = true;
                     }
@@ -130,6 +128,24 @@ describe("Verify ListField Failures", () => {
         // there are originally 3 responses to the ListField: [ 'list-1-t', 'list-1-1', 'list-1-2' ]
         validateFormResponse();
         expect(errors).containsError("Selection count above maximum.");
+
+        done();
+    });
+    test("Form Response with less responses than minSelections returns Validation Error", done => {
+        //  Originally minSelections is set to 1 and there are 3 responses to the ListField: [ 'list-1-t', 'list-1-1', 'list-1-2' ]
+        // Modify maxSelections=10 and minSelections=5, original responses should trigger error
+        outer:
+        for(let item of form.children){
+            for(let field of item.children){
+                if(field instanceof Model.SDCListField){
+                    field.maxSelections = 10;
+                    field.minSelections = 5;
+                    break outer;
+                }
+            }
+        }
+        validateFormResponse();
+        expect(errors).containsError("Selection count below minimum.");
 
         done();
     });
