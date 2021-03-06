@@ -115,4 +115,14 @@ describe("Verify ListField Failures", () => {
         expect(validateFormResponse).toThrowError(ValidationError);
         done();
     });
+    test("Response for ListField Item w/o valid ID Throws Validation Error", done => {
+        for(let answer of formResponse.answers){
+            if('list-1' === answer.questionID){
+                answer.responses.push('fake id; should fail');
+                break;
+            }
+        }
+        expect(validateFormResponse).toThrowError(ValidationError);
+        done();
+    });
 });
