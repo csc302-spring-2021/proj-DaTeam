@@ -36,7 +36,7 @@ describe("Verify TextField Failures", () => {
     test("No Responses Throws Validation Error", done => {
         for(let answer of formResponse.answers){
             if("text-1" === answer.questionID){
-                delete answer.responses;
+                answer.responses = [];
                 break;
             }
         }
