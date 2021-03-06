@@ -35,11 +35,11 @@ function Form() {
         } else if (sdcnode instanceof Model.SDCTextField) {
             return <><TextField responseState={{response, setResponse}} sdcTextField={sdcnode}>{childNodes}</TextField></>
         } else if (sdcnode instanceof Model.SDCListField) {
-            const optionsNodes = sdcnode.options.map((optionnode) => {
+            const optionsNodes: {listFieldItem: Model.SDCListFieldItem; listFieldItemChildren: JSX.Element[]}[] = sdcnode.options.map((optionnode: Model.SDCListFieldItem) => {
                 const optionChild = optionnode.children.map((childnode) => {
                     return <div key={childnode.id}>{RenderNode(childnode)}</div>;
                 });
-                return [optionnode, optionChild];
+                return {listFieldItem: optionnode,listFieldItemChildren: optionChild};
             });
             return <><ListField responseState={{response, setResponse}} sdcListField={sdcnode} optionNodes={optionsNodes}>{childNodes}</ListField></>;
         } else {
@@ -88,7 +88,6 @@ function Form() {
                 </div>
             </div>
             {RenderNode(sdcform)}
-            {console.log(response)}
         </div>
     );
 }

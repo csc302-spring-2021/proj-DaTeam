@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 
 interface IFormInputProps {
   type: "text" | "number";
@@ -6,15 +6,17 @@ interface IFormInputProps {
   state: string;
   setState: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
-  responseState?: {setResponse:React.Dispatch<React.SetStateAction<{[key: string]: string;}>>; response:{[key: string]: string;}}
+  responseState?: {setResponse:React.Dispatch<React.SetStateAction<{[key: string]: any;}>>; response:{[key: string]: any;}}
   iid?: string;
 }
 
 function FormInput(props: IFormInputProps) {
+
     const valueSetter = (e: ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation();
         props.setState(e.currentTarget.value);
         if(props.responseState && props.iid){
-            const response: {[key:string] : string;} = {...props.responseState.response};
+            const response: {[key:string] : any;} = {...props.responseState.response};
             if(e.currentTarget.value === ""){
                 delete response[props.iid];
             }else{

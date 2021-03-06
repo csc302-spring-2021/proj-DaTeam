@@ -11,18 +11,17 @@ function ListFieldItem(props: {responseState?: {setResponse:React.Dispatch<React
         >
                 <label className="inline-flex items-center"> 
                 <div className="py-1 text-xl hover:bg-gray-200 border-gray-300 rounded">
-                    <input type={props.isMultiSelect ? "checkbox" : "radio"} className="form-radio ml-2 h-5 w-5" name={"radio"} value={props.sdcListFieldItem.title} />
+                    <input id={props.sdcListFieldItem.id} type={props.isMultiSelect ? "checkbox" : "radio"} className="form-radio ml-2 h-5 w-5" name={"radio"} value={props.sdcListFieldItem.title} />
                     <span className="ml-2"> 
-                    <>{props.isSelected ? "true" : "false"}</>
-                    <>{props.sdcListFieldItem.title}</>
-                    {props.sdcListFieldItem.textResponse ?
+                    <>{props.sdcListFieldItem.id}</>
+                    {props.sdcListFieldItem.textResponse && props.isSelected ?
                     <div className="py-2 pl-8">
                         <FormInput
                             placeholder={props.sdcListFieldItem.textResponse.title}
                             type="text"
                             state={textResponse}
                             setState={setTextResponse}
-                            iid={props.sdcListFieldItem.id}
+                            iid={props.sdcListFieldItem.textResponse.id}
                             responseState={props.responseState}
                         />
                     </div>
