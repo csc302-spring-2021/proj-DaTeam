@@ -43,4 +43,14 @@ describe("Verify TextField Failures", () => {
         expect(validateFormResponse).toThrowError(ValidationError);
         done();
     });
+    test("Invalid Response Throws Validation Error", done => {
+        for(let answer of formResponse.answers){
+            if("text-1" === answer.questionID){
+                answer.responses = ["this should throw an error"];
+                break;
+            }
+        }
+        expect(validateFormResponse).toThrowError(ValidationError);
+        done();
+    });
 });
