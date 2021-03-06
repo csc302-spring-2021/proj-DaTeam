@@ -2,7 +2,7 @@ import { Model } from "@dateam/shared";
 import { useState } from "react";
 import { FormInput } from "../FormInput";
 
-function ListFieldItem(props: {isMultiSelect:boolean, isSelected:boolean, children?: any; sdcListFieldItem: Model.SDCListFieldItem }) {
+function ListFieldItem(props: {responseState?: {setResponse:React.Dispatch<React.SetStateAction<{[key: string]: string;}>>; response:{[key: string]: string;}}; isMultiSelect:boolean, isSelected:boolean, children?: any; sdcListFieldItem: Model.SDCListFieldItem }) {
     const [textResponse, setTextResponse] = useState<string>("");
     return (
         <div
@@ -13,6 +13,7 @@ function ListFieldItem(props: {isMultiSelect:boolean, isSelected:boolean, childr
                 <div className="py-1 text-xl hover:bg-gray-200 border-gray-300 rounded">
                     <input type={props.isMultiSelect ? "checkbox" : "radio"} className="form-radio ml-2 h-5 w-5" name={"radio"} value={props.sdcListFieldItem.title} />
                     <span className="ml-2"> 
+                    <>{props.isSelected ? "true" : "false"}</>
                     <>{props.sdcListFieldItem.title}</>
                     {props.sdcListFieldItem.textResponse ?
                     <div className="py-2 pl-8">
@@ -21,6 +22,8 @@ function ListFieldItem(props: {isMultiSelect:boolean, isSelected:boolean, childr
                             type="text"
                             state={textResponse}
                             setState={setTextResponse}
+                            iid={props.sdcListFieldItem.id}
+                            responseState={props.responseState}
                         />
                     </div>
                         :

@@ -14,35 +14,38 @@ interface IMockPrivateClass {
     __class?: "SDCSection" | "SDCDisplayItem" | "SDCTextField" | "SDCListField";
 }
 
-function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
-    const childNodes = sdcnode.children.map((childnode) => {
-        return <div key={childnode.id}>{RenderNode(childnode)}</div>;
-    });
 
-    if (sdcnode instanceof Model.SDCSection) {
-        return (
-            <Section sdcSection={sdcnode as Model.SDCSection}>{childNodes}</Section>
-        );
-    } else if (sdcnode instanceof Model.SDCDisplayItem) {
-        return <DisplayItem sdcDisplayitem={sdcnode as Model.SDCDisplayItem} />;
-    } else if (sdcnode instanceof Model.SDCTextField) {
-        return <><TextField sdcTextField={sdcnode}>{childNodes}</TextField></>
-    } else if (sdcnode instanceof Model.SDCListField) {
-        const optionsNodes = sdcnode.options.map((optionnode) => {            
-            const optionChild = optionnode.children.map((childnode) => {
-                return <div key={childnode.id}>{RenderNode(childnode)}</div>;
-            });
-            return [optionnode, optionChild];
-        });
-        return <><ListField sdcListField={sdcnode} optionNodes={optionsNodes}>{childNodes}</ListField></>;
-    } else {
-        return <>{childNodes}</>;
-    }
-}
 
 function Form() {
     const [sdcform, setSdcform] = useState<Model.SDCNode | undefined>(undefined);
     const [patient, setPatient] = useState<Model.Patient | undefined>(undefined);
+    const [response, setResponse] = useState<{[key:string] : any;}>({});
+
+    function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
+        const childNodes = sdcnode.children.map((childnode) => {
+            return <div key={childnode.id}>{RenderNode(childnode)}</div>;
+        });
+
+        if (sdcnode instanceof Model.SDCSection) {
+            return (
+                <Section sdcSection={sdcnode as Model.SDCSection}>{childNodes}</Section>
+            );
+        } else if (sdcnode instanceof Model.SDCDisplayItem) {
+            return <DisplayItem sdcDisplayitem={sdcnode as Model.SDCDisplayItem} />;
+        } else if (sdcnode instanceof Model.SDCTextField) {
+            return <><TextField responseState={{response, setResponse}} sdcTextField={sdcnode}>{childNodes}</TextField></>
+        } else if (sdcnode instanceof Model.SDCListField) {
+            const optionsNodes = sdcnode.options.map((optionnode) => {
+                const optionChild = optionnode.children.map((childnode) => {
+                    return <div key={childnode.id}>{RenderNode(childnode)}</div>;
+                });
+                return [optionnode, optionChild];
+            });
+            return <><ListField responseState={{response, setResponse}} sdcListField={sdcnode} optionNodes={optionsNodes}>{childNodes}</ListField></>;
+        } else {
+            return <>{childNodes}</>;
+        }
+    }
 
     useEffect(() => {
         FormService.read(123)
@@ -85,6 +88,7 @@ function Form() {
                 </div>
             </div>
             {RenderNode(sdcform)}
+            {console.log(response)}
         </div>
     );
 }
