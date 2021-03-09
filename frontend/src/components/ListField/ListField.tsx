@@ -9,7 +9,6 @@ function ListField(props: { responseState: { setResponse: React.Dispatch<React.S
     const [isMultiSelect, setIsMultiSelect] = useState<boolean>(false);
 
     useEffect(() => {
-        console.log("rendered", props.responseState.response);
         if (props.sdcListField.maxSelections !== 1) {
             setIsMultiSelect(true);
         }
@@ -46,9 +45,7 @@ function ListField(props: { responseState: { setResponse: React.Dispatch<React.S
                 setNumSelected(numSelected - 1);
             }
             props.responseState.setResponse(response);
-
         }
-
     }
 
     return (
