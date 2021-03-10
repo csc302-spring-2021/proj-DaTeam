@@ -87,9 +87,8 @@ function FormsPanel() {
   ];
   const responseFormInfoBlocks = responseFormInfoArr.map((responseForm, i) => {
     return (
-      <Link to={`/responses/${responseForm.id}`}>
+      <Link to={`/responses/${responseForm.id}`} key={i}>
         <FormCard
-          key={i}
           responseForm={responseForm}
           isSelected={formId === responseForm.id}
         />
@@ -207,9 +206,11 @@ function ResponsesPanel() {
   ];
   const responseFormInfoBlocks = responseFormInfoArr.map((responseForm, i) => {
     return (
-      <Link to={`/responses/${responseForm.formId}/${responseForm.id}`}>
+      <Link
+        to={`/responses/${responseForm.formId}/${responseForm.id}`}
+        key={responseForm.id}
+      >
         <ResponsesCard
-          key={responseForm.id}
           responseForm={responseForm}
           isSelected={responseId === responseForm.id}
         />
