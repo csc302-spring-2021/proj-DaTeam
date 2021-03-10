@@ -2,7 +2,7 @@ import { Model } from "@dateam/shared";
 import { useEffect, useState } from "react";
 import { ListFieldItem } from "../ListFieldItem";
 
-function ListField(props: {
+interface IListFieldProps {
   responseState: {
     setResponse: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>;
     response: { [key: string]: any };
@@ -13,7 +13,9 @@ function ListField(props: {
   }[];
   children?: any;
   sdcListField: Model.SDCListField;
-}) {
+}
+
+function ListField(props: IListFieldProps) {
   const [numSelected, setNumSelected] = useState<number>(0);
   const [isMultiSelect, setIsMultiSelect] = useState<boolean>(false);
 
