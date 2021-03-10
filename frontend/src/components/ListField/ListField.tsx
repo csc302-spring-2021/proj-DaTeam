@@ -11,21 +11,28 @@ interface IListFieldProps {
     listFieldItem: Model.SDCListFieldItem;
     listFieldItemChildren: JSX.Element[];
   }[];
-  children?: any;
+  children?: React.ReactNode;
   sdcListField: Model.SDCListField;
 }
 
+/**
+ * An selectable list field which may or many not have one or more items.
+ * @param  {[type]} responseState [description]
+ * @param  {[type]} optionNodes [description]
+ * @param  {[type]} children [description]
+ * @param  {[type]} sdcListField [description]
+ */
 function ListField(props: IListFieldProps) {
   const [numSelected, setNumSelected] = useState<number>(0);
   const [isMultiSelect, setIsMultiSelect] = useState<boolean>(false);
 
   const { responseState, optionNodes, children, sdcListField } = props;
-
+  console.log(props);
   useEffect(() => {
     if (sdcListField.maxSelections !== 1) {
       setIsMultiSelect(true);
     }
-  }, [optionNodes]);
+  }, [optionNodes, sdcListField.maxSelections]);
 
   const onChangeSelect = (event: any) => {
     event.stopPropagation();
@@ -65,7 +72,7 @@ function ListField(props: IListFieldProps) {
   return (
     <div
       data-testid="listfield"
-      className="py-2 text-lg font-bold tracking-wide"
+      className="py-2 text-lg font-bold tracking-wide "
     >
       <div className="px-2">{sdcListField.id}</div>
       <div onChange={isMultiSelect ? onChangeMultiSelect : onChangeSelect}>
