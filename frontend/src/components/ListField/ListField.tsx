@@ -19,47 +19,46 @@ function ListField(props: IListFieldProps) {
   const [numSelected, setNumSelected] = useState<number>(0);
   const [isMultiSelect, setIsMultiSelect] = useState<boolean>(false);
 
+  const { responseState, optionNodes, children, sdcListField } = props;
+
   useEffect(() => {
-    if (props.sdcListField.maxSelections !== 1) {
+    if (sdcListField.maxSelections !== 1) {
       setIsMultiSelect(true);
     }
-  }, [props.optionNodes]);
+  }, [optionNodes]);
 
   const onChangeSelect = (event: any) => {
     event.stopPropagation();
     const response: { [key: string]: any } = {
-      ...props.responseState.response,
+      ...responseState.response,
     };
     if (numSelected === 0) {
       setNumSelected(1);
     }
-    response[props.sdcListField.id] = [event.target.id];
-    props.responseState.setResponse(response);
+    response[sdcListField.id] = [event.target.id];
+    responseState.setResponse(response);
   };
 
   const onChangeMultiSelect = (event: any) => {
     event.stopPropagation();
-    if (
-      event.target.checked &&
-      numSelected >= props.sdcListField.maxSelections + 5
-    ) {
+    if (event.target.checked && numSelected >= sdcListField.maxSelections + 5) {
       event.target.checked = false;
     } else {
       const response: { [key: string]: any } = {
-        ...props.responseState.response,
+        ...responseState.response,
       };
-      if (response[props.sdcListField.id] === undefined) {
-        response[props.sdcListField.id] = [];
+      if (response[sdcListField.id] === undefined) {
+        response[sdcListField.id] = [];
       }
-      let index = response[props.sdcListField.id].indexOf(event.target.id);
+      let index = response[sdcListField.id].indexOf(event.target.id);
       if (event.target.checked && index === -1) {
-        response[props.sdcListField.id].push(event.target.id);
+        response[sdcListField.id].push(event.target.id);
         setNumSelected(numSelected + 1);
       } else if (!event.target.checked && index !== -1) {
-        response[props.sdcListField.id].splice(index, 1);
+        response[sdcListField.id].splice(index, 1);
         setNumSelected(numSelected - 1);
       }
-      props.responseState.setResponse(response);
+      responseState.setResponse(response);
     }
   };
 
@@ -68,9 +67,9 @@ function ListField(props: IListFieldProps) {
       data-testid="listfield"
       className="py-2 text-lg font-bold tracking-wide"
     >
-      <div className="px-2">{props.sdcListField.id}</div>
+      <div className="px-2">{sdcListField.id}</div>
       <div onChange={isMultiSelect ? onChangeMultiSelect : onChangeSelect}>
-        {props.optionNodes.map(
+        {optionNodes.map(
           (optionnode: {
             listFieldItem: Model.SDCListFieldItem;
             listFieldItemChildren: any[];
@@ -78,13 +77,13 @@ function ListField(props: IListFieldProps) {
             return (
               <ListFieldItem
                 key={optionnode.listFieldItem.id}
-                responseState={props.responseState}
+                responseState={responseState}
                 isMultiSelect={isMultiSelect}
                 isSelected={
-                  props.responseState.response[props.sdcListField.id]
-                    ? props.responseState.response[
-                        props.sdcListField.id
-                      ].indexOf(optionnode.listFieldItem.id) !== -1
+                  responseState.response[sdcListField.id]
+                    ? responseState.response[sdcListField.id].indexOf(
+                        optionnode.listFieldItem.id
+                      ) !== -1
                     : false
                 }
                 sdcListFieldItem={optionnode.listFieldItem}
@@ -95,7 +94,7 @@ function ListField(props: IListFieldProps) {
           }
         )}
       </div>
-      {props.children}
+      {children}
     </div>
   );
 }
