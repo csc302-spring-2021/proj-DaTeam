@@ -173,8 +173,7 @@ function CloseButton() {
     <button
       type="button"
       className="absolute inline-flex items-center justify-center p-2 text-gray-400 rounded-md top-2 right-2 bg-gray-50 hover:text-gray-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-      aria-controls="mobile-menu"
-      aria-expanded="false"
+      aria-label="close"
     >
       <span className="sr-only">Close</span>
       <svg
@@ -220,6 +219,7 @@ function ResponsesPanel() {
 
   return (
     <motion.div
+      data-testid="responses-panel"
       variants={{
         initial: {
           opacity: 0,
@@ -266,6 +266,7 @@ function FormRendererPanel() {
   const { formId } = useParams<{ formId: string }>();
   return (
     <motion.div
+      data-testid="form-renderer-panel"
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0, transition: { ease: "easeInOut" } }}
       exit={{ opacity: 0 }}
