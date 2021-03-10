@@ -1,26 +1,28 @@
-import { createMemoryHistory } from "history";
+import { createMemoryHistory, MemoryHistory } from "history";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { MemoryRouter, Router } from "react-router";
+import { Router } from "react-router";
 
 import { Responses } from "../Responses";
 
+function renderResponses(): { history: MemoryHistory } {
+  const history = createMemoryHistory({ initialEntries: ["/responses"] });
+  render(
+    <Router history={history}>
+      <Responses />
+    </Router>
+  );
+
+  return { history };
+}
+
 describe("Responses", () => {
   it("renders without error", () => {
-    render(
-      <MemoryRouter initialEntries={["/responses"]}>
-        <Responses />
-      </MemoryRouter>
-    );
+    renderResponses();
     screen.getByTestId("responses");
   });
 
   it("navigates to a response", () => {
-    const history = createMemoryHistory({ initialEntries: ["/responses"] });
-    render(
-      <Router history={history}>
-        <Responses />
-      </Router>
-    );
+    const { history } = renderResponses();
 
     fireEvent.click(screen.getByText("ID: 1"));
     fireEvent.click(screen.getByText("Arnav"));
@@ -29,12 +31,7 @@ describe("Responses", () => {
   });
 
   it("navigates back when you close a panel", () => {
-    const history = createMemoryHistory({ initialEntries: ["/responses"] });
-    render(
-      <Router history={history}>
-        <Responses />
-      </Router>
-    );
+    const { history } = renderResponses();
 
     fireEvent.click(screen.getByText("ID: 1"));
     fireEvent.click(screen.getByText("Arnav"));
