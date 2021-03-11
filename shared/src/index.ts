@@ -3,7 +3,7 @@ export * as Model from "./ClassDef";
 export * from "./ClassMeta";
 export * from "./ClassJsonSerializer";
 export * from "./ClassValidator";
-export * as Mocks from "./MockData"
-export * from "./FormResponseValidator"
-export * from "./TextFieldTypeMeta"
-export { ValidationError, ParsingError } from "./Utils"
+export * as Mocks from "./MockData";
+export * from "./FormResponseValidator";
+export * from "./TextFieldTypeMeta";
+export { StackUtil, ValidationError, ParsingError } from "./Utils";
