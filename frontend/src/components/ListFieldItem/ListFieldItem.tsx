@@ -16,30 +16,46 @@ interface IListFieldItemProps {
   sdcListFieldItem: Model.SDCListFieldItem;
 }
 
+/**
+ * An selectable list field which may or many not have one or more items.
+ * @param  {[type]} responseState [description]
+ * @param  {[type]} optionNodes [description]
+ * @param  {[type]} children [description]
+ * @param  {[type]} sdcListField [description]
+ */
 function ListFieldItem(props: IListFieldItemProps) {
+  const {
+    parentQuestionID,
+    responseState,
+    isMultiSelect,
+    isSelected,
+    children,
+    sdcListFieldItem,
+  } = props;
+
   const [textResponse, setTextResponse] = useState<string>("");
   return (
     <div data-testid="listfielditem" className="font-normal text-md">
       <label className="inline-flex items-center w-full">
         <div className="flex w-full py-1 border-gray-300 rounded cursor-pointer hover:bg-gray-200">
           <input
-            id={props.sdcListFieldItem.id}
-            type={props.isMultiSelect ? "checkbox" : "radio"}
+            id={sdcListFieldItem.id}
+            type={isMultiSelect ? "checkbox" : "radio"}
             className="w-5 h-5 ml-2 form-radio"
             name={"radio"}
-            value={props.sdcListFieldItem.title}
+            
           />
           <label className="px-1 ml-2 cursor-pointer">
-            <>{props.sdcListFieldItem.id}</>
-            {props.sdcListFieldItem.textResponse && props.isSelected ? (
+            <>{sdcListFieldItem.id}</>
+            {sdcListFieldItem.textResponse && isSelected ? (
               <div className="pl-8 ">
                 <FormInput
-                  placeholder={props.sdcListFieldItem.textResponse.title}
+                  placeholder={sdcListFieldItem.textResponse.title}
                   type="text"
                   state={textResponse}
                   setState={setTextResponse}
-                  iid={props.sdcListFieldItem.textResponse.id}
-                  responseState={props.responseState}
+                  iid={sdcListFieldItem.textResponse.id}
+                  responseState={responseState}
                 />
               </div>
             ) : (
@@ -49,8 +65,8 @@ function ListFieldItem(props: IListFieldItemProps) {
         </div>
       </label>
       <div className="px-12">
-        {props.isSelected && !props.sdcListFieldItem.selectionDisablesChildren
-          ? props.children
+        {isSelected && !sdcListFieldItem.selectionDisablesChildren
+          ? children
           : null}
       </div>
     </div>

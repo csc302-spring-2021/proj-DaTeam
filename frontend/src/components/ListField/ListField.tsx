@@ -27,14 +27,14 @@ function ListField(props: IListFieldProps) {
   const [isMultiSelect, setIsMultiSelect] = useState<boolean>(false);
 
   const { responseState, optionNodes, children, sdcListField } = props;
-  console.log(optionNodes);
+
   useEffect(() => {
     if (sdcListField.maxSelections !== 1) {
       setIsMultiSelect(true);
     }
   }, [optionNodes, sdcListField.maxSelections]);
 
-  const onChangeSelect = (event: any) => {
+  const onChangeSelect = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
     const response: { [key: string]: any } = {
       ...responseState.response,
@@ -42,7 +42,7 @@ function ListField(props: IListFieldProps) {
     if (numSelected === 0) {
       setNumSelected(1);
     }
-    response[sdcListField.id] = [event.target.id];
+    response[sdcListField.id] = [event.currentTarget.id];
     responseState.setResponse(response);
   };
 
@@ -74,11 +74,12 @@ function ListField(props: IListFieldProps) {
       data-testid="listfield"
       className="py-2 font-bold tracking-wide text-md "
     >
-      <div className="w-full px-2 py-1 bg-blue-200 rounded-md">
+      <div className="w-full px-2 py-1 mb-2 bg-blue-200 rounded-md">
         {sdcListField.title + " - ID: " + sdcListField.id}
       </div>
 
-      <div onChange={isMultiSelect ? onChangeMultiSelect : onChangeSelect}>
+      <div onClick={isMultiSelect ? onChangeMultiSelect : onChangeSelect}>
+        {console.log(responseState)}
         {optionNodes.map(
           (optionnode: {
             listFieldItem: Model.SDCListFieldItem;
