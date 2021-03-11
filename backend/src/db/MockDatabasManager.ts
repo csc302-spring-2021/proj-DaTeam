@@ -1,4 +1,6 @@
 import {GenericDatabaseManager} from './DatabaseManager';
+import {SearchParam} from "./DBSerializer/DatabaseMetaInterface";
+import { v4 as uuid } from "uuid"
 
 /**
  * Mock Implementation of the Database Manager to be used by tests
