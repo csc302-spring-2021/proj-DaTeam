@@ -26,7 +26,7 @@ function strip(obj: any, targetClass: Function): any {
 async function testAll() {
   const form1 = Mocks.buildFormPartial();
   const form2 = Mocks.buildFormComplete();
-  const response = Mocks.buildFormResponseComplete();
+  const response = Mocks.buildFormResponsePartial();
   const patient = Mocks.genPatientPartial();
 
   /** Test for create and read */
