@@ -66,9 +66,9 @@ async function testAll() {
   
   /** Test for search */
 
-  databaseManager.genericSeach(Model.SDCForm, {}, true).then(inspect);
+  databaseManager.genericSearch(Model.SDCForm, {}, true).then(inspect);
   databaseManager
-    .genericSeach(
+    .genericSearch(
       Model.SDCFormProperty,
       { SDCFormProperty: [`formId = '${uid}'`] },
       false
