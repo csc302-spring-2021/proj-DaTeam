@@ -28,7 +28,7 @@ function App() {
                 <Switch>
                   <Route path="/responses" component={Responses} />
                   <Route exact path="/home" component={Home} />
-                  <Route exact path="/forms" component={Forms} />
+                  <Route path="/forms" component={Forms} />
                   <Route exact path="/404" component={NotFound} />
                   <Redirect exact path="/" to="/responses" />
                   <Redirect to="/404" />
