@@ -1,5 +1,5 @@
 import { Model } from "@dateam/shared";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ListFieldItem } from "../ListFieldItem";
 
 interface IListFieldProps {
@@ -28,6 +28,7 @@ function ListField(props: IListFieldProps) {
 
   const { responseState, optionNodes, children, sdcListField } = props;
 
+  // Check if we should use checkboxes or radio buttons  
   useEffect(() => {
     if (sdcListField.maxSelections !== 1) {
       setIsMultiSelect(true);
@@ -35,14 +36,14 @@ function ListField(props: IListFieldProps) {
   }, [optionNodes, sdcListField.maxSelections]);
 
   const onChangeSelect = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
     const response: { [key: string]: any } = {
       ...responseState.response,
     };
     if (numSelected === 0) {
       setNumSelected(1);
     }
-    response[sdcListField.id] = [event.currentTarget.id];
+    console.log((event.target as any).id)
+    response[sdcListField.id] = [(event.target as any).id];
     responseState.setResponse(response);
   };
 
@@ -78,13 +79,10 @@ function ListField(props: IListFieldProps) {
         {sdcListField.title + " - ID: " + sdcListField.id}
       </div>
 
-      <div onClick={isMultiSelect ? onChangeMultiSelect : onChangeSelect}>
-        {console.log(responseState)}
+      <div >
+        {console.log(optionNodes)}
         {optionNodes.map(
-          (optionnode: {
-            listFieldItem: Model.SDCListFieldItem;
-            listFieldItemChildren: any[];
-          }) => {
+          (optionnode) => {
             return (
               <ListFieldItem
                 key={optionnode.listFieldItem.id}
@@ -97,6 +95,7 @@ function ListField(props: IListFieldProps) {
                       ) !== -1
                     : false
                 }
+                onClick={isMultiSelect ? onChangeMultiSelect : onChangeSelect}
                 sdcListFieldItem={optionnode.listFieldItem}
               >
                 {optionnode.listFieldItemChildren}

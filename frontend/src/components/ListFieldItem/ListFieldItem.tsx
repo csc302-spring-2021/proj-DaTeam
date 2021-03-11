@@ -14,6 +14,7 @@ interface IListFieldItemProps {
   isSelected: boolean;
   children?: React.ReactNode;
   sdcListFieldItem: Model.SDCListFieldItem;
+  onClick: Function
 }
 
 /**
@@ -31,6 +32,7 @@ function ListFieldItem(props: IListFieldItemProps) {
     isSelected,
     children,
     sdcListFieldItem,
+    onClick
   } = props;
 
   const [textResponse, setTextResponse] = useState<string>("");
@@ -43,7 +45,7 @@ function ListFieldItem(props: IListFieldItemProps) {
             type={isMultiSelect ? "checkbox" : "radio"}
             className="w-5 h-5 ml-2 form-radio"
             name={"radio"}
-            
+            checked={isSelected}
           />
           <label className="px-1 ml-2 cursor-pointer">
             <>{sdcListFieldItem.id}</>
