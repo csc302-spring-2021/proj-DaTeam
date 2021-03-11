@@ -2,7 +2,7 @@ import { Model } from "@dateam/shared";
 import { useState } from "react";
 import { FormInput } from "../FormInput";
 
-function ListFieldItem(props: {
+interface IListFieldItemProps {
   parentQuestionID?: string;
   responseState?: {
     setResponse: React.Dispatch<
@@ -12,18 +12,21 @@ function ListFieldItem(props: {
   };
   isMultiSelect: boolean;
   isSelected: boolean;
-  children?: any;
+  children?: React.ReactNode;
   sdcListFieldItem: Model.SDCListFieldItem;
-}) {
+}
+
+function ListFieldItem(props: IListFieldItemProps) {
   const [textResponse, setTextResponse] = useState<string>("");
   return (
     <div
       data-testid="listfielditem"
-      className="font-normal tracking-wide text-md"
+      className="font-normal text-md"
     >
       <label className="inline-flex items-center">
-        <div className="py-1 text-xl border-gray-300 rounded cursor-pointer hover:bg-gray-200">
+        <div className="py-1 border-gray-300 rounded cursor-pointer hover:bg-gray-200">
           <input
+          
             id={props.sdcListFieldItem.id}
             type={props.isMultiSelect ? "checkbox" : "radio"}
             className="w-5 h-5 ml-2 form-radio"

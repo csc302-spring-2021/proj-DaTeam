@@ -27,7 +27,7 @@ function ListField(props: IListFieldProps) {
   const [isMultiSelect, setIsMultiSelect] = useState<boolean>(false);
 
   const { responseState, optionNodes, children, sdcListField } = props;
-  console.log(props);
+  console.log(optionNodes);
   useEffect(() => {
     if (sdcListField.maxSelections !== 1) {
       setIsMultiSelect(true);
@@ -72,9 +72,9 @@ function ListField(props: IListFieldProps) {
   return (
     <div
       data-testid="listfield"
-      className="py-2 text-lg font-bold tracking-wide "
+      className="py-2 font-bold tracking-wide text-md "
     >
-      <div className="px-2">{sdcListField.id}</div>
+      <div className="px-2">{sdcListField.id + " - " + sdcListField.title}</div>
       <div onChange={isMultiSelect ? onChangeMultiSelect : onChangeSelect}>
         {optionNodes.map(
           (optionnode: {
