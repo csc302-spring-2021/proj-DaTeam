@@ -74,7 +74,10 @@ function ListField(props: IListFieldProps) {
       data-testid="listfield"
       className="py-2 font-bold tracking-wide text-md "
     >
-      <div className="px-2">{sdcListField.id + " - " + sdcListField.title}</div>
+      <div className="w-full px-2 py-1 bg-blue-200 rounded-md">
+        {sdcListField.title + " - ID: " + sdcListField.id}
+      </div>
+
       <div onChange={isMultiSelect ? onChangeMultiSelect : onChangeSelect}>
         {optionNodes.map(
           (optionnode: {

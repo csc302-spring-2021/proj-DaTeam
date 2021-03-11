@@ -19,24 +19,20 @@ interface IListFieldItemProps {
 function ListFieldItem(props: IListFieldItemProps) {
   const [textResponse, setTextResponse] = useState<string>("");
   return (
-    <div
-      data-testid="listfielditem"
-      className="font-normal text-md"
-    >
-      <label className="inline-flex items-center">
-        <div className="py-1 border-gray-300 rounded cursor-pointer hover:bg-gray-200">
+    <div data-testid="listfielditem" className="font-normal text-md">
+      <label className="inline-flex items-center w-full">
+        <div className="flex w-full py-1 border-gray-300 rounded cursor-pointer hover:bg-gray-200">
           <input
-          
             id={props.sdcListFieldItem.id}
             type={props.isMultiSelect ? "checkbox" : "radio"}
             className="w-5 h-5 ml-2 form-radio"
             name={"radio"}
             value={props.sdcListFieldItem.title}
           />
-          <label className="ml-2">
+          <label className="px-1 ml-2 cursor-pointer">
             <>{props.sdcListFieldItem.id}</>
             {props.sdcListFieldItem.textResponse && props.isSelected ? (
-              <div className="py-2 pl-8">
+              <div className="pl-8 ">
                 <FormInput
                   placeholder={props.sdcListFieldItem.textResponse.title}
                   type="text"
