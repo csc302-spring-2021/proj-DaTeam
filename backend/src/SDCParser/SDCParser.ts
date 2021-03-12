@@ -12,8 +12,8 @@ class SDCParser {
     ignoreAttributes: false,
     ignoreNameSpace: false,
     allowBooleanAttributes: false, // boolean i.e. attributes with no value
-    parseNodeValue: true,
-    parseAttributeValue: true,
+    parseNodeValue: false,
+    parseAttributeValue: false,
     trimValues: true,
     cdataTagName: "false", //default is 'false'
     cdataPositionChar: "\\c",
@@ -36,7 +36,7 @@ class SDCParser {
     ListItemResponseField: ListFieldItemParser,
   };
 
-  protected xmlToJson(xmlData: string): any {
+  xmlToJson(xmlData: string): any {
     const validationResult = XMLParser.validate(xmlData);
     if (validationResult !== true) throw validationResult;
     return XMLParser.parse(xmlData, this.xmlParserOptions);
@@ -67,8 +67,10 @@ abstract class NodeParser {
   }
 
   parseChildren(obj: any) {
+    // TODO
     console.log("parseChildren called on");
     console.log(obj);
+    this.result.children = obj.ChildItems; // this is just a mock
   }
 
   populateProperties(obj: any) {
@@ -79,7 +81,7 @@ abstract class NodeParser {
   }
 }
 
-class FormParser extends NodeParser {
+export class FormParser extends NodeParser {
   result: Model.SDCForm;
   targeClass = Model.SDCForm;
   populateProperties(obj: any) {
@@ -94,6 +96,7 @@ class FormParser extends NodeParser {
       throw this.stack.genError("Missing attribute: version");
     }
     this.result.version = obj.false.version;
+    this.result.title = obj.false.formTitle;
     // todo: parse formProperties
   }
   parseChildren(obj: any) {
@@ -103,27 +106,27 @@ class FormParser extends NodeParser {
   }
 }
 
-class QuestionParser extends NodeParser {}
+export class QuestionParser extends NodeParser {}
 
-class DisplayedItemParser extends NodeParser {
+export class DisplayedItemParser extends NodeParser {
   targeClass = Model.SDCDisplayItem;
 }
 
-class SectionParser extends NodeParser {
+export class SectionParser extends NodeParser {
   targeClass = Model.SDCSection;
 }
 
-class TextFieldParser extends QuestionParser {
+export class TextFieldParser extends QuestionParser {
   result: Model.SDCTextField;
   targeClass = Model.SDCTextField;
 }
 
-class ListFieldParser extends QuestionParser {
+export class ListFieldParser extends QuestionParser {
   result: Model.SDCListField;
   targeClass = Model.SDCListField;
 }
 
-class ListFieldItemParser extends NodeParser {
+export class ListFieldItemParser extends NodeParser {
   result: Model.SDCListFieldItem;
   targeClass = Model.SDCListFieldItem;
 }
