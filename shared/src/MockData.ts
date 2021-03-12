@@ -7,6 +7,7 @@
  * All functions begin with build will generate a complex
  */
 import * as Model from "./ClassDef";
+import { findNode, findAnswer } from "./Utils";
 import { v4 as uuid } from "uuid";
 
 const shortID = () => {
@@ -183,74 +184,6 @@ export function genListFieldItemComplete(): Model.SDCListFieldItem {
   return result;
 }
 
-/**
- * Generate a simple form with pretty much all optional fields missing
- */
-export function buildFormPartial(): Model.SDCForm {
-  const form = genFormPartial();
-  form.formProperties.push(genFormPropertyPartial());
-  form.formProperties.push(genFormPropertyPartial2());
-
-  form.children.push(genDisplayItemPartial());
-  const section = genSectionPartial();
-  form.children.push(section);
-
-  section.children.push(genTextFieldPartial());
-  const listQuestion = genListFieldPartial();
-  section.children.push(listQuestion);
-
-  for (let i = 0; i < 4; i++) {
-    const listOption = genListFieldItemPartial();
-    listOption.id = `${listOption.id}${i}`;
-    listOption.title = `optiont ${i}`;
-    listQuestion.options.push(listOption);
-  }
-  return form;
-}
-
-/**
- * Generate a simple form with pretty much all fields defined
- */
-export function buildFormComplete(): Model.SDCForm {
-  const form = genFormComplete();
-  form.uid = "5d5bb199-59e2-400e-9f16-2d1d4d0db106";
-  form.formProperties.push(genFormPropertyComplete());
-  form.formProperties.push(genFormPropertyComplete2());
-
-  form.children.push(genDisplayItemComplete());
-  const section = new Model.SDCSection(genSectionComplete());
-  form.children.push(section);
-
-  const textQuestion = genTextFieldComplete();
-  textQuestion.id = "text-1";
-  section.children.push(textQuestion);
-
-  const listQuestion = genListFieldComplete();
-  listQuestion.id = "list-1";
-  section.children.push(listQuestion);
-
-  for (let i = 0; i < 4; i++) {
-    const listOption = genListFieldItemComplete();
-    listOption.id = "list-1-" + i;
-    const listOptionChild = genListFieldComplete();
-    listOptionChild.id = "list-1" + i;
-    for (let j = 0; j < i; j++) {
-      const listoptions2 = genListFieldItemComplete();
-      listoptions2.id = "list-1" + i + "-" + j;
-      listOptionChild.options.push(listoptions2);
-    }
-    listOption.children.push(listOptionChild);
-    listQuestion.options.push(listOption);
-  }
-
-  const listOption = genListFieldItemComplete();
-  listOption.id = "list-1-t";
-  listOption.textResponse = genTextFieldComplete();
-  listOption.textResponse.id = "listText";
-  listQuestion.options.push(listOption);
-  return form;
-}
-
 export function genFormResponsePartial(): Model.SDCFormResponse {
   const temp: Model.SDCFormResponse = {
     formId: uuid(),
@@ -274,12 +207,77 @@ export function genAnswer(): Model.SDCAnswer {
   return new Model.SDCAnswer(temp);
 }
 
+export function buildSimpleList(baseId?: string): Model.SDCListField {
+  const result = genListFieldComplete()
+  if (baseId) result.id = baseId
+
+  for (let i = 0; i < 4; i++) {
+    const listOption = genListFieldItemPartial();
+    listOption.id = `${baseId}-${i}`;
+    listOption.title = `optiont ${i}`;
+    result.options.push(listOption);
+  }
+  return result
+}
+
+/**
+ * Generate a simple form with pretty much all optional fields missing
+ */
+export function buildFormPartial(): Model.SDCForm {
+  const form = genFormPartial();
+  form.formProperties.push(genFormPropertyPartial());
+  form.formProperties.push(genFormPropertyPartial2());
+
+  form.children.push(genDisplayItemPartial());
+  const section = genSectionPartial();
+  form.children.push(section);
+
+  section.children.push(genTextFieldPartial());
+  const listQuestion = genListFieldPartial();
+  section.children.push(listQuestion);
+
+  for (let i = 0; i < 4; i++) {
+    const listOption = genListFieldItemPartial();
+    listOption.id = `${listQuestion.id}-${i}`;
+    listOption.title = `optiont ${i}`;
+    listQuestion.options.push(listOption);
+  }
+  return form;
+}
+
+/**
+ * Generate a simple form with pretty much all fields defined
+ */
+export function buildFormComplete(): Model.SDCForm {
+  const form = genFormComplete();
+  form.formProperties.push(genFormPropertyComplete());
+  form.formProperties.push(genFormPropertyComplete2());
+
+  form.children.push(genDisplayItemComplete());
+  const section = genSectionComplete();
+  form.children.push(section);
+
+  const textQuestion = genTextFieldComplete();
+  textQuestion.id = "text-1";
+  section.children.push(textQuestion);
+
+  const listQuestion = buildSimpleList("list-1")
+  section.children.push(listQuestion);
+
+  const listOption = genListFieldItemComplete();
+  listOption.id = "list-1-t";
+  listOption.textResponse = genTextFieldComplete();
+  listOption.textResponse.id = "listText";
+  listOption.textResponse.type = "string";
+  listQuestion.options.push(listOption);
+  return form;
+}
+
 /**
  * Generate a valid response to the question created by buildFormComplete
  */
-export function buildFormResponseComplete(): Model.SDCFormResponse {
-  const response = genFormResponseComplete();
-  response.formId = "5d5bb199-59e2-400e-9f16-2d1d4d0db106";
+export function buildFormResponsePartial(): Model.SDCFormResponse {
+  const response = genFormResponsePartial();
 
   let answer = genAnswer();
   answer.questionID = "text-1";
@@ -288,7 +286,7 @@ export function buildFormResponseComplete(): Model.SDCFormResponse {
 
   answer = genAnswer();
   answer.questionID = "list-1";
-  answer.responses = ["list-1-t", "list-1-1", "list-1-2"];
+  answer.responses = ["list-1-t"];
   response.answers.push(answer);
 
   answer = genAnswer();
@@ -297,4 +295,133 @@ export function buildFormResponseComplete(): Model.SDCFormResponse {
   response.answers.push(answer);
 
   return response;
+}
+
+export function buildFormSimpleList(): Model.SDCForm {
+  const form = genFormComplete();
+  form.formProperties.push(genFormPropertyComplete());
+  form.formProperties.push(genFormPropertyComplete2());
+
+  form.children.push(buildSimpleList("list"));
+
+  return form;
+}
+
+export function buildFormResponseSimpleList(): Model.SDCFormResponse {
+  const response = genFormResponsePartial()
+
+  let answer = genAnswer();
+  answer.questionID = "list";
+  answer.responses = ["list-1"];
+  response.answers.push(answer);
+
+  return response
+}
+
+export function buildFormOptionalQuestion(): Model.SDCForm {
+  const form = buildFormSimpleList();
+  findNode(form, "list").minSelections = 0;
+  return form
+}
+
+export function buildFormResponseOptionalQuestion(): Model.SDCFormResponse {
+  const response = genFormResponsePartial()
+
+  let answer = genAnswer();
+  answer.questionID = "list";
+  answer.responses = [];
+  response.answers.push(answer);
+
+  return response
+}
+
+export function buildFormMultipleQuestion(): Model.SDCForm {
+  const form = buildFormSimpleList();
+  findNode(form, "list").maxSelections = 4;
+  return form
+}
+
+export function buildFormResponseMultipleQuestion(): Model.SDCFormResponse {
+  const response = genFormResponsePartial()
+
+  let answer = genAnswer();
+  answer.questionID = "list";
+  answer.responses = ["list-0", "list-1"];
+  response.answers.push(answer);
+
+  return response
+}
+
+export function buildFormDeselectSiblings(): Model.SDCForm {
+  const form = buildFormSimpleList();
+  findNode(form, "list-0").selectionDeselectsSiblings = true
+  return form
+}
+
+export function buildFormResponseDeselectSiblings1(): Model.SDCFormResponse {
+  const response = genFormResponsePartial()
+
+  let answer = genAnswer();
+  answer.questionID = "list";
+  answer.responses = ["list-0"];
+  response.answers.push(answer);
+
+  return response
+}
+
+export function buildFormResponseDeselectSiblings2(): Model.SDCFormResponse {
+  const response = genFormResponsePartial()
+
+  let answer = genAnswer();
+  answer.questionID = "list";
+  answer.responses = ["list-1", "list-2"];
+  response.answers.push(answer);
+
+  return response
+}
+
+export function buildFormNestedList(): Model.SDCForm {
+  const form = buildFormSimpleList();
+
+  findNode(form, "list-3").children.push(buildSimpleList("list-3-l"))
+  findNode(form, "list").children.push(buildSimpleList("list-l"))
+
+  return form
+}
+
+export function buildFormResponseNestedList(): Model.SDCFormResponse {
+  const response = genFormResponsePartial()
+
+  let answer = genAnswer();
+  answer.questionID = "list";
+  answer.responses = ["list-3"];
+  response.answers.push(answer);
+
+  answer = genAnswer();
+  answer.questionID = "list-3-l";
+  answer.responses = ["list-3-l-3"];
+  response.answers.push(answer);
+
+  answer = genAnswer();
+  answer.questionID = "list-l";
+  answer.responses = ["list-l-0"];
+  response.answers.push(answer);
+
+  return response
+}
+
+export function buildFormDeselectChildren(): Model.SDCForm {
+  const form = buildFormNestedList();
+
+  findNode(form, "list-3").selectionDisablesChildren = true
+
+  return form
+}
+
+export function buildFormResponseDeselectChildren(): Model.SDCFormResponse {
+  const response = buildFormResponseNestedList();
+
+  response.answers = response.answers.filter(o => o.questionID !== "list-3-l")
+
+  return response
 }
