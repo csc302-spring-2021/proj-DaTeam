@@ -26,7 +26,7 @@ function App() {
             <div className="flex-1">
               <AnimatePresence>
                 <Switch>
-                  <Route exact path="/responses" component={Responses} />
+                  <Route path="/responses" component={Responses} />
                   <Route exact path="/home" component={Home} />
                   <Route exact path="/forms" component={Forms} />
                   <Route exact path="/404" component={NotFound} />
