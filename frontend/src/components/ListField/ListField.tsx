@@ -27,16 +27,12 @@ interface IListFieldProps {
 function ListField(props: IListFieldProps) {
   const { responseState, optionNodes, children, sdcListField } = props;
 
-  const [isMultiSelect, setIsMultiSelect] = useState<boolean>(false);
   // Set choice for single answer responses
   const [currentSingleChoice, setCurrentSingleChoice] = useState(
     new LinkedListNode<string>("ROOT")
   );
-  // Check if we should use checkboxes or radio buttons
-  // Check for each node
-  useEffect(() => {
-    setIsMultiSelect(sdcListField.maxSelections !== 1);
-  }, [optionNodes, sdcListField.maxSelections]);
+  // Check if we can select multiple children
+  const isMultiSelect = sdcListField.maxSelections !== 1;
 
   // Sets current parent node in list
   const onClickListField = (optionnode: IOptionNode) => () => {
@@ -47,9 +43,8 @@ function ListField(props: IListFieldProps) {
   return (
     <fieldset data-testid="listfield" className="tracking-wide text-md">
       <legend className="w-full p-1 font-bold rounded-md">
-        {sdcListField.title
-          ? sdcListField.title + " - ID: " + sdcListField.id
-          : "ID: " + sdcListField.id}
+        {sdcListField.title && " - "}
+        {"ID: " + sdcListField.id}
       </legend>
       <div className="">
         {optionNodes.map((optionnode) => {
