@@ -6,4 +6,11 @@ export * from "./ClassValidator";
 export * as Mocks from "./MockData";
 export * from "./FormResponseValidator";
 export * from "./TextFieldTypeMeta";
-export { StackUtil, ValidationError, ParsingError } from "./Utils";
+export {
+  StackUtil,
+  ValidationError,
+  ParsingError,
+  findNode,
+  findAnswer,
+  printNode,
+} from "./Utils";
