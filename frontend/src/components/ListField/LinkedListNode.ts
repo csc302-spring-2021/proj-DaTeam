@@ -19,6 +19,12 @@ export class LinkedListNode<T> {
     return this.value;
   }
 
+  public addValue(value: T) {
+    if (value instanceof Array && this.value instanceof Array) {
+      this.value = this.value.concat(value) as T & any[];
+    }
+  }
+
   public getNext() {
     return this.next;
   }

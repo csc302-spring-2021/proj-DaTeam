@@ -4,13 +4,12 @@ import { FormInput } from "../FormInput";
 import { LinkedListNode } from "../ListField/LinkedListNode";
 import { IOptionNode } from "../ListField/ListField";
 
-interface IListFieldItemProps {
+interface IListFieldItemProps<T> {
   optionNode: IOptionNode;
-  setCurrentChoice: React.Dispatch<
-    React.SetStateAction<LinkedListNode<string>>
-  >;
-  currentChoice: LinkedListNode<string>;
+  setCurrentChoice: React.Dispatch<React.SetStateAction<LinkedListNode<T>>>;
+  currentChoice: LinkedListNode<T>;
   collaped: boolean;
+  isMultiSelect: boolean;
   /* parentQuestionID?: string;
   responseState?: {
     setResponse: React.Dispatch<
@@ -33,16 +32,43 @@ interface IListFieldItemProps {
  * @param  {[type]} children [description]
  * @param  {[type]} sdcListField [description]
  */
-function ListFieldItem(props: IListFieldItemProps) {
-  const { currentChoice, setCurrentChoice, optionNode, collaped } = props;
+function ListFieldItem(props: IListFieldItemProps<string[]>) {
+  const {
+    currentChoice,
+    setCurrentChoice,
+    optionNode,
+    collaped,
+    isMultiSelect,
+  } = props;
 
-  const checked = currentChoice.getValue() === optionNode.listFieldItem.id;
+  const checked =
+    currentChoice.getPrev()?.getValue().includes(optionNode.listFieldItem.id) ||
+    false;
+
   const onCheck = () => {
-    const currentNode = new LinkedListNode(optionNode.listFieldItem.id);
+    /* currentChoice.addValue([optionNode.listFieldItem.id]);
+    console.log(currentChoice); */
+    const currentNode =
+      currentChoice.getNext() ||
+      new LinkedListNode([]);
+
+    
+    if (!currentChoice.getValue().includes(optionNode.listFieldItem.id)) {
+      currentChoice.addValue([optionNode.listFieldItem.id]);
+      currentNode.setPrev(currentChoice);
+     /*  setCurrentChoice(currentNode); */
+      console.log(currentChoice, currentNode);
+      console.log(currentNode.getPrev());
+    }
+
+    /* setCurrentChoice(currentNode); */
+    /* 
     currentNode.setPrev(currentChoice);
     currentChoice.setNext(currentNode);
-    setCurrentChoice(currentNode);
+    setCurrentChoice(currentNode); */
   };
+
+  const checkType = isMultiSelect || true ? "checkbox" : "radio";
 
   /*   const {
     parentQuestionID,
@@ -81,7 +107,7 @@ function ListFieldItem(props: IListFieldItemProps) {
           className="my-auto cursor-pointer"
           checked={checked}
           onChange={onCheck}
-          type="radio"
+          type={checkType}
         />
         <label className="my-auto cursor-pointer">
           {!optionNode.listFieldItem.selectionDisablesChildren &&

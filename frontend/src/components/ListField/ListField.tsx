@@ -29,21 +29,15 @@ function ListField(props: IListFieldProps) {
 
   // Set choice for single answer responses
   const [currentSingleChoice, setCurrentSingleChoice] = useState(
-    new LinkedListNode<string>("ROOT")
+    new LinkedListNode<string[]>(["ROOT"])
   );
-  // Check if we can select multiple children
-  const isMultiSelect = sdcListField.maxSelections !== 1;
 
-  // Sets current parent node in list
-  const onClickListField = (optionnode: IOptionNode) => () => {
-    const ll_node = new LinkedListNode<string>(optionnode.listFieldItem.id);
-    setCurrentSingleChoice(ll_node);
-  };
+  const isMultiSelect = sdcListField.maxSelections !== 1;
 
   return (
     <fieldset data-testid="listfield" className="tracking-wide text-md">
       <legend className="w-full p-1 font-bold rounded-md">
-        {sdcListField.title && " - "}
+        {sdcListField.title && sdcListField.title + " - "}
         {"ID: " + sdcListField.id}
       </legend>
       <div className="">
@@ -55,6 +49,7 @@ function ListField(props: IListFieldProps) {
               currentChoice={currentSingleChoice}
               optionNode={optionnode}
               collaped={false}
+              isMultiSelect={isMultiSelect}
             />
           );
         })}
