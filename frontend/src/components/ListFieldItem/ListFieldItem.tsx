@@ -80,7 +80,11 @@ function ListFieldItem(props: IListFieldItemProps) {
           type="radio"
         />
         <label className="my-auto cursor-pointer">
+          {!optionNode.listFieldItem.selectionDisablesChildren &&
+            optionNode.listFieldItemChildren.length > 0 &&
+            " +  "}
           {optionNode.listFieldItem.title}
+          {console.log(optionNode)}
         </label>
       </div>
 
