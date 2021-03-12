@@ -34,8 +34,8 @@ interface IListFieldItemProps {
  */
 function ListFieldItem(props: IListFieldItemProps) {
   const { currentChoice, setCurrentChoice, optionNode } = props;
-  const [isChecked, setIsChecked] = useState(false);
 
+  const checked = currentChoice.getValue() === optionNode.listFieldItem.id;
   const onCheck = () => {
     const currentNode = new LinkedListNode(optionNode.listFieldItem.id);
     currentNode.setPrev(currentChoice);
@@ -64,7 +64,6 @@ function ListFieldItem(props: IListFieldItemProps) {
     console.log(currentChoice);
     setIsChecked((b) => !b);
   }; */
-  const checked = currentChoice.getValue() === optionNode.listFieldItem.id;
 
   return (
     <div
@@ -80,7 +79,7 @@ function ListFieldItem(props: IListFieldItemProps) {
 
       <label className="my-auto cursor-pointer">
         {" "}
-        {optionNode.listFieldItem.id}{" "}
+        {optionNode.listFieldItem.title}{" "}
       </label>
 
       {/* <div

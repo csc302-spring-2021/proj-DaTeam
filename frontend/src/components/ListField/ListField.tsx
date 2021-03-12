@@ -47,7 +47,9 @@ function ListField(props: IListFieldProps) {
   return (
     <fieldset data-testid="listfield" className="py-2 tracking-wide text-md ">
       <legend className="w-full px-2 py-1 font-bold bg-blue-200 rounded-md">
-        {sdcListField.title + " - ID: " + sdcListField.id}
+        {sdcListField.title
+          ? sdcListField.title + " - ID: " + sdcListField.id
+          : "ID: " + sdcListField.id}
       </legend>
       <div>
         {optionNodes.map((optionnode) => {
