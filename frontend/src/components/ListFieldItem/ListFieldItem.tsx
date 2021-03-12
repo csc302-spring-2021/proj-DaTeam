@@ -66,21 +66,38 @@ function ListFieldItem(props: IListFieldItemProps) {
   }; */
 
   return (
-    <div
-      className="flex space-x-4 cursor-pointer hover:bg-gray-200 hover:rounded-lg"
-      onClick={onCheck}
-    >
-      <input
-        className="my-auto cursor-pointer"
-        checked={checked}
-        onChange={onCheck}
-        type="radio"
-      />
+    <div className="flex flex-col " onClick={onCheck}>
+      <div
+        className={`flex px-2 space-x-4 rounded-md cursor-pointer  ${
+          checked ? "bg-blue-200" : "hover:bg-blue-100"
+        }`}
+      >
+        <input
+          className="my-auto cursor-pointer"
+          checked={checked}
+          onChange={onCheck}
+          type="radio"
+        />
+        <label className="my-auto cursor-pointer">
+          {optionNode.listFieldItem.title}
+        </label>
+      </div>
 
-      <label className="my-auto cursor-pointer">
-        {" "}
-        {optionNode.listFieldItem.title}{" "}
-      </label>
+      <div className={`flex flex-col pl-4`}>
+        {checked &&
+          !optionNode.listFieldItem.selectionDisablesChildren &&
+          optionNode.listFieldItemChildren}
+        {checked && optionNode.listFieldItem.textResponse && (
+          <div className="mt-2">
+          <FormInput
+            placeholder={optionNode.listFieldItem.textResponse.title}
+            type="text"
+            state={""}
+            setState={() => {}}
+          />
+          </div>
+        )}
+      </div>
 
       {/* <div
       data-testid="listfielditem"

@@ -45,13 +45,13 @@ function ListField(props: IListFieldProps) {
   };
 
   return (
-    <fieldset data-testid="listfield" className="py-2 tracking-wide text-md ">
-      <legend className="w-full px-2 py-1 font-bold bg-blue-200 rounded-md">
+    <fieldset data-testid="listfield" className="tracking-wide text-md">
+      <legend className="w-full p-1 font-bold rounded-md">
         {sdcListField.title
           ? sdcListField.title + " - ID: " + sdcListField.id
           : "ID: " + sdcListField.id}
       </legend>
-      <div>
+      <div className="">
         {optionNodes.map((optionnode) => {
           return (
             <ListFieldItem
