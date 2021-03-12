@@ -59,6 +59,7 @@ function ListField(props: IListFieldProps) {
               setCurrentChoice={setCurrentSingleChoice}
               currentChoice={currentSingleChoice}
               optionNode={optionnode}
+              collaped={false}
             />
           );
         })}

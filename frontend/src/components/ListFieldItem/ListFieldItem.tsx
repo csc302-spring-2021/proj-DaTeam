@@ -10,6 +10,7 @@ interface IListFieldItemProps {
     React.SetStateAction<LinkedListNode<string>>
   >;
   currentChoice: LinkedListNode<string>;
+  collaped: boolean;
   /* parentQuestionID?: string;
   responseState?: {
     setResponse: React.Dispatch<
@@ -33,7 +34,7 @@ interface IListFieldItemProps {
  * @param  {[type]} sdcListField [description]
  */
 function ListFieldItem(props: IListFieldItemProps) {
-  const { currentChoice, setCurrentChoice, optionNode } = props;
+  const { currentChoice, setCurrentChoice, optionNode, collaped } = props;
 
   const checked = currentChoice.getValue() === optionNode.listFieldItem.id;
   const onCheck = () => {
@@ -84,17 +85,17 @@ function ListFieldItem(props: IListFieldItemProps) {
       </div>
 
       <div className={`flex flex-col pl-4`}>
-        {checked &&
+        {(checked || collaped) &&
           !optionNode.listFieldItem.selectionDisablesChildren &&
           optionNode.listFieldItemChildren}
-        {checked && optionNode.listFieldItem.textResponse && (
+        {(checked || collaped) && optionNode.listFieldItem.textResponse && (
           <div className="mt-2">
-          <FormInput
-            placeholder={optionNode.listFieldItem.textResponse.title}
-            type="text"
-            state={""}
-            setState={() => {}}
-          />
+            <FormInput
+              placeholder={optionNode.listFieldItem.textResponse.title}
+              type="text"
+              state={""}
+              setState={() => {}}
+            />
           </div>
         )}
       </div>
