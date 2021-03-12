@@ -84,7 +84,6 @@ function ListFieldItem(props: IListFieldItemProps) {
             optionNode.listFieldItemChildren.length > 0 &&
             " +  "}
           {optionNode.listFieldItem.title}
-          {console.log(optionNode)}
         </label>
       </div>
 
