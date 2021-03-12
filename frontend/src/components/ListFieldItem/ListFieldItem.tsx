@@ -67,7 +67,11 @@ function ListFieldItem(props: IListFieldItemProps) {
   }; */
 
   return (
-    <div className="flex flex-col " onClick={onCheck}>
+    <div
+      className="flex flex-col"
+      onClick={onCheck}
+      data-testid="listfielditem"
+    >
       <div
         className={`flex px-2 space-x-4 rounded-md cursor-pointer  ${
           checked ? "bg-blue-200" : "hover:bg-blue-100"
