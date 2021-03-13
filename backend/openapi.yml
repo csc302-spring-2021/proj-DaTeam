@@ -24,6 +24,20 @@ externalDocs:
   url: "https://umar-ahmed.gitbook.io/project-dateam/"
 paths:
   /patients:
+    post:
+      description: "Create a new patient"
+      tags:
+        - patient
+      requestBody:
+        required: true
+        description: SDC Patient
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientRequestBody"
+      responses:
+        204:
+          description: "Patient created successfully"
     get:
       description: "Get all patients"
       tags:
@@ -297,6 +311,18 @@ components:
           description: The legal name of the patient
           example: "Jane Doe"
 
+    PatientRequestBody:
+      type: object
+      properties:
+        id:
+          type: string
+          description: External ID (typically OHIP) for identifying the patient
+          example: "5584-486-674-YM"
+        name:
+          type: string
+          description: The legal name of the patient
+          example: "Jane Doe"
+
     Procedure:
       type: object
       properties:
@@ -327,10 +353,6 @@ components:
           type: string
           description: The title of the form
           example: "Lung Biopsy Analysis"
-        num_responses:
-          type: number
-          description: Total number of responses for this form
-          example: 4
 
     FormRequestBody:
       type: object
@@ -364,7 +386,7 @@ components:
               type: string
               description: Unique identifier of this form
               format: uuid
-        
+
     FormResponsePartial:
       type: object
       properties:
@@ -376,8 +398,10 @@ components:
           type: string
           description: Unique identifier of this form response
           format: uuid
-        patient:
-          $ref: "#/components/schemas/Patient"
+        patient_id:
+          type: string
+          description: Unique identifier of the patient whom the response is for
+          format: uuid
 
     FormResponseRequestBody:
       type: object
