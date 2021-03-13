@@ -80,6 +80,13 @@ describe.only("Verify Form Response Validator", () => {
         expect(errors).toHaveLength(0);
         done();
     });
+    test("Deselect Children does not throw or return errors", done => {
+        form = Mocks.buildFormDeselectChildren();
+        formResponse = Mocks.buildFormResponseDeselectChildren()
+        expect(validateFormResponse).not.toThrow();
+        expect(errors).toHaveLength(0);
+        done();
+    });
 });
 
 describe("Verify TextField Failures", () => {
