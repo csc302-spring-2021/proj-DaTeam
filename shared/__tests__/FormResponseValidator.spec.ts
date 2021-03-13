@@ -137,7 +137,7 @@ describe("Verify TextField Failures", () => {
     });
 });
 
-describe.skip("Verify ListField Failures", () => {
+describe.only("Verify ListField Failures", () => {
     let form, formResponse, errors;
     beforeEach(() => {
         form = Mocks.buildFormComplete();
@@ -149,6 +149,7 @@ describe.skip("Verify ListField Failures", () => {
     test("ListField Item w/ selectionDeselectsSiblings enabled and >1 responses Throws Validation Error", done => {
         // Modify the all SDCListField item option to have selectionDeselectsSiblings is enabled
         // The Mock Response already has multiple responses for the listfield
+        let qId;
         outer:
         for(let item of form.children){
             for(let field of item.children){
@@ -156,10 +157,19 @@ describe.skip("Verify ListField Failures", () => {
                     for(let opt of field.options){
                        opt.selectionDeselectsSiblings = true;
                     }
+                    qId = field.id;
                     break outer;
                 }
             }
         }
+        for(let answer of formResponse.answers){
+            if(answer.questionID === qId){
+                answer.responses.push(answer.responses[0]); // repeat the response
+                break;
+            }
+        }
+        console.log(form.children[1].children[1]);
+        console.log(formResponse.answers[1]);
         expect(validateFormResponse).toThrowError(ValidationError);
         done();
     });
@@ -173,9 +183,11 @@ describe.skip("Verify ListField Failures", () => {
         expect(validateFormResponse).toThrowError(ValidationError);
         done();
     });
-    test("Form Response with more responses than maxSelections returns Validation Error", done => {
+    test.only("Form Response with more responses than maxSelections returns Validation Error", done => {
         // Original Mock data should trigger this failure since maxSelections is set to 1 and 
         // there are originally 3 responses to the ListField: [ 'list-1-t', 'list-1-1', 'list-1-2' ]
+        console.log(form);
+        console.log(formResponse);
         validateFormResponse();
         expect(errors).containsError("Selection count above maximum.");
 
