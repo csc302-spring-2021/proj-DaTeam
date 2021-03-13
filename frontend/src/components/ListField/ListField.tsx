@@ -26,50 +26,58 @@ interface IListFieldProps {
  */
 function ListField(props: IListFieldProps) {
   const { responseState, optionNodes, children, sdcListField } = props;
+  const [uncollapsed, setUncollapsed] = useState(true);
 
   // Set choice for single answer responses
   const [currentSingleChoice, setCurrentSingleChoice] = useState(
     new LinkedListNode<string[]>(["ROOT"])
   );
 
+  const collapseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setUncollapsed(!uncollapsed);
+  };
+
+  const preventLegendSelect = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const isMultiSelect = sdcListField.maxSelections !== 1;
 
   return (
     <fieldset data-testid="listfield" className="tracking-wide text-md">
-      <legend className="w-full p-1 font-bold rounded-md">
-        {sdcListField.title && sdcListField.title + " - "}
-        {"ID: " + sdcListField.id}
-      </legend>
+      <div onClick={preventLegendSelect} className="flex">
+        <legend className="w-full p-1 font-bold rounded-md">
+          {sdcListField.title && sdcListField.title + " - "}
+          {"ID: " + sdcListField.id}
+        </legend>
+        {sdcListField.children && (
+          <button
+            onClick={collapseClick}
+            className="w-12 h-6 mt-1 bg-gray-300 rounded-md text-md hover:bg-gray-400"
+          >
+            {uncollapsed ? "-" : "+"}
+          </button>
+        )}
+      </div>
       <div className="">
-        {optionNodes.map((optionnode) => {
-          return (
-            <ListFieldItem
-              key={optionnode.listFieldItem.id}
-              setCurrentChoice={setCurrentSingleChoice}
-              currentChoice={currentSingleChoice}
-              optionNode={optionnode}
-              collaped={false}
-              isMultiSelect={isMultiSelect}
-            />
-          );
-        })}
-        {/* <ListFieldItem
+        {uncollapsed &&
+          optionNodes.map((optionnode) => {
+            /* currentSingleChoice.addValue([optionnode.listFieldItem.id]); */
+
+            return (
+              <ListFieldItem
                 key={optionnode.listFieldItem.id}
-                responseState={responseState}
+                setCurrentChoice={setCurrentSingleChoice}
+                currentChoice={currentSingleChoice}
+                optionNode={optionnode}
+                uncollaped={uncollapsed}
                 isMultiSelect={isMultiSelect}
-                isSelected={
-                  responseState.response[sdcListField.id]
-                    ? responseState.response[sdcListField.id].indexOf(
-                        optionnode.listFieldItem.id
-                      ) !== -1
-                    : false
-                }
-                parentNode={currentSingleChoice}
-                onClick={isMultiSelect ? onChangeMultiSelect : onChangeSelect}
-                sdcListFieldItem={optionnode.listFieldItem}
-              >
-                {optionnode.listFieldItemChildren}
-              </ListFieldItem> */}
+              />
+            );
+          })}
       </div>
       {children}
     </fieldset>

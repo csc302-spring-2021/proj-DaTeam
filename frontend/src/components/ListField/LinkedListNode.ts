@@ -37,7 +37,7 @@ export class LinkedListNode<T> {
     this.next = node;
   }
 
-  public setPrev(node: LinkedListNode<T>) {
+  public setPrev(node: LinkedListNode<T> | undefined) {
     this.prev = node;
   }
 }
