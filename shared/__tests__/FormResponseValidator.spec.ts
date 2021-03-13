@@ -137,7 +137,7 @@ describe("Verify TextField Failures", () => {
     });
 });
 
-describe.only("Verify ListField Failures", () => {
+describe("Verify ListField Failures", () => {
     let form, formResponse, errors;
     beforeEach(() => {
         form = Mocks.buildFormComplete();
@@ -168,8 +168,6 @@ describe.only("Verify ListField Failures", () => {
                 break;
             }
         }
-        console.log(form.children[1].children[1]);
-        console.log(formResponse.answers[1]);
         expect(validateFormResponse).toThrowError(ValidationError);
         done();
     });
@@ -183,12 +181,28 @@ describe.only("Verify ListField Failures", () => {
         expect(validateFormResponse).toThrowError(ValidationError);
         done();
     });
-    test.only("Form Response with more responses than maxSelections returns Validation Error", done => {
-        // Original Mock data should trigger this failure since maxSelections is set to 1 and 
-        // there are originally 3 responses to the ListField: [ 'list-1-t', 'list-1-1', 'list-1-2' ]
-        console.log(form);
-        console.log(formResponse);
-        validateFormResponse();
+    test("Form Response with more responses than maxSelections returns Validation Error", done => {
+        let ids = [];
+        let qId;
+        outer:
+        for(let item of form.children){
+            for(let field of item.children){
+                if(field instanceof Model.SDCListField){
+                    for(let opt of field.options){
+                       ids.push(opt.id);
+                    }
+                    qId = field.id;
+                    break outer;
+                }
+            }
+        }
+        for(let answer of formResponse.answers){
+            if(answer.questionID === qId){
+                answer.responses = ids;
+                break;
+            }
+        }
+        expect(validateFormResponse).not.toThrowError();
         expect(errors).containsError("Selection count above maximum.");
 
         done();
@@ -206,7 +220,7 @@ describe.only("Verify ListField Failures", () => {
                 }
             }
         }
-        validateFormResponse();
+        expect(validateFormResponse).not.toThrowError();
         expect(errors).containsError("Selection count below minimum.");
 
         done();
