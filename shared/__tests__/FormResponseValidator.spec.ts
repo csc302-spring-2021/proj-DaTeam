@@ -44,6 +44,13 @@ describe.only("Verify Form Response Validator", () => {
         expect(errors).toHaveLength(0);
         done();
     });
+    test("Optional Question does not throw or return errors", done => {
+        form = Mocks.buildFormOptionalQuestion();
+        formResponse = Mocks.buildFormResponseOptionalQuestion()
+        expect(validateFormResponse).not.toThrow();
+        expect(errors).toHaveLength(0);
+        done();
+    });
 });
 
 describe("Verify TextField Failures", () => {
