@@ -30,19 +30,7 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
   } = props;
 
   const [isChecked, setIsChecked] = useState(false);
-
-  useEffect(() => {
-    const checked = isMultiSelect
-      ? currentChoice
-          .getPrev()
-          ?.getValue()
-          .includes(optionNode.listFieldItem.id) || false
-      : currentChoice
-          .getNext()
-          ?.getValue()
-          .includes(optionNode.listFieldItem.id) || false;
-    setIsChecked(checked);
-  }, []);
+  const [optionalText, setOptionalText] = useState("");
 
   const onCheck = (e: React.MouseEvent | React.ChangeEvent) => {
     e.preventDefault();
@@ -90,8 +78,8 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
             <FormInput
               placeholder={optionNode.listFieldItem.textResponse.title}
               type="text"
-              state={""}
-              setState={() => {}}
+              state={optionalText}
+              setState={setOptionalText}
             />
           </div>
         )}
