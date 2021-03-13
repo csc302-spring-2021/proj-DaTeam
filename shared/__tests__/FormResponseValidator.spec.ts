@@ -73,6 +73,13 @@ describe.only("Verify Form Response Validator", () => {
         expect(errors).toHaveLength(0);
         done();
     });
+    test("Nested List does not throw or return errors", done => {
+        form = Mocks.buildFormNestedList();
+        formResponse = Mocks.buildFormResponseNestedList()
+        expect(validateFormResponse).not.toThrow();
+        expect(errors).toHaveLength(0);
+        done();
+    });
 });
 
 describe("Verify TextField Failures", () => {
