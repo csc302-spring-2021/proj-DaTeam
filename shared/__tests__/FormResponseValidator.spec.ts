@@ -58,6 +58,21 @@ describe.only("Verify Form Response Validator", () => {
         expect(errors).toHaveLength(0);
         done();
     });
+    test("Deselect Siblings 1 does not throw or return errors", done => {
+        form = Mocks.buildFormDeselectSiblings();
+        formResponse = Mocks.buildFormResponseDeselectSiblings1()
+        expect(validateFormResponse).not.toThrow();
+        expect(errors).toHaveLength(0);
+        done();
+    });
+    test("Deselect Siblings 2 does not throw or return errors", done => {
+        form = Mocks.buildFormDeselectSiblings();
+        form.children[0].maxSelections = 5;
+        formResponse = Mocks.buildFormResponseDeselectSiblings2()
+        expect(validateFormResponse).not.toThrow();
+        expect(errors).toHaveLength(0);
+        done();
+    });
 });
 
 describe("Verify TextField Failures", () => {
