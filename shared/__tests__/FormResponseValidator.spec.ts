@@ -32,12 +32,16 @@ beforeAll(() => {
     });
 });
 
-describe("Verify Form Response Validator", () => {
+describe.only("Verify Form Response Validator", () => {
+    let form, formResponse, errors;
     function validateFormResponse(){
-        FormResponseValidator.validate(Mocks.buildFormResponseComplete(), Mocks.buildFormComplete());
+        errors = FormResponseValidator.validate(formResponse, form);
     }
-    test("Basic Case: Default Mock Data Passes", done => {
+    test("Simple List does not throw or return errors", done => {
+        form = Mocks.buildFormSimpleList();
+        formResponse = Mocks.buildFormResponseSimpleList()
         expect(validateFormResponse).not.toThrow();
+        expect(errors).toHaveLength(0);
         done();
     });
 });
@@ -49,7 +53,7 @@ describe("Verify TextField Failures", () => {
         form = Mocks.buildFormComplete();
     });
     beforeEach(() => {
-        formResponse = Mocks.buildFormResponseComplete();
+        formResponse = Mocks.buildFormResponsePartial();
     });
     function validateFormResponse(){
         errors = FormResponseValidator.validate(formResponse, form);
@@ -91,7 +95,7 @@ describe("Verify ListField Failures", () => {
     let form, formResponse, errors;
     beforeEach(() => {
         form = Mocks.buildFormComplete();
-        formResponse = Mocks.buildFormResponseComplete();
+        formResponse = Mocks.buildFormResponsePartial();
     });
     function validateFormResponse(){
         errors = FormResponseValidator.validate(formResponse, form);

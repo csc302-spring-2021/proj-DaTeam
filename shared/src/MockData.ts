@@ -212,7 +212,7 @@ export function buildSimpleList(baseId?: string): Model.SDCListField {
   if (baseId) result.id = baseId
 
   for (let i = 0; i < 4; i++) {
-    const listOption = genListFieldItemPartial();
+    const listOption = genListFieldItemComplete();
     listOption.id = `${baseId}-${i}`;
     listOption.title = `optiont ${i}`;
     result.options.push(listOption);
