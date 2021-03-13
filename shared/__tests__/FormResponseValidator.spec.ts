@@ -51,6 +51,13 @@ describe.only("Verify Form Response Validator", () => {
         expect(errors).toHaveLength(0);
         done();
     });
+    test("Multiple Question does not throw or return errors", done => {
+        form = Mocks.buildFormMultipleQuestion();
+        formResponse = Mocks.buildFormResponseMultipleQuestion()
+        expect(validateFormResponse).not.toThrow();
+        expect(errors).toHaveLength(0);
+        done();
+    });
 });
 
 describe("Verify TextField Failures", () => {
