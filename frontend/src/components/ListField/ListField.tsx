@@ -29,9 +29,7 @@ function ListField(props: IListFieldProps) {
   const [uncollapsed, setUncollapsed] = useState(true);
 
   // Set choice for single answer responses
-  const [currentSingleChoice, setCurrentSingleChoice] = useState(
-    new LinkedListNode<string[]>(["ROOT"])
-  );
+  const [currentSingleChoice, setCurrentSingleChoice] = useState<string[]>([]);
 
   const collapseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

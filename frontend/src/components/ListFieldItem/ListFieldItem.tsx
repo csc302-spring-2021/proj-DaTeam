@@ -6,11 +6,10 @@ import { IOptionNode } from "../ListField/ListField";
 
 interface IListFieldItemProps<T> {
   optionNode: IOptionNode;
-  setCurrentChoice: React.Dispatch<React.SetStateAction<LinkedListNode<T>>>;
-  currentChoice: LinkedListNode<T>;
+  setCurrentChoice: React.Dispatch<React.SetStateAction<T>>;
+  currentChoice: T;
   uncollaped?: boolean;
   isMultiSelect: boolean;
-  currentNode?: LinkedListNode<T>;
 }
 
 /**
@@ -32,12 +31,25 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
   const [isChecked, setIsChecked] = useState(false);
   const [optionalText, setOptionalText] = useState("");
 
+  useEffect(() => {
+    if (currentChoice.includes(optionNode.listFieldItem.id)) {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+  }, [optionNode, currentChoice]);
+
   const onCheck = (e: React.MouseEvent | React.ChangeEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!isMultiSelect) {
-      setIsChecked((c) => !c);
+    const currentId = optionNode.listFieldItem.id;
+    if (!currentChoice.includes(currentId)) {
+      isMultiSelect
+        ? setCurrentChoice((arr) => [...arr, currentId])
+        : setCurrentChoice([currentId]);
+    } else {
+      setCurrentChoice((arr) => arr.filter((val) => val !== currentId));
     }
   };
 
