@@ -9,8 +9,10 @@ export const FormController = {
   },
 
   read: function (req: Request, res: Response) {
-    const sdcForm = Mocks.buildFormComplete();
-    const serialized = GenericJsonSerializer.encode(sdcForm, Model.SDCForm)
+    const targetUID: string = req.url.substring(req.url.lastIndexOf("/") + 1);
+    const sdcForm: Model.SDCForm = Mocks.buildFormComplete();
+    sdcForm.uid = targetUID;
+    const serialized = GenericJsonSerializer.encode(sdcForm, Model.SDCForm);
 
     res.status(HttpCode.OK).send(serialized);
   },
@@ -27,8 +29,8 @@ export const FormController = {
 
   parse: function (req: Request, res: Response) {
     const sdcForm = Mocks.buildFormComplete();
-    const serialized = GenericJsonSerializer.encode(sdcForm, Model.SDCForm)
+    const serialized = GenericJsonSerializer.encode(sdcForm, Model.SDCForm);
 
     res.status(HttpCode.OK).send(serialized);
-  }
+  },
 };
