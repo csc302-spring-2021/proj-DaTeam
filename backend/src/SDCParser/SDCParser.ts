@@ -7,7 +7,7 @@ class SDCParser {
 
   protected xmlParserOptions = {
     attributeNamePrefix: "",
-    attrNodeName: "false", //default is 'false'
+    attrNodeName: "attributes", //default is 'false'
     textNodeName: "#text",
     ignoreAttributes: false,
     ignoreNameSpace: false,
@@ -15,7 +15,7 @@ class SDCParser {
     parseNodeValue: false,
     parseAttributeValue: false,
     trimValues: true,
-    cdataTagName: "false", //default is 'false'
+    cdataTagName: "cdataTags", //default is 'false'
     cdataPositionChar: "\\c",
     parseTrueNumberOnly: false,
     arrayMode: true, //"strict"
@@ -74,10 +74,10 @@ abstract class NodeParser {
   }
 
   populateProperties(obj: any) {
-    if (!obj.false.ID) throw this.stack.genError("Missing attribute: ID");
-    this.result.id = obj.false.ID;
-    this.result.title = obj.false.title;
-    this.result.order = obj.false.order;
+    if (!obj.attributes.ID) throw this.stack.genError("Missing attribute: ID");
+    this.result.id = obj.attributes.ID;
+    this.result.title = obj.attributes.title;
+    this.result.order = obj.attributes.order;
   }
 }
 
@@ -88,15 +88,15 @@ export class FormParser extends NodeParser {
     super.populateProperties(obj);
     if (obj.Header) this.result.header = obj.Header[0]["#text"].trim();
     if (obj.Footer) this.result.footer = obj.Footer[0]["#text"].trim();
-    if (!obj.false.lineage) {
+    if (!obj.attributes.lineage) {
       throw this.stack.genError("Missing attribute: lineage");
     }
-    this.result.lineage = obj.false.lineage;
-    if (!obj.false.version) {
+    this.result.lineage = obj.attributes.lineage;
+    if (!obj.attributes.version) {
       throw this.stack.genError("Missing attribute: version");
     }
-    this.result.version = obj.false.version;
-    this.result.title = obj.false.formTitle;
+    this.result.version = obj.attributes.version;
+    this.result.title = obj.attributes.formTitle;
     // todo: parse formProperties
   }
   parseChildren(obj: any) {
