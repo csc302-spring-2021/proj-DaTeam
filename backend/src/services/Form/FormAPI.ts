@@ -1,4 +1,4 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import { FormController } from "./FormController";
 
 export class FormAPI {
@@ -22,6 +22,13 @@ export class FormAPI {
 
   /* POST /forms/{formId} */
   private postForm() {
+    // lets endpoints take raw XML files
+    // may have to switch back to express.json() for everything else
+    this.router.use(
+      express.raw({
+        type: "application/xml",
+      })
+    );
     this.router.post("/forms", FormController.create);
   }
 
