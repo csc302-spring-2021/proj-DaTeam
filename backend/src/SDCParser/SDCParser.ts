@@ -121,6 +121,9 @@ export class SectionParser extends NodeParser {
 export class TextFieldParser extends QuestionParser {
   result: Model.SDCTextField;
   targeClass = Model.SDCTextField;
+  populateProperties(obj: any) {
+    super.populateProperties(obj);
+  }
 }
 
 export class ListFieldParser extends QuestionParser {
