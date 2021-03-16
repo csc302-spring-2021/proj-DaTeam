@@ -123,53 +123,53 @@ function FormsPanel() {
   );
 }
 
-function render(child: Model.SDCNode) {
-  if (child instanceof Model.SDCDisplayItem) {
+function render(node: Model.SDCNode) {
+  if (node instanceof Model.SDCDisplayItem) {
     return (
       <FormFieldCard
-        key={child.uid}
+        key={node.uid}
         type="Display Item"
-        title={child.title ?? "Untitled"}
+        title={node.title ?? "Untitled"}
       />
     );
-  } else if (child instanceof Model.SDCListField) {
+  } else if (node instanceof Model.SDCListField) {
     return (
       <FormFieldCard
-        key={child.uid}
+        key={node.uid}
         type="List"
-        title={child.title ?? "Untitled"}
+        title={node.title ?? "Untitled"}
       />
     );
-  } else if (child instanceof Model.SDCTextField) {
+  } else if (node instanceof Model.SDCTextField) {
     return (
       <FormFieldCard
-        key={child.uid}
+        key={node.uid}
         type="Text"
-        title={child.title ?? "Untitled"}
+        title={node.title ?? "Untitled"}
       />
     );
-  } else if (child instanceof Model.SDCSection) {
+  } else if (node instanceof Model.SDCSection) {
     return (
       <>
         <motion.h3
-          key={`${child.uid}-heading`}
+          key={`${node.uid}-heading`}
           variants={{
             initial: { opacity: 0, y: 10 },
             animate: { opacity: 1, y: 0 },
           }}
           className="font-medium uppercase"
         >
-          {child.title}
+          {node.title}
         </motion.h3>
         <motion.div
-          key={`${child.uid}-children`}
+          key={`${node.uid}-children`}
           variants={{
             initial: { opacity: 0, y: 10 },
             animate: { opacity: 1, y: 0 },
           }}
           className="pl-4 space-y-4 border-l-2 border-gray-200"
         >
-          {child.children.map(render)}
+          {node.children.map(render)}
         </motion.div>
       </>
     );
@@ -183,7 +183,7 @@ function FormDetailsPanel() {
   const [sdcform, setSdcform] = useState<Model.SDCNode | undefined>(undefined);
 
   useEffect(() => {
-    FormService.read(123)
+    FormService.read(formId)
       .then((sdcform) => {
         const decodedSdcNode = GenericJsonSerializer.decode(
           sdcform,
@@ -192,7 +192,7 @@ function FormDetailsPanel() {
         setSdcform(decodedSdcNode);
       })
       .catch((err) => notify.error(err.message));
-  }, []);
+  }, [formId]);
 
   return (
     <motion.div
@@ -218,6 +218,7 @@ function FormDetailsPanel() {
         },
       }}
       className="z-10 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50 relative"
+      data-testid="structure"
     >
       <Link to="/forms">
         <CloseButton />
