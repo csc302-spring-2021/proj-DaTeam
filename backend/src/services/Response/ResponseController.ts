@@ -1,43 +1,42 @@
 import { Mocks, GenericJsonSerializer, Model } from "@dateam/shared";
 import { Request, Response } from "express";
-import { HttpCode } from "../../utils/Error";
+import { HttpCode, sendError } from "../../utils/Error";
 import { databaseManager as dbManager } from "../../db/DatabaseManager";
 
 export const ResponseController = {
   create: function (req: Request, res: Response) {
+    let objectToCreate;
     try {
-      const objectToCreate = GenericJsonSerializer.decode(
+      objectToCreate = GenericJsonSerializer.decode(
         req.body.properties,
         Model.SDCFormResponse
       );
-      dbManager
-        .genericCreate(objectToCreate, Model.SDCFormResponse)
-        .then((pk) => {
-          res.status(HttpCode.RESPONSE_CREATED).send(pk);
-        })
-        .catch((e) => {
-          res.status(HttpCode.BAD_REQUEST).send(e.name + ": " + e.message);
-        });
     } catch (e) {
-      res.status(HttpCode.BAD_REQUEST).send("Invalid object");
-      return;
+      sendError(res, HttpCode.BAD_REQUEST, e);
     }
+    dbManager
+      .genericCreate(objectToCreate, Model.SDCFormResponse)
+      .then((pk) => {
+        res.status(HttpCode.NO_CONTENT).send();
+      })
+      .catch((e) => {
+        sendError(res, HttpCode.BAD_REQUEST, e);
+      });
   },
 
   read: function (req: Request, res: Response) {
     const pk = req.params.responseId;
     dbManager
       .genericRead(pk, Model.SDCFormResponse)
-      .then((sdcForm) => {
+      .then((sdcFormResponse) => {
         const serialized = GenericJsonSerializer.encode(
-          sdcForm,
+          sdcFormResponse,
           Model.SDCFormResponse
         );
         res.status(HttpCode.OK).send(serialized);
       })
       .catch((e) => {
-        const serialized = GenericJsonSerializer.encode(e, Error);
-        res.status(HttpCode.NOT_FOUND).send(serialized);
+        sendError(res, HttpCode.BAD_REQUEST, e);
       });
   },
 

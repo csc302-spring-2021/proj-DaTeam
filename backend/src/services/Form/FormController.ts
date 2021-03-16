@@ -1,6 +1,6 @@
 import { Mocks, GenericJsonSerializer, Model } from "@dateam/shared";
 import { Request, Response } from "express";
-import { HttpCode } from "../../utils/Error";
+import { HttpCode, sendError } from "../../utils/Error";
 import { databaseManager as dbManager } from "../../db/DatabaseManager";
 
 export const FormController = {
@@ -13,7 +13,7 @@ export const FormController = {
         Model.SDCForm
       );
     } catch (e) {
-      res.status(HttpCode.BAD_REQUEST).send("Invalid object");
+      sendError(res, HttpCode.BAD_REQUEST, e);
       return;
     }
 
@@ -22,16 +22,16 @@ export const FormController = {
       .genericCreate(objectToCreate, Model.SDCForm)
       .then((pk) => {
         // Once created, search by PK and return the object as specified in openapi.yml
-        dbManager.genericRead(pk, Model.SDCForm).then((response) => {
+        dbManager.genericRead(pk, Model.SDCForm).then((sdcForm) => {
           const serialized = GenericJsonSerializer.encode(
-            response,
+            sdcForm,
             Model.SDCForm
           );
           res.status(HttpCode.CREATED).send(serialized);
         });
       })
       .catch((e) => {
-        res.status(HttpCode.BAD_REQUEST).send(e.name + ": " + e.message);
+        sendError(res, HttpCode.BAD_REQUEST, e);
       });
   },
 
@@ -44,8 +44,7 @@ export const FormController = {
         res.status(HttpCode.OK).send(serialized);
       })
       .catch((e) => {
-        const serialized = GenericJsonSerializer.encode(e, Error);
-        res.status(HttpCode.NOT_FOUND).send(serialized);
+        sendError(res, HttpCode.NOT_FOUND, e);
       });
   },
 
