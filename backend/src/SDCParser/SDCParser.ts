@@ -38,6 +38,7 @@ class SDCParser {
 
   xmlToJson(xmlData: string): any {
     const validationResult = XMLParser.validate(xmlData);
+    console.log(validationResult);
     if (validationResult !== true) throw validationResult;
     return XMLParser.parse(xmlData, this.xmlParserOptions);
   }
@@ -48,6 +49,12 @@ class SDCParser {
     if (!obj.FormDesign) throw this.stack.genError("Missing child: FormDesign");
     formParser.parse(obj.FormDesign[0]);
     return formParser.result;
+  }
+
+  xmlToRawFormDesign(xmlData: string): any {
+    const obj = this.xmlToJson(xmlData);
+    if (!obj.FormDesign) throw this.stack.genError("Missing child: FormDesign");
+    return obj.FormDesign[0];
   }
 }
 
