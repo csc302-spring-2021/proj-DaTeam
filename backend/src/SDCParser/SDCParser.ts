@@ -128,6 +128,19 @@ export class TextFieldParser extends QuestionParser {
   targeClass = Model.SDCTextField;
   populateProperties(obj: any) {
     super.populateProperties(obj);
+    // check if key exists in TextAfterResponse
+    if ("TextAfterResponse" in obj["ResponseField"]) {
+      // textAfterResponse is stored in the attributes list of TextAfterResponse under the key "val"
+      this.result.textAfterResponse =
+        obj["ResponseField"]["TextAfterResponse"]["@_"]["val"];
+    }
+    // type is always stored after attribute key "@_" *if* it exists, which it may not
+    // thus check if it exists first
+    if ("@_" in obj["ResponseField"]["Response"]) {
+      this.result.type = Object.keys(obj)[1];
+    } else {
+      this.result.type = Object.keys(obj)[0];
+    }
   }
 }
 
