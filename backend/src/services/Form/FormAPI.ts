@@ -22,6 +22,10 @@ export class FormAPI {
 
   /* POST /forms/{formId} */
   private postForm() {
+    this.router.post("/forms", FormController.create);
+  }
+
+  private parseForm() {
     // lets endpoints take raw XML files
     // may have to switch back to express.json() for everything else
     this.router.use(
@@ -29,10 +33,6 @@ export class FormAPI {
         type: "application/xml",
       })
     );
-    this.router.post("/forms", FormController.create);
-  }
-
-  private parseForm() {
     this.router.post("/forms/parse", FormController.parse);
   }
 }
