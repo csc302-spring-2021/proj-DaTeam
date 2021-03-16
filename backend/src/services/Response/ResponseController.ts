@@ -13,7 +13,7 @@ export const ResponseController = {
       dbManager
         .genericCreate(objectToCreate, Model.SDCFormResponse)
         .then((pk) => {
-          res.status(HttpCode.OK).send(pk);
+          res.status(HttpCode.RESPONSE_CREATED).send(pk);
         })
         .catch((e) => {
           res.status(HttpCode.BAD_REQUEST).send(e.name + ": " + e.message);

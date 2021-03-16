@@ -13,7 +13,7 @@ export const PatientController = {
       dbManager
         .genericCreate(objectToCreate, Model.Patient)
         .then((pk) => {
-          res.status(HttpCode.OK).send(pk);
+          res.status(HttpCode.CREATED).send(pk);
         })
         .catch((e) => {
           res.status(HttpCode.BAD_REQUEST).send(e.name + ": " + e.message);

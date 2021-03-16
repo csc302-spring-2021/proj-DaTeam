@@ -5,23 +5,34 @@ import { databaseManager as dbManager } from "../../db/DatabaseManager";
 
 export const FormController = {
   create: function (req: Request, res: Response) {
+    // Validate object by decoding.
+    let objectToCreate;
     try {
-      const objectToCreate = GenericJsonSerializer.decode(
+      objectToCreate = GenericJsonSerializer.decode(
         req.body.properties,
         Model.SDCForm
       );
-      dbManager
-        .genericCreate(objectToCreate, Model.SDCForm)
-        .then((pk) => {
-          res.status(HttpCode.OK).send(pk);
-        })
-        .catch((e) => {
-          res.status(HttpCode.BAD_REQUEST).send(e.name + ": " + e.message);
-        });
     } catch (e) {
       res.status(HttpCode.BAD_REQUEST).send("Invalid object");
       return;
     }
+
+    // If not invalid, proceed with creation
+    dbManager
+      .genericCreate(objectToCreate, Model.SDCForm)
+      .then((pk) => {
+        // Once created, search by PK and return the object as specified in openapi.yml
+        dbManager.genericRead(pk, Model.SDCForm).then((response) => {
+          const serialized = GenericJsonSerializer.encode(
+            response,
+            Model.SDCForm
+          );
+          res.status(HttpCode.CREATED).send(serialized);
+        });
+      })
+      .catch((e) => {
+        res.status(HttpCode.BAD_REQUEST).send(e.name + ": " + e.message);
+      });
   },
 
   read: function (req: Request, res: Response) {
