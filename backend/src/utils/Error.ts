@@ -20,7 +20,5 @@ export enum HttpCode {
 }
 
 export function sendError(res: any, code: number, error: Error) {
-  let response = { message: error.message };
-  const serialized = GenericJsonSerializer.encode(error, Error);
-  res.status(code).send(serialized);
+  res.status(code).send({ message: error.message });
 }
