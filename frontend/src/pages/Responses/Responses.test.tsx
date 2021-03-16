@@ -2,7 +2,7 @@ import { createMemoryHistory, MemoryHistory } from "history";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { Router } from "react-router";
 
-import { Responses } from "../Responses";
+import { Responses } from ".";
 
 function renderResponses(): { history: MemoryHistory } {
   const history = createMemoryHistory({ initialEntries: ["/responses"] });
