@@ -41,8 +41,7 @@ export const FormController = {
       .genericRead(pk, Model.SDCForm)
       .then((sdcForm) => {
         const serialized = GenericJsonSerializer.encode(sdcForm, Model.SDCForm);
-        res.type("json");
-        res.status(HttpCode.OK).send(serialized);
+        res.type("json").status(HttpCode.OK).send(serialized);
       })
       .catch((e) => {
         res.status(HttpCode.NOT_FOUND).send(e.name + ": " + e.message);
