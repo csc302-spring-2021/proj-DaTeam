@@ -1,8 +1,21 @@
-import React from "react";
-import { render } from "@testing-library/react";
-import {Forms} from "../Forms";
+import { createMemoryHistory, MemoryHistory } from "history";
+import { render, screen } from "@testing-library/react";
+import { Router } from "react-router";
 
-test('render check for forms page', () => {
-    const {getByTestId} = render(<Forms/>);
-    getByTestId("forms")
+import { Forms } from ".";
+
+function renderForms(): { history: MemoryHistory } {
+  const history = createMemoryHistory({ initialEntries: ["/responses"] });
+  render(
+    <Router history={history}>
+      <Forms />
+    </Router>
+  );
+
+  return { history };
+}
+
+test("render check for forms page", () => {
+  renderForms();
+  screen.getByTestId("forms");
 });
