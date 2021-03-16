@@ -36,7 +36,8 @@ export const PatientController = {
         res.status(HttpCode.OK).send(serialized);
       })
       .catch((e) => {
-        res.status(HttpCode.NOT_FOUND).send(e.name + ": " + e.message);
+        const serialized = GenericJsonSerializer.encode(e, Error);
+        res.status(HttpCode.NOT_FOUND).send(serialized);
       });
   },
 
