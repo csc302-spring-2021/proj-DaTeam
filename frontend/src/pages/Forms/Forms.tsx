@@ -1,6 +1,6 @@
 import { GenericJsonSerializer, Model } from "@dateam/shared";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { EffectCallback, useEffect, useState } from "react";
 import { Link, Route, useParams } from "react-router-dom";
 
 import { pageVariants } from "../../App";
@@ -179,20 +179,24 @@ function render(node: Model.SDCNode) {
 function FormDetailsPanel() {
   const { formId } = useParams<{ formId: string }>();
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
-
   const [sdcform, setSdcform] = useState<Model.SDCNode | undefined>(undefined);
 
-  useEffect(() => {
+  useEffect(():any => {
+    let addedForm: Boolean = true;
     FormService.read(formId)
       .then((sdcform) => {
         const decodedSdcNode = GenericJsonSerializer.decode(
           sdcform,
           Model.SDCNode
         );
-        setSdcform(decodedSdcNode);
+        if(addedForm){
+            setSdcform(decodedSdcNode);
+        }
       })
       .catch((err) => notify.error(err.message));
-  }, [formId]);
+
+      return () => addedForm = false;
+  }, [formId, setSdcform]);
 
   return (
     <motion.div

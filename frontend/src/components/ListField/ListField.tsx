@@ -8,7 +8,7 @@ export interface IOptionNode {
   listFieldItemChildren: JSX.Element[];
 }
 interface IListFieldProps {
-  responseState: {
+  responseState?: {
     setResponse: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>;
     response: { [key: string]: any };
   };
