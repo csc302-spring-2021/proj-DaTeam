@@ -74,3 +74,11 @@ describe.skip("Verify Search from DB Works", () => {
     done();
   });
 });
+
+describe.skip("Verify Delete from DB Works", () => {
+  // Skipping because delete is not implemented in the proper DatabaseManager
+  // Thus not implemented in the MockDatabaseManager yet
+  test("Delete Base case", (done) => {
+    done();
+  });
+});
