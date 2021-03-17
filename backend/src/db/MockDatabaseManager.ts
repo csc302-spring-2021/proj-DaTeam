@@ -14,9 +14,13 @@ class MockDatabaseManager extends GenericDatabaseManager {
     this.db = new Map();
   }
 
-  genPk(): string {
+  genPk(targetClass: string): string {
+    if (!this.db.get(targetClass)) {
+      this.db.set(targetClass, new Map());
+    }
+    let innerMap = this.db.get(targetClass);
     let newPk = uuid();
-    while (this.db.hasOwnProperty(newPk)) {
+    while (innerMap.has(newPk)) {
       newPk = uuid();
     }
     return newPk;
@@ -32,8 +36,10 @@ class MockDatabaseManager extends GenericDatabaseManager {
       throw new Error("Input object is not " + targetClass.name);
     }
     const serialized = serializer.encode(obj, targetClass);
-    let new_pk = this.genPk();
-    this.db.set(new_pk, serialized);
+    let new_pk = this.genPk(targetClass.name);
+    let innerDB = this.db.get(targetClass.name);
+    innerDB.set(new_pk, serialized);
+    this.db.set(targetClass.name, innerDB);
     return new_pk;
   }
 
@@ -43,11 +49,17 @@ class MockDatabaseManager extends GenericDatabaseManager {
    * @param targetClass expected object class
    */
   async genericRead(pk: string, targetClass: new () => any): Promise<any> {
-    let result = this.db.get(pk);
-    if (!result) {
+    let innerDB = this.db.get(targetClass.name);
+    if (!innerDB) {
       // If result is undefined
       throw new Error(`PK ${targetClass.name} does not exist in DB`);
     }
+    if (!innerDB.has(pk)) {
+      throw new Error(
+        `Specified PK for ${targetClass.name} does not exist in DB`
+      );
+    }
+    let result = innerDB.get(pk);
     result = serializer.decode(result, targetClass);
     if (!(result instanceof targetClass)) {
       throw new Error("Output object is not " + targetClass.name);
