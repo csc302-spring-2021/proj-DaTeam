@@ -47,7 +47,7 @@ export abstract class Condition {
 export class ColumnCondition extends Condition {
   static readonly validOpts = [
     "==",
-    "!=",
+    "<>",
     ">",
     "<",
     ">=",
@@ -106,7 +106,7 @@ export const not = (c: Condition) => new Not(c);
 /** Column equals a value (number, string) */
 export const equals = conditionBuilder("==");
 /** Column does not equal to a value (number, string) */
-export const notEquals = conditionBuilder("!=");
+export const notEquals = conditionBuilder("<>");
 /** Column starts with a string (string) */
 export const startsWith = conditionBuilder("startsWith");
 /** Column ends with a string (string) */
