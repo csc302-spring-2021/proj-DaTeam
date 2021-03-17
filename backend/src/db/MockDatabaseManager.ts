@@ -1,5 +1,6 @@
 import { GenericDatabaseManager } from "./DatabaseManager";
 import { SearchParam } from "./DBSerializer/DatabaseMetaInterface";
+import { GenericJsonSerializer as serializer } from "@dateam/shared";
 import { v4 as uuid } from "uuid";
 
 /**
@@ -13,13 +14,27 @@ class MockDatabaseManager extends GenericDatabaseManager {
     this.db = new Map();
   }
 
+  genPk(): string {
+    let newPk = uuid();
+    while (this.db.hasOwnProperty(newPk)) {
+      newPk = uuid();
+    }
+    return newPk;
+  }
+
   /**
    * Save an object into the database, return its primary key if defined
    * @param obj object to store
    * @param targetClass object class
    */
   async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
-    throw new Error("genericCreate not implemented yet");
+    if (!(obj instanceof targetClass)) {
+      throw new Error("Input object is not " + targetClass.name);
+    }
+    const serialized = serializer.encode(obj, targetClass);
+    let new_pk = this.genPk();
+    this.db.set(new_pk, serialized);
+    return new_pk;
   }
 
   /**
@@ -28,7 +43,16 @@ class MockDatabaseManager extends GenericDatabaseManager {
    * @param targetClass expected object class
    */
   async genericRead(pk: string, targetClass: new () => any): Promise<any> {
-    throw new Error("genericRead not implemented yet");
+    let result = this.db.get(pk);
+    if (!result) {
+      // If result is undefined
+      throw new Error(`PK ${targetClass.name} does not exist in DB`);
+    }
+    result = serializer.decode(result, targetClass);
+    if (!(result instanceof targetClass)) {
+      throw new Error("Output object is not " + targetClass.name);
+    }
+    return result;
   }
 
   /**
