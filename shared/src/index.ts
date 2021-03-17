@@ -14,4 +14,4 @@ export {
   findAnswer,
   printNode,
 } from "./Utils";
-export * from "./QueryObject";
+export * as Query from "./QueryObject";
