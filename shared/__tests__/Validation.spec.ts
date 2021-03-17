@@ -14,7 +14,7 @@ describe("Mock Data Validator Test", () => {
 
 describe("Verify Invalid Cases", () => {
   let form;
-  beforeAll(() => {
+  beforeEach(() => {
     form = Mocks.buildFormComplete();
   });
   function validateForm() {
