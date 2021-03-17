@@ -1,8 +1,8 @@
-import { databaseManager } from "../build/db/DatabaseManager";
+import { databaseManager } from "../build/db";
 import { Mocks, Model, GenericJsonSerializer } from "@dateam/shared";
 import * as assert from "assert";
 
-function strip(obj: any, targetClass: Function): any {
+function strip(obj, targetClass) {
   return GenericJsonSerializer.decode(
     GenericJsonSerializer.encode(obj, targetClass),
     targetClass
@@ -51,21 +51,25 @@ describe("Verify Create and Read from DB Works", () => {
     response = Mocks.buildFormResponsePartial();
     patient = Mocks.genPatientPartial();
   });
-  test("Test Form Partial", (done) => {
+  test("Test Form Partial", async (done) => {
+    await expect(form1).verifyCreateRead(Model.SDCForm);
     done();
   });
-  test("Test Form Complete", (done) => {
+  test("Test Form Complete", async (done) => {
+    await expect(form2).verifyCreateRead(Model.SDCForm);
     done();
   });
-  test("Test Patient", (done) => {
+  test("Test Patient", async (done) => {
+    await expect(patient).verifyCreateRead(Model.Patient);
     done();
   });
-  test("Test Form Response", (done) => {
+  test("Test Form Response", async (done) => {
+    await expect(response).verifyCreateRead(Model.SDCFormResponse);
     done();
   });
 });
 
-describe("Verify Search from DB Works", () => {
+describe.skip("Verify Search from DB Works", () => {
   test("Generic Search", (done) => {
     done();
   });

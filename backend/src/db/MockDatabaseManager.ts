@@ -19,7 +19,7 @@ class MockDatabaseManager extends GenericDatabaseManager {
    * @param targetClass object class
    */
   async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
-    throw new Error("genericCreate should be invoked by subclasses");
+    throw new Error("genericCreate not implemented yet");
   }
 
   /**
@@ -28,7 +28,7 @@ class MockDatabaseManager extends GenericDatabaseManager {
    * @param targetClass expected object class
    */
   async genericRead(pk: string, targetClass: new () => any): Promise<any> {
-    throw new Error("genericRead should be invoked by subclasses");
+    throw new Error("genericRead not implemented yet");
   }
 
   /**
@@ -42,7 +42,7 @@ class MockDatabaseManager extends GenericDatabaseManager {
     searchParam: SearchParam,
     partial: boolean
   ): Promise<any> {
-    throw new Error("genericSearch should be invoked by subclasses");
+    throw new Error("genericSearch not implemented yet");
   }
 
   /**
@@ -54,7 +54,7 @@ class MockDatabaseManager extends GenericDatabaseManager {
     pk: string,
     targetClass: new () => any
   ): Promise<string | undefined> {
-    throw new Error("genericDelete should be invoked by subclasses");
+    throw new Error("genericDelete not implemented yet");
   }
 
   testConnection() {
