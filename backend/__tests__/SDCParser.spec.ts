@@ -1,6 +1,6 @@
 import * as SDCParser from "../build/SDCParser/SDCParser";
 import * as TestData from "./SDCTestData";
-import { StackUtil } from "@dateam/shared";
+import { Model, StackUtil } from "@dateam/shared";
 import util from "util";
 
 const log = console.log;
@@ -40,6 +40,7 @@ describe("Parse Form", () => {
   test("Children extracted", (done) => {
     expect(result).toHaveProperty("children");
     expect(result.children).toHaveLength(1);
+    expect(result.children[0] instanceof Model.SDCDisplayItem).toEqual(true);
     done();
   });
 });
