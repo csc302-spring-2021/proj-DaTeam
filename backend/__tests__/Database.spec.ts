@@ -70,7 +70,14 @@ describe("Verify Create and Read from DB Works", () => {
 });
 
 describe.skip("Verify Search from DB Works", () => {
-  test("Generic Search", (done) => {
+  let form;
+  beforeAll(() => {
+    form = Mocks.buildFormPartial();
+  });
+  test("Search all SDCForms", async (done) => {
+    const uid = await databaseManager.genericCreate(form, Model.SDCForm);
+    let result = await databaseManager.genericSearch(Model.SDCForm, {}, true);
+    console.log(result);
     done();
   });
 });

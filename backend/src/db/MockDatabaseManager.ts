@@ -78,7 +78,14 @@ class MockDatabaseManager extends GenericDatabaseManager {
     searchParam: SearchParam,
     partial: boolean
   ): Promise<any> {
-    throw new Error("genericSearch not implemented yet");
+    const searchEmpty =
+      searchParam &&
+      Object.keys(searchParam).length === 0 &&
+      searchParam.constructor === Object;
+    if (searchEmpty && this.db.has(targetClass.name)) {
+      let innerDB = this.db.get(targetClass.name);
+      return [...innerDB.values()];
+    }
   }
 
   /**
