@@ -1,7 +1,7 @@
 import { Mocks, GenericJsonSerializer, Model } from "@dateam/shared";
 import { Request, Response } from "express";
 import { HttpCode, sendError } from "../../utils/Error";
-import { databaseManager as dbManager } from "../../db/DatabaseManager";
+import { databaseManager as dbManager } from "../../db";
 
 export const FormController = {
   create: function (req: Request, res: Response) {
