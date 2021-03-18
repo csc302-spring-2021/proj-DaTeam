@@ -14,18 +14,6 @@ class MockDatabaseManager extends GenericDatabaseManager {
     this.db = new Map();
   }
 
-  genPk(targetClass: string): string {
-    if (!this.db.get(targetClass)) {
-      this.db.set(targetClass, new Map());
-    }
-    let innerMap = this.db.get(targetClass);
-    let newPk = uuid();
-    while (innerMap.has(newPk)) {
-      newPk = uuid();
-    }
-    return newPk;
-  }
-
   /**
    * Save an object into the database, return its primary key if defined
    * @param obj object to store
@@ -35,8 +23,11 @@ class MockDatabaseManager extends GenericDatabaseManager {
     if (!(obj instanceof targetClass)) {
       throw new Error("Input object is not " + targetClass.name);
     }
+    if (!this.db.get(targetClass.name)) {
+      this.db.set(targetClass.name, new Map());
+    }
     const serialized = serializer.encode(obj, targetClass);
-    let new_pk = this.genPk(targetClass.name);
+    let new_pk = uuid();
     let innerDB = this.db.get(targetClass.name);
     innerDB.set(new_pk, serialized);
     this.db.set(targetClass.name, innerDB);
