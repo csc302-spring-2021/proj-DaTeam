@@ -3,13 +3,69 @@ import * as promise from "bluebird";
 import { GenericDatabaseSerializer } from "./DBSerializer";
 import { SearchParam } from "./DBSerializer";
 
+export class GenericDatabaseManager {
+  constructor() {}
+  /**
+   * Save an object into the database, return its primary key if defined
+   * @param obj object to store
+   * @param targetClass object class
+   */
+  async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
+    throw new Error("genericCreate should be invoked by subclasses");
+  }
+
+  /**
+   * Load an object from the database with the given primary key
+   * @param pk key to search with
+   * @param targetClass expected object class
+   */
+  async genericRead(pk: string, targetClass: new () => any): Promise<any> {
+    throw new Error("genericRead should be invoked by subclasses");
+  }
+
+  /**
+   * Load all objects matching the search criteria
+   * @param targetClass expected object class
+   * @param searchParam seach query (**the queries should be built within the server**)
+   * @param partial whether or not the complete object structure should be rebuild
+   */
+  async genericSearch(
+    targetClass: new () => any,
+    searchParam: SearchParam,
+    partial: boolean
+  ): Promise<any> {
+    throw new Error("genericSearch should be invoked by subclasses");
+  }
+
+  /**
+   * Delete an object from the database with the given primary key
+   * @param pk key to search with
+   * @param targetClass object class
+   */
+  async genericDelete(
+    pk: string,
+    targetClass: new () => any
+  ): Promise<string | undefined> {
+    throw new Error("genericDelete should be invoked by subclasses");
+  }
+
+  /**
+   * Test to see if the dabase is correctly setup.
+   * Exit the program with code 1 if failed
+   */
+  testConnection() {
+    throw new Error("testConnection should be invoked by subclasses");
+  }
+}
+
 /**
  * Connects with database and handle query requests
  */
-class DatabaseManager {
+class DatabaseManager extends GenericDatabaseManager {
   protected db: pgPromise.IDatabase<{}>;
 
   constructor() {
+    super();
     const initOptions = {
       promiseLib: promise,
     };
@@ -23,7 +79,7 @@ class DatabaseManager {
       user: process.env.DB_USER || "",
       password: process.env.DB_PASSWORD || "",
       connectionString: process.env.DATABASE_URL || "",
-      ssl: process.env.DB_SSL == "true" ? {rejectUnauthorized: false} : false
+      ssl: process.env.DB_SSL == "true" ? { rejectUnauthorized: false } : false,
     };
 
     if (process.env.NODE_ENV === "development") {
@@ -87,7 +143,7 @@ class DatabaseManager {
    * @param searchParam seach query (**the queries should be built within the server**)
    * @param partial whether or not the complete object structure should be rebuild
    */
-  async genericSeach(
+  async genericSearch(
     targetClass: new () => any,
     searchParam: SearchParam,
     partial: boolean
