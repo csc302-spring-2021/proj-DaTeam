@@ -26,12 +26,17 @@ class MockDatabaseManager extends GenericDatabaseManager {
     if (!this.db.get(targetClass.name)) {
       this.db.set(targetClass.name, new Map());
     }
+    let pk;
+    if (obj.uid) {
+      pk = obj.uid;
+    } else {
+      pk = uuid();
+    }
     const serialized = serializer.encode(obj, targetClass);
-    let new_pk = uuid();
     let innerDB = this.db.get(targetClass.name);
-    innerDB.set(new_pk, serialized);
+    innerDB.set(pk, serialized);
     this.db.set(targetClass.name, innerDB);
-    return new_pk;
+    return pk;
   }
 
   /**
