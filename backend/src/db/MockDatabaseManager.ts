@@ -74,14 +74,15 @@ class MockDatabaseManager extends GenericDatabaseManager {
     searchParam: SearchParam,
     partial: boolean
   ): Promise<any> {
-    const searchEmpty =
-      searchParam &&
-      Object.keys(searchParam).length === 0 &&
-      searchParam.constructor === Object;
-    if (searchEmpty && this.db.has(targetClass.name)) {
-      let innerDB = this.db.get(targetClass.name);
-      return [...innerDB.values()];
+    let ret: any = [];
+    if (this.db.has(targetClass.name)) {
+      this.db
+        .get(targetClass.name)
+        .forEach((value: any, key: any, map: Map<any, any>) => {
+          ret.push(serializer.decode(value, targetClass));
+        });
     }
+    return ret;
   }
 
   /**
