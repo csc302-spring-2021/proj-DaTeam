@@ -5,6 +5,8 @@ const supertest = require("supertest");
 const customMatchers = require("./ValidateResponse").default;
 
 import * as Mock from "./MockData";
+import { databaseManager } from "../build/db";
+import { Model, Mocks } from "@dateam/shared";
 
 let server, request;
 
@@ -190,8 +192,13 @@ describe("POST /api/forms: Create a new form from an XML document", () => {
 });
 
 describe.only("GET /api/forms/{formId}: Get a specific form", () => {
-  var mockForm = Mock.getMockForm();
-  var formId = mockForm.uid;
+  let formId;
+  beforeAll(() => {
+    var mockForm = Mocks.buildFormComplete();
+    return databaseManager
+      .genericCreate(mockForm, Model.SDCForm)
+      .then((id) => (formId = id));
+  });
 
   test.only("Return Form matching query", (done) => {
     request
