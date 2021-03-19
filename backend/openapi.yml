@@ -321,6 +321,10 @@ components:
     PatientRequestBody:
       type: object
       properties:
+        __class:
+          type: string
+          description: Class identifier
+          default: Patient
         id:
           type: string
           description: External ID (typically OHIP) for identifying the patient
@@ -366,6 +370,7 @@ components:
       properties:
         __class:
           type: string
+          description: Class identifier
           default: "SDCForm"
         id:
           type: string
@@ -375,13 +380,27 @@ components:
           type: string
           description: The title of the form
           example: "Lung Biopsy Analysis"
+        lineage:
+          type: string
+          description: The lineage of the form
+          example: Covid-19-test
+        version:
+          type: string
+          description: The version of the form
+          example: 55728d
         order:
           type: number
           description: Order of this item in form
+        formProperties:
+          type: array
+          items:
+            type: object
+          example: []
         children:
           type: array
           items:
             type: object
+          example: []
 
     Form:
       type: object
@@ -413,11 +432,15 @@ components:
     FormResponseRequestBody:
       type: object
       properties:
-        form_id:
+        __class:
+          description: Class identifier
+          type: string
+          default: "SDCFormResponse"
+        formId:
           type: string
           description: ID of form
           format: uuid
-        patient_id:
+        patientID:
           type: string
           description: ID of patient
           format: uuid
@@ -426,7 +449,11 @@ components:
           items:
             type: object
             properties:
-              question_id:
+              __class:
+                description: Class identifier
+                type: string
+                default: "SDCAnswer"
+              questionID:
                 type: string
                 description: ID of question
               responses:
@@ -457,6 +484,7 @@ components:
       type: object
       properties:
         __class:
+          description: Class identifier
           type: string
           default: "SDCForm"
         id:
