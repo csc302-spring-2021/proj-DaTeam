@@ -35,9 +35,38 @@ For Phase 2, we plan on implementing the following use-cases:
 
 - **TODO:** High-level design of your software.
 
+- App is sliced up into two parts:
+  - Frontend
+  - Backend
+- Frontend communicates with backend via REST API (as defined in [OpenAPI spec](../../backend/openapi.yml)) on different endpoints and JSON payloads
+- Frontend and backend deserialize content from JSON to our own data model classes defined in a shared library
+- We have a database mapping layer that translates a given data model instance into the relevant SQL queries needed for CRUD operations
+- On the frontend, we divided the app into different routes using React Router and built pages that compose React components to fetch and display data
+- On the backend, we divided into services on domain areas:
+  - Forms
+  - Responses
+  - Patients
+  - etc.
+- In each domain area, we created separate controllers and routes to separate logic for easier unit testing
+- In development, we use Docker compose to spin up the frontend, backend, and database as separate containers on the same network
+- In production, we deploy the frontend and backend separately as Apps on Heroku due to a limititation of Heroku, they communicate with eachother via HTTP
+
+INSERT INFRASTRUCTURE DIAGRAM HERE
+
 ## Technical Highlights
 
 - **TODO:** Technical highlights: interesting bugs, challenges, lessons learned, observations, etc.
+
+- **Solution:** Custom ORM for mapping domain models (represented as JavaScript objects) to SQL queries
+- **Observation:** database interaction in tests is hard to work with, [we discussed a couple different approaches](https://github.com/csc302-spring-2021/proj-DaTeam/pull/99#issuecomment-785388981), and settled on mocking out database access layer for unit tests and maybe writing a small number of full-scale End-to-end tests that spin up the full app, including a real database
+- **Interesting Bugs:** Some of our serialization logic depends on [reflection](https://en.wikipedia.org/wiki/Reflective_programming) of JS classes to extract constructor types. This lead to an interesting problem when we integrated this serialization code into our frontend app. When developing locally, we had no issues, but when we built our React app for production, we were seeing errors with this part of the code. After a couple minutes of debugging the minified code (not a fun way to debug!), we found out that the cause of the bug was that in production, our tooling was running a minification and obfuscation step that was changing constructor names to make them terser. This was good for performance as it resulted in a smaller bundle size being sent over the network, but it was breaking one of the invariants that we assumed when writing the serialization logic. We investigated some solutions and found two options that were reasonable:
+
+  1. Disable minification - this is the easiest fix, but has the side-effect of increasing bundle size
+  2. Replace/reconfigure the built-in minification to avoid stripping class constructor names - this is the better solution, but requires investigation into the settings of Webpack (the bundler used by our build tool)
+
+We decided that, in the interests of time and considering that the project size is small, we would go with the first option that would allow us to quickly get unblocked. We filed an issue for this problem, so that if we have time at the end of the project, we can come back to it and re-enable minification for better network performance
+
+- Lesson Learned: We initially had a single issue for the parser implementation but this was too big a task for one person, so we decided to split the task up into smaller sub-parser tasks that multiple developers could work on concurrently
 
 ## Reflection
 
