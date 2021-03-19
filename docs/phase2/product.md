@@ -58,6 +58,7 @@ INSERT INFRASTRUCTURE DIAGRAM HERE
 > Technical highlights: interesting bugs, challenges, lessons learned, observations, etc.
 
 - **Solution:** Custom ORM for mapping domain models (represented as JavaScript objects) to SQL queries
+- **Interesting Bugs:** We are trying our best to avoid database injection when implementing the database manager. However, we are unable to elimiate the risk of database injection for the search function. We are developing a search query system so that the query can be compiled securely within backend server.
 - **Observation:** database interaction in tests is hard to work with, [we discussed a couple different approaches](https://github.com/csc302-spring-2021/proj-DaTeam/pull/99#issuecomment-785388981), and settled on mocking out database access layer for unit tests and maybe writing a small number of full-scale End-to-end tests that spin up the full app, including a real database
 - **Interesting Bugs:** Some of our serialization logic depends on [reflection](https://en.wikipedia.org/wiki/Reflective_programming) of JS classes to extract constructor types. This lead to an interesting problem when we integrated this serialization code into our frontend app. When developing locally, we had no issues, but when we built our React app for production, we were seeing errors with this part of the code. After a couple minutes of debugging the minified code (not a fun way to debug!), we found out that the cause of the bug was that in production, our tooling was running a minification and obfuscation step that was changing constructor names to make them terser. This was good for performance as it resulted in a smaller bundle size being sent over the network, but it was breaking one of the invariants that we assumed when writing the serialization logic. We investigated some solutions and found two options that were reasonable:
 
@@ -70,8 +71,27 @@ We decided that, in the interests of time and considering that the project size 
 
 ## Reflection
 
-- **TODO:** Reflect on your teamwork and process. What worked well, what needs improvement.
-  - Ideally you will have specific artifacts from your development process to show (for instance, a burndown chart)
+> Reflect on your teamwork and process. What worked well, what needs improvement.
+>
+> - Ideally you will have specific artifacts from your development process to show (for instance, a burndown chart)
+>   One big learning point was learning how to coordinate with git branches, rebases, and merge conflicts with teammates as all changes are important
+
+### What worked well
+
+- Weekly meetings are great opportunities for us to talk about what we are working on, what we are blocked on, and what we want to work on next.
+- it was useful to have an extra set of eyes quickly review pull requests before submissions.
+- It was often useful to look at [mockups](https://www.figma.com/file/AkEpl4urre2SXIPiAfKulQ/SDC-Form-App?node-id=0%3A1) and [OpenAPI documentation](../../backend/openapi.yml) when discussing implementation to make sure everyone was on the same page.
+- VScode Liveshare is a useful tool for us to collaborate on documents simultaneously. This worked well especially while on a group call.
+- Labels on our Kanban board helped us organize our tasks; able to filter relevant TODOs. For example: group/backend label for tasks relevant to the backend team, area/tests for tasks related to testing.
+- GitHub discord integrations are good way for us all to be in the loop and to see updates.
+- Team compatibility 😀
+
+### What needs improvement
+
+- One thing we could work on is providing better feedback in reviewing these pull requests.
+- Writing tests helps us to make sure our implementations are correct. However, in the early stages of the development we did not take the full advantage of test driving development by writing the tests first. We have adapoted TDD for the recent PRs and it helps us to ensure the correctness of the commits.
+- Diplaying recursive components which could have option which displayed more options which also had children,
+  was more difficult that initally imagined as mainly due to the difficult of keeping track of which states belonged to which choices. This was important as the state of other form objects must be depenedant on children. Since disabled components should optimially change it's layout, this was another challenge.
 
 ## Next Phase
 
@@ -81,3 +101,4 @@ We decided that, in the interests of time and considering that the project size 
 - Filtering and searching for forms and responses
 - Delete forms and responses
 - Share URL for form response
+- Add Procedure
