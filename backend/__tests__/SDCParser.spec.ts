@@ -26,9 +26,13 @@ describe("Parse Form", () => {
       "id",
       "Adrenal.Bx.Res.129_3.003.001.REL_sdcFDF"
     );
-    expect(result).toHaveProperty("title", "ADRENAL GLAND");
-    expect(result).toHaveProperty("lineage", "Adrenal.Bx.Res.129");
-    expect(result).toHaveProperty("version", "3.003.001.REL");
+    expect(result).toEqual(
+      expect.objectContaining({
+        title: "ADRENAL GLAND",
+        lineage: "Adrenal.Bx.Res.129",
+        version: "3.003.001.REL",
+      })
+    );
     expect(result).toHaveProperty("footer");
     done();
   });
