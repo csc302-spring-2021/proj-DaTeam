@@ -1,5 +1,15 @@
 # Technical Product Report
 
+> ## Rubric:
+>
+> - Clearly describes what was built.
+> - Uses meaningful artifacts (e.g. diagrams, links to source-code and/or pull-requests, etc.)
+> - Documents specific progress towards your goal.
+> - High-quality technical documentation
+> - Describes strengths and weaknesses of your process in an insightful way
+> - Referring to specific meeting minutes or other process artifacts.
+> - Makes realistic plan for final work towards demo
+
 ## Proposed Features
 
 For Phase 2, we plan on implementing the following use-cases:
