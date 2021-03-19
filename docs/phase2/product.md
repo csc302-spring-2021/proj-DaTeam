@@ -33,7 +33,7 @@ For Phase 2, we plan on implementing the following use-cases:
 
 ## High-level design
 
-- **TODO:** High-level design of your software.
+> High-level design of your software.
 
 - App is sliced up into two parts:
   - Frontend
@@ -55,7 +55,7 @@ INSERT INFRASTRUCTURE DIAGRAM HERE
 
 ## Technical Highlights
 
-- **TODO:** Technical highlights: interesting bugs, challenges, lessons learned, observations, etc.
+> Technical highlights: interesting bugs, challenges, lessons learned, observations, etc.
 
 - **Solution:** Custom ORM for mapping domain models (represented as JavaScript objects) to SQL queries
 - **Observation:** database interaction in tests is hard to work with, [we discussed a couple different approaches](https://github.com/csc302-spring-2021/proj-DaTeam/pull/99#issuecomment-785388981), and settled on mocking out database access layer for unit tests and maybe writing a small number of full-scale End-to-end tests that spin up the full app, including a real database
@@ -75,4 +75,9 @@ We decided that, in the interests of time and considering that the project size 
 
 ## Next Phase
 
-- **TODO:** Triage: What will you build for phase 3, the final demo?
+> Triage: What will you build for phase 3, the final demo?
+
+- Patients management
+- Filtering and searching for forms and responses
+- Delete forms and responses
+- Share URL for form response
