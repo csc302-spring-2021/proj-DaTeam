@@ -2,9 +2,7 @@
   Reference for all HTTP codes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status  
 */
 
-import e from "express";
-import { Request, Response } from "express";
-import { GenericJsonSerializer } from "@dateam/shared";
+import { Response } from "express";
 
 export enum HttpCode {
   OK = 200,
@@ -19,6 +17,8 @@ export enum HttpCode {
   NOT_IMPLEMENTED = 501,
 }
 
-export function sendError(res: any, code: number, error: Error) {
+export function sendError(res: Response, code: number, error: Error) {
+  console.log(error);
+  res.type("json");
   res.status(code).send({ message: error.message });
 }
