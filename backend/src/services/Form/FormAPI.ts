@@ -10,21 +10,25 @@ export class FormAPI {
 
   public returnRouter() {
     this.getForm();
+    this.getAllFormResponses();
+    this.getAllForms();
     this.postForm();
     this.parseForm();
     return this.router;
   }
 
-  /* GET /forms/{formId} */
   private getForm() {
     this.router.get("/forms/:formId", FormController.read);
   }
 
-  private getFormResponses() {
+  private getAllFormResponses() {
     this.router.get("/forms/:formId/responses", FormController.readResponses);
   }
 
-  /* POST /forms/{formId} */
+  private getAllForms() {
+    this.router.get("/forms", FormController.readAll);
+  }
+
   private postForm() {
     this.router.post("/forms", FormController.create);
   }

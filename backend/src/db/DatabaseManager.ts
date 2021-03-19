@@ -33,7 +33,7 @@ export class GenericDatabaseManager {
     targetClass: new () => any,
     searchParam: SearchParam,
     partial: boolean
-  ): Promise<any> {
+  ): Promise<any[]> {
     throw new Error("genericSearch should be invoked by subclasses");
   }
 
@@ -56,6 +56,11 @@ export class GenericDatabaseManager {
   testConnection() {
     throw new Error("testConnection should be invoked by subclasses");
   }
+
+  /**
+   * Terminate the database connection immediately
+   */
+  endConnection() {}
 }
 
 /**
@@ -91,10 +96,6 @@ class DatabaseManager extends GenericDatabaseManager {
     this.db = pgp(cn);
   }
 
-  /**
-   * Test to see if the dabase is correctly setup.
-   * Exit the program with code 1 if failed
-   */
   testConnection() {
     this.db
       .one("SELECT count(*) FROM " + process.env.DB_TEST_TABLE)
@@ -107,11 +108,10 @@ class DatabaseManager extends GenericDatabaseManager {
       });
   }
 
-  /**
-   * Save an object into the database, return its primary key if defined
-   * @param obj object to store
-   * @param targetClass object class
-   */
+  endConnection() {
+    this.db.$pool.end();
+  }
+
   async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
     if (!(obj instanceof targetClass)) {
       throw new Error("Input object is not " + targetClass.name);
@@ -119,11 +119,6 @@ class DatabaseManager extends GenericDatabaseManager {
     return await this.db.tx((tx) => GenericDatabaseSerializer.create(obj, tx));
   }
 
-  /**
-   * Load an object from the database with the given primary key
-   * @param pk key to search with
-   * @param targetClass expected object class
-   */
   async genericRead(pk: string, targetClass: new () => any): Promise<any> {
     const result = await this.db.tx((tx) =>
       GenericDatabaseSerializer.read(pk, targetClass.name, tx)
@@ -134,20 +129,11 @@ class DatabaseManager extends GenericDatabaseManager {
     return result;
   }
 
-  /**
-   *    *************************************************
-   *    **DB injection warning! Do not expose this API!**
-   *    *************************************************
-   * Load all objects matching the search criteria
-   * @param targetClass expected object class
-   * @param searchParam seach query (**the queries should be built within the server**)
-   * @param partial whether or not the complete object structure should be rebuild
-   */
   async genericSearch(
     targetClass: new () => any,
     searchParam: SearchParam,
     partial: boolean
-  ): Promise<any> {
+  ): Promise<any[]> {
     const results = await this.db.tx((tx) =>
       GenericDatabaseSerializer.search(
         targetClass.name,
@@ -162,11 +148,6 @@ class DatabaseManager extends GenericDatabaseManager {
     return results;
   }
 
-  /**
-   * Delete an object from the database with the given primary key
-   * @param pk key to search with
-   * @param targetClass object class
-   */
   async genericDelete(
     pk: string,
     targetClass: new () => any

@@ -1,6 +1,14 @@
-import { databaseManager } from "../build/db";
 import { Mocks, Model, GenericJsonSerializer } from "@dateam/shared";
 import * as assert from "assert";
+import dotenv from "dotenv";
+import { v4 as uuid } from "uuid";
+
+process.env.NODE_ENV = "test_db";
+dotenv.config({
+  path: "../.env",
+});
+// cannot use import here because import is executed at the very beginning
+const databaseManager = require("../build/db").databaseManager;
 
 function strip(obj, targetClass) {
   return GenericJsonSerializer.decode(
@@ -64,15 +72,54 @@ describe("Verify Create and Read from DB Works", () => {
     done();
   });
   test("Test Form Response", async (done) => {
+    // this test depends on the previouse tests for the uid
+    response.formId = form1.uid;
+    response.patientID = patient.uid;
     await expect(response).verifyCreateRead(Model.SDCFormResponse);
     done();
   });
 });
 
 describe("Verify Search from DB Works", () => {
+  let allUids = [],
+    searchTargetUids = [];
+  const testFormId = uuid();
+  beforeAll(async (done) => {
+    let form = Mocks.buildFormComplete();
+    await databaseManager.genericCreate(form, Model.SDCForm);
+    allUids.push(form.uid);
+
+    form = Mocks.buildFormComplete();
+    form.id = testFormId;
+    await databaseManager.genericCreate(form, Model.SDCForm);
+    allUids.push(form.uid);
+    searchTargetUids.push(form.uid);
+
+    form = Mocks.buildFormComplete();
+    form.id = testFormId;
+    await databaseManager.genericCreate(form, Model.SDCForm);
+    allUids.push(form.uid);
+    searchTargetUids.push(form.uid);
+    done();
+  });
   test("Search all SDCForms", async (done) => {
     let result = await databaseManager.genericSearch(Model.SDCForm, {}, true);
-    console.log(result);
+    result.forEach((o) => {
+      expect(o).toBeInstanceOf(Model.SDCForm);
+    });
+    expect(result.map((o) => o.uid)).toEqual(expect.arrayContaining(allUids));
+    done();
+  });
+  test("Search all SDCForms with id", async (done) => {
+    let result = await databaseManager.genericSearch(
+      Model.SDCForm,
+      { SDCNode: [`item.id = '${testFormId}'`] },
+      true
+    );
+    result.forEach((o) => {
+      expect(o).toBeInstanceOf(Model.SDCForm);
+    });
+    expect(result.map((o) => o.uid)).toEqual(searchTargetUids);
     done();
   });
 });
@@ -83,4 +130,8 @@ describe.skip("Verify Delete from DB Works", () => {
   test("Delete Base case", (done) => {
     done();
   });
+});
+
+afterAll(() => {
+  databaseManager.endConnection();
 });

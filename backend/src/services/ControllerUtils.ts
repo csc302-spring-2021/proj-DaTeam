@@ -1,4 +1,4 @@
-import { GenericJsonSerializer, Model } from "@dateam/shared";
+import { GenericJsonSerializer } from "@dateam/shared";
 import { Request, Response } from "express";
 import { HttpCode } from "../utils/Error";
 import { databaseManager as dbManager } from "../db";
@@ -23,6 +23,21 @@ export async function read(
   const pk = req.params[pkKey];
   const result = await dbManager.genericRead(pk, targetClass);
   const encoded = GenericJsonSerializer.encode(result, targetClass);
+  res.type("json");
+  res.status(HttpCode.OK).send(encoded);
+}
+
+export async function search(
+  req: Request,
+  res: Response,
+  targetClass: new () => any,
+  param: any,
+  partial: boolean
+) {
+  const results = await dbManager.genericSearch(targetClass, param, partial);
+  const encoded = results.map((o) =>
+    GenericJsonSerializer.encode(o, targetClass)
+  );
   res.type("json");
   res.status(HttpCode.OK).send(encoded);
 }
