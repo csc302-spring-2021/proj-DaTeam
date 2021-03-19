@@ -36,8 +36,10 @@ paths:
             schema:
               $ref: "#/components/schemas/PatientRequestBody"
       responses:
-        204:
-          description: "Patient created successfully"
+        201:
+          description: "Patient created successfully, return UID"
+          content:
+            $ref: "#/components/responses/UID"
     get:
       description: "Get all patients"
       tags:
@@ -152,11 +154,9 @@ paths:
               $ref: "#/components/schemas/FormRequestBody"
       responses:
         201:
-          description: Successfully created form
+          description: Successfully created form, return UID
           content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Form"
+            $ref: "#/components/responses/UID"
         400:
           $ref: "#/components/responses/BadRequest"
 
@@ -222,8 +222,10 @@ paths:
             schema:
               $ref: "#/components/schemas/FormResponseRequestBody"
       responses:
-        204:
-          description: Response created successfully
+        201:
+          description: Response created successfully, return UID
+          content:
+            $ref: "#/components/responses/UID"
         400:
           $ref: "#/components/responses/BadRequest"
         404:
@@ -271,6 +273,11 @@ paths:
 
 components:
   responses:
+    UID:
+      text/plain:
+        schema:
+          type: string
+          example: 5d5bb199-59e2-400e-9f16-2d1d4d0db106
     NotFound:
       description: The specified resource was not found
       content:
