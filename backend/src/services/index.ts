@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { FormAPI } from "./Form";
+import { ParserAPI } from "./Parser";
 import { PatientAPI } from "./Patient";
 import { ProcedureAPI } from "./Procedure";
 import { ResponseAPI } from "./Response";
-
 
 export class ServicesAPI {
   private router: Router;
@@ -14,6 +14,7 @@ export class ServicesAPI {
 
   public getRouter() {
     this.routeSDCFormAPI();
+    this.routeSDCPaserAPI();
     this.routeSDCPatientAPI();
     this.routeSDCProcedureAPI();
     this.routeSDCResponseAPI();
@@ -24,6 +25,12 @@ export class ServicesAPI {
     const scheduleEventAPI = new FormAPI(this.router);
     const scheduleEventRouter = scheduleEventAPI.returnRouter();
     this.router.use("/v1", scheduleEventRouter);
+  }
+
+  private routeSDCPaserAPI() {
+    const parserAPI = new ParserAPI(this.router);
+    const parserRouter = parserAPI.returnRouter();
+    this.router.use("/v1", parserRouter);
   }
 
   private routeSDCPatientAPI() {
@@ -43,4 +50,4 @@ export class ServicesAPI {
     const responseRouter = responseAPI.returnRouter();
     this.router.use("/v1", responseRouter);
   }
-} 
+}
