@@ -25,17 +25,6 @@ class SDCParser {
     stopNodes: ["Header", "Footer"], // tag names that don't need to be parsed, only passed in as a string
   };
 
-  protected parsers: { [id: string]: new (s: StackUtil) => NodeParser } = {
-    FormDesign: FormParser,
-    DisplayedItem: DisplayedItemParser,
-    Section: SectionParser,
-    ResponseField: TextFieldParser,
-    ListField: ListFieldParser,
-    ListItem: ListFieldItemParser,
-    Question: QuestionParser,
-    ListItemResponseField: ListFieldItemParser,
-  };
-
   xmlToJson(xmlData: string): any {
     const validationResult = XMLParser.validate(xmlData);
     if (validationResult !== true) throw validationResult;
@@ -67,10 +56,16 @@ abstract class NodeParser {
   }
 
   parseChildren(obj: any) {
-    // TODO
-    console.log("parseChildren called on");
-    console.log(obj);
-    this.result.children = obj.ChildItems; // this is just a mock
+    if (!obj.ChildItems) return;
+    const children = obj.ChildItems[0];
+    for (let key of Object.keys(children)) {
+      if (parsers[key] == null) continue;
+      for (let child of children[key]) {
+        const parser = new parsers[key](this.stack);
+        parser.parse(child);
+        this.result.children.push(parser.result);
+      }
+    }
   }
 
   populateProperties(obj: any) {
@@ -132,3 +127,14 @@ export class ListFieldItemParser extends NodeParser {
 }
 
 export const sdcParser = new SDCParser();
+
+const parsers: { [id: string]: new (s: StackUtil) => NodeParser } = {
+  FormDesign: FormParser,
+  DisplayedItem: DisplayedItemParser,
+  Section: SectionParser,
+  ResponseField: TextFieldParser,
+  ListField: ListFieldParser,
+  ListItem: ListFieldItemParser,
+  Question: QuestionParser,
+  ListItemResponseField: ListFieldItemParser,
+};
