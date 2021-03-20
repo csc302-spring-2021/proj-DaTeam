@@ -1,70 +1,84 @@
 import { Model } from "@dateam/shared";
-import { useEffect, useState } from "react";
-import { preProcessFile } from "typescript";
+import React, { useEffect, useState } from "react";
 import { ListFieldItem } from "../ListFieldItem";
+import { LinkedListNode } from "./LinkedListNode";
 
-function ListField(props: { optionNodes:any[]; children?: any; sdcListField: Model.SDCListField }) {
-    const [selected, setSelected] = useState<any>({});
-    const [numSelected, setNumSelected] = useState<number>(0);
-    const [isMultiSelect, setIsMultiSelect] = useState<boolean>(false);
+export interface IOptionNode {
+  listFieldItem: Model.SDCListFieldItem;
+  listFieldItemChildren: JSX.Element[];
+}
+interface IListFieldProps {
+  responseState?: {
+    setResponse: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>;
+    response: { [key: string]: any };
+  };
+  optionNodes: IOptionNode[];
+  children?: React.ReactNode;
+  sdcListField: Model.SDCListField;
+}
 
-    useEffect(() => {
-        const selectedOptionsList: {[key:string] : boolean;} = {};
-        props.optionNodes.forEach((optionnode:any[]) => {
-            selectedOptionsList[optionnode[0].title] = false;
-        })
+/**
+ * An selectable list field which may or many not have one or more items.
+ * @param  {[type]} responseState [description]
+ * @param  {[type]} optionNodes [description]
+ * @param  {[type]} children [description]
+ * @param  {[type]} sdcListField [description]
+ */
+function ListField(props: IListFieldProps) {
+  const { responseState, optionNodes, children, sdcListField } = props;
+  const [uncollapsed, setUncollapsed] = useState(true);
 
-        if(props.sdcListField.maxSelections !== 1){
-            setIsMultiSelect(true);
-        }
+  // Set choice for single answer responses
+  const [currentSingleChoice, setCurrentSingleChoice] = useState<string[]>([]);
 
-        setSelected(selectedOptionsList);
-    },[props.optionNodes]);
+  const collapseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setUncollapsed(!uncollapsed);
+  };
 
-    const onChangeSelect = (event: any) =>{
-        event.stopPropagation() ;   
-        const selectedOptionsList:{[key:string] : boolean;} = {...selected};
-        for(let optionnodeKey in selectedOptionsList){
-            if(event.target.value === optionnodeKey){
-                selectedOptionsList[optionnodeKey] = true;
-                if(numSelected === 0){
-                    setNumSelected(1);
-                }
-            }else{
-                selectedOptionsList[optionnodeKey] = false;
-            }
-        }
-        setSelected(selectedOptionsList);
-    }
+  const preventLegendSelect = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
-    const onChangeMultiSelect = (event: any) => {
-        event.stopPropagation();
-        const selectedOptionsList:{[key:string] : boolean;} = {...selected};
-        if(numSelected >= props.sdcListField.maxSelections){
-            selectedOptionsList[event.target.value] = false;
-        }else{
-            selectedOptionsList[event.target.value] = event.target.checked;
-            const currentNumberSelect = event.target.checked ? numSelected + 1 : numSelected - 1;
-            setNumSelected(currentNumberSelect);
-        }
-        setSelected(selectedOptionsList);  
-    }
+  const isMultiSelect = sdcListField.maxSelections !== 1;
 
-    return (
-    <div
-      data-testid="listfield"
-      className="py-2 text-lg font-bold tracking-wide"
-    >
-        <div className="px-2">
-            {props.sdcListField.title} 
-        </div>
-        <form onChange={isMultiSelect ? onChangeMultiSelect : onChangeSelect}>
-            {props.optionNodes.map((optionnode:any[]) => {
-                return <ListFieldItem isMultiSelect={isMultiSelect} isSelected={selected[optionnode[0].title]} sdcListFieldItem={optionnode[0]}>{optionnode[1]}</ListFieldItem>
-            })}
-        </form>
-        {props.children}
-    </div>
+  return (
+    <fieldset data-testid="listfield" className="tracking-wide text-md">
+      <div onClick={preventLegendSelect} className="flex">
+        <legend className="w-full p-1 font-bold rounded-md">
+          {sdcListField.title && sdcListField.title + " - "}
+          {"ID: " + sdcListField.id}
+        </legend>
+        {sdcListField.children && (
+          <button
+            onClick={collapseClick}
+            className="w-12 h-6 mt-1 bg-gray-300 rounded-md text-md hover:bg-gray-400"
+          >
+            {uncollapsed ? "-" : "+"}
+          </button>
+        )}
+      </div>
+      <div className="">
+        {uncollapsed &&
+          optionNodes.map((optionnode) => {
+            /* currentSingleChoice.addValue([optionnode.listFieldItem.id]); */
+
+            return (
+              <ListFieldItem
+                key={optionnode.listFieldItem.id}
+                setCurrentChoice={setCurrentSingleChoice}
+                currentChoice={currentSingleChoice}
+                optionNode={optionnode}
+                uncollaped={uncollapsed}
+                isMultiSelect={isMultiSelect}
+              />
+            );
+          })}
+      </div>
+      {children}
+    </fieldset>
   );
 }
 
