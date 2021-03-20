@@ -124,7 +124,10 @@ export class TextFieldParser extends QuestionParser {
   parse(obj: any) {
     this.result = new this.targeClass();
     // check if key exists in TextAfterResponse
-    if ("TextAfterResponse" in obj) {
+    if (
+      "TextAfterResponse" in obj &&
+      obj["TextAfterResponse"][0]["attributes"]
+    ) {
       // textAfterResponse is stored in the attributes list of TextAfterResponse under the key "val"
       this.result.textAfterResponse =
         obj["TextAfterResponse"][0]["attributes"]["val"];
@@ -137,6 +140,7 @@ export class TextFieldParser extends QuestionParser {
         throw this.stack.genError("Response contains multiple children");
       this.result.type = type;
     }
+    if (!this.result.type) throw this.stack.genError("Missing child: type");
   }
 }
 
