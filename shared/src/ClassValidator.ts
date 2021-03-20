@@ -28,6 +28,7 @@ export class GenericClassValidator {
    * @param className use the validation logic of this class
    */
   protected _validate(obj: any, className?: string) {
+    this.stackUtil.setInspectedObject(obj);
     if (className == null) className = obj.constructor.name;
     if (className == null) {
       throw this.stackUtil.genError("Unable to determine class");
@@ -41,6 +42,7 @@ export class GenericClassValidator {
     if (targetClass.super) this._validate(obj, targetClass.super.name);
 
     for (let [id, targetField] of Object.entries(targetClass.fields)) {
+      this.stackUtil.setInspectedObject(obj);
       const field = obj[id];
       if (field == null) {
         if (targetField.nullable) {
