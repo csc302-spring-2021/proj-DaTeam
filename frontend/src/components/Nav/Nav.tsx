@@ -8,7 +8,7 @@ function Nav() {
       data-testid="nav"
       className="flex-shrink-0 flex-col w-16 h-screen bg-black shadow-2xl"
     >
-      <Link to="/search">
+      <Link data-testid="search-link" to="/search">
         <svg
           data-testid="menu-btn-search"
           className={
@@ -30,7 +30,7 @@ function Nav() {
         </svg>
       </Link>
 
-      <Link to="/home">
+      <Link data-testid="home-link" to="/home">
         <svg
           data-testid="menu-btn-home"
           className={
@@ -52,7 +52,7 @@ function Nav() {
         </svg>
       </Link>
 
-      <Link to="/responses">
+      <Link data-testid="responses-link" to="/responses">
         <svg
           data-testid="menu-btn-responses"
           className={
@@ -74,7 +74,7 @@ function Nav() {
         </svg>
       </Link>
 
-      <Link to="/forms">
+      <Link data-testid="forms-link" to="/forms">
         <svg
           data-testid="menu-btn-forms"
           className={
