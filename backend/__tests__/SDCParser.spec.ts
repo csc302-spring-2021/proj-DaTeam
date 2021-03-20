@@ -67,13 +67,15 @@ describe("Parse TextField", () => {
     parser.parse(obj2);
     result2 = parser.result;
   });
-  test("Extracted textAfterResponse", () => {
-    expect(result).toHaveProperty("textAfterResponse", "cm");
+  test("Extracted basic info", () => {
+    expect(result).toEqual(
+      expect.objectContaining({
+        textAfterResponse: "cm",
+        type: "decimal",
+      })
+    );
   });
-  test("Extracted type", () => {
-    expect(result).toHaveProperty("type", "decimal");
-  });
-  test("Extracted type in edge case", () => {
+  test("Extracted type from TextField without textAfterResponse", () => {
     expect(result2).toHaveProperty("type", "string");
   });
 });
