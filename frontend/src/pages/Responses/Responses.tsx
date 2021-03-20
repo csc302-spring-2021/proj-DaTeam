@@ -220,7 +220,12 @@ function ResponsesPanel() {
 
       <div className="space-y-8">
         <div className="space-y-2">
-          <h2 className="text-3xl font-medium tracking-tighter">Responses</h2>
+          <div className="flex justify-between align-center">
+            <h2 className="text-3xl font-medium tracking-tighter">Responses</h2>
+            <button className="font-semibold px-4 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+              New
+            </button>
+          </div>
           <p className="text-gray-600">
             Responses are grouped by the form they come from.
           </p>
