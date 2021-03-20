@@ -53,26 +53,28 @@ describe("Parse TextField", () => {
   let result2;
   beforeAll(() => {
     const json = SDCParser.sdcParser.xmlToJson(TestData.textField);
-    inspect(json);
+    const obj1 = json.ResponseField[0];
+    inspect(obj1);
 
     const json2 = SDCParser.sdcParser.xmlToJson(TestData.textField2);
-    inspect(json2);
+    const obj2 = json2.ResponseField[0];
+    inspect(obj2);
 
     const parser = new SDCParser.TextFieldParser(new StackUtil());
-    parser.parse(json);
+    parser.parse(obj1);
     result = parser.result;
 
-    parser.parse(json2);
+    parser.parse(obj2);
     result2 = parser.result;
-    test("Extracted textAfterResponse", () => {
-      expect(result).toHaveProperty("textAfterResponse", "cm");
-    });
-    test("Extracted type", () => {
-      expect(result).toHaveProperty("type", "decimal");
-    });
-    test("Extracted type in edge case", () => {
-      expect(result2).toHaveProperty("type", "string");
-    });
+  });
+  test("Extracted textAfterResponse", () => {
+    expect(result).toHaveProperty("textAfterResponse", "cm");
+  });
+  test("Extracted type", () => {
+    expect(result).toHaveProperty("type", "decimal");
+  });
+  test("Extracted type in edge case", () => {
+    expect(result2).toHaveProperty("type", "string");
   });
 });
 

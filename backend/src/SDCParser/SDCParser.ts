@@ -121,20 +121,21 @@ export class SectionParser extends NodeParser {
 export class TextFieldParser extends QuestionParser {
   result: Model.SDCTextField;
   targeClass = Model.SDCTextField;
-  populateProperties(obj: any) {
-    super.populateProperties(obj);
+  parse(obj: any) {
+    this.result = new this.targeClass();
     // check if key exists in TextAfterResponse
-    if ("TextAfterResponse" in obj["ResponseField"]) {
+    if ("TextAfterResponse" in obj) {
       // textAfterResponse is stored in the attributes list of TextAfterResponse under the key "val"
       this.result.textAfterResponse =
-        obj["ResponseField"]["TextAfterResponse"]["@_"]["val"];
+        obj["TextAfterResponse"][0]["attributes"]["val"];
     }
-    // type is always stored after attribute key "@_" *if* it exists, which it may not
+    // type is always stored after attribute key "attributes" *if* it exists, which it may not
     // thus check if it exists first
-    if ("@_" in obj["ResponseField"]["Response"]) {
-      this.result.type = Object.keys(obj)[1];
-    } else {
-      this.result.type = Object.keys(obj)[0];
+    for (let type of Object.keys(obj.Response[0])) {
+      if (type === "attributes") continue;
+      if (this.result.type)
+        throw this.stack.genError("Response contains multiple children");
+      this.result.type = type;
     }
   }
 }
