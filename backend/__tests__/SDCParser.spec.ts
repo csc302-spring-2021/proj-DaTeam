@@ -15,37 +15,30 @@ describe("Parse Form", () => {
   beforeAll(() => {
     const json = SDCParser.sdcParser.xmlToJson(TestData.form);
     const obj = json.FormDesign[0];
-    inspect(obj);
 
     const parser = new SDCParser.FormParser(new StackUtil());
     parser.parse(obj);
     result = parser.result;
   });
-  test("Base info extracted", (done) => {
-    expect(result).toHaveProperty(
-      "id",
-      "Adrenal.Bx.Res.129_3.003.001.REL_sdcFDF"
-    );
+  test("Base info extracted", () => {
     expect(result).toEqual(
       expect.objectContaining({
+        id: "Adrenal.Bx.Res.129_3.003.001.REL_sdcFDF",
         title: "ADRENAL GLAND",
         lineage: "Adrenal.Bx.Res.129",
         version: "3.003.001.REL",
       })
     );
     expect(result).toHaveProperty("footer");
-    done();
   });
-  test("Form properties extracted", (done) => {
+  test("Form properties extracted", () => {
     expect(result).toHaveProperty("formProperties");
     expect(result.formProperties).toHaveLength(1);
-    done();
   });
-  test("Children extracted", (done) => {
+  test("Children extracted", () => {
     expect(result).toHaveProperty("children");
     expect(result.children).toHaveLength(1);
-    expect(result.children[0] instanceof Model.SDCDisplayItem).toEqual(true);
-    done();
+    expect(result.children[0]).toBeInstanceOf(Model.SDCDisplayItem);
   });
 });
 
