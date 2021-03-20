@@ -170,6 +170,24 @@ export class TextFieldParser extends QuestionParser {
 export class ListFieldParser extends QuestionParser {
   result: Model.SDCListField;
   targeClass = Model.SDCListField;
+  parse(obj: any) {
+    this.result = new this.targeClass();
+    if ("maxSelections" in obj.attributes) {
+      this.result.maxSelections = parseInt(obj.attributes.maxSelections);
+    }
+    if ("minSelections" in obj.attributes) {
+      this.result.minSelections = parseInt(obj.attributes.minSelections);
+    }
+
+    const parser = new ListFieldItemParser(new StackUtil());
+    if ("List" in obj && "ListItem" in obj.List[0]) {
+      for (let item of obj.List[0].ListItem) {
+        console.log(item);
+        parser.parse(item);
+        this.result.options.push(parser.result);
+      }
+    }
+  }
 }
 
 export class ListFieldItemParser extends NodeParser {
