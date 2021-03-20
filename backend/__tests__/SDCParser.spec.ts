@@ -42,7 +42,40 @@ describe("Parse Form", () => {
   });
 });
 
-describe("Parse Question", () => {});
+describe("Parse Text Question", () => {
+  let result;
+  beforeAll(() => {
+    const json = SDCParser.sdcParser.xmlToJson(TestData.questionTest);
+    const obj = json.Question[0];
+
+    const parser = new SDCParser.QuestionParser(new StackUtil());
+    parser.parse(obj);
+    result = parser.result;
+  });
+  test("Base info extracted", () => {
+    expect(result).toEqual(
+      expect.objectContaining({
+        order: "82",
+        id: "59852.100004300",
+        title: "Histologic Type (Notes C through E)",
+      })
+    );
+  });
+  test("Text field extracted", () => {
+    expect(result).toBeInstanceOf(Model.SDCTextField);
+    expect(result).toEqual(
+      expect.objectContaining({
+        textAfterResponse: "cm",
+        type: "decimal",
+      })
+    );
+  });
+  test("Children extracted", () => {
+    expect(result).toHaveProperty("children");
+    expect(result.children).toHaveLength(1);
+    expect(result.children[0]).toBeInstanceOf(Model.SDCDisplayItem);
+  });
+});
 
 describe("Parse DisplayedItem", () => {});
 

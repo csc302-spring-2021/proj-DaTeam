@@ -58,14 +58,18 @@ abstract class NodeParser {
   parseChildren(obj: any) {
     if (!obj.ChildItems) return;
     const children = obj.ChildItems[0];
+    this.stack.enter("ChildItems");
     for (let key of Object.keys(children)) {
       if (parsers[key] == null) continue;
+      this.stack.enter(key);
       for (let child of children[key]) {
         const parser = new parsers[key](this.stack);
         parser.parse(child);
         this.result.children.push(parser.result);
       }
+      this.stack.enter(key);
     }
+    this.stack.leave();
   }
 
   populateProperties(obj: any) {
@@ -98,10 +102,35 @@ export class FormParser extends NodeParser {
     if (!obj.Body) throw this.stack.genError("Missing child: Body");
     this.stack.enter("Body");
     super.parseChildren(obj.Body[0]);
+    this.stack.leave();
   }
 }
 
-export class QuestionParser extends NodeParser {}
+export class QuestionParser extends NodeParser {
+  parse(obj: any) {
+    let subField: string;
+    if (obj.ResponseField && obj.ListField) {
+      throw this.stack.genError(
+        "Question cannot contain both ResponseField and ListField"
+      );
+    } else if (obj.ResponseField) {
+      subField = "ResponseField";
+    } else if (obj.ListField) {
+      subField = "ListField";
+    } else {
+      throw this.stack.genError(
+        "Question has no child ResponseField nor ListField"
+      );
+    }
+    const subParser = new parsers[subField](this.stack);
+    this.stack.enter(subField);
+    subParser.parse(obj[subField][0]);
+    this.result = subParser.result;
+    this.stack.leave();
+    this.populateProperties(obj);
+    this.parseChildren(obj);
+  }
+}
 
 export class DisplayedItemParser extends NodeParser {
   targeClass = Model.SDCDisplayItem;
