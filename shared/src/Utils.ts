@@ -5,6 +5,9 @@ export class StackUtil {
   /** Keep track of where the parser is parsing */
   private callStack: string[] = [];
 
+  /** Print this object on error */
+  private inspectedObject: any;
+
   /** Error type to generate */
   private errorType: new (message: string) => Error = Error;
 
@@ -13,9 +16,29 @@ export class StackUtil {
     if (errorType) this.errorType = errorType;
   }
 
+  /** Print the object on error */
+  setInspectedObject(obj: any) {
+    this.inspectedObject = obj;
+  }
+
+  private inspectedObjectToString() {
+    if (this.inspectedObject == null) return "";
+    const obj = JSON.parse(JSON.stringify(this.inspectedObject));
+    for (let key of Object.keys(obj)) {
+      if (typeof obj[key] === "object") {
+        obj[key] = `[object ${obj[key].constructor.name}]`;
+      }
+    }
+    return "\n" + JSON.stringify(obj, null, 2);
+  }
+
   /** Throw error with the stack info */
   genError(message: string): Error {
-    return new this.errorType(message + " at " + this.callStack.join("."));
+    return new this.errorType(
+      `${message}\n    at ${this.callStack.join(
+        "."
+      )}${this.inspectedObjectToString()}`
+    );
   }
 
   /** append level to call stack */
