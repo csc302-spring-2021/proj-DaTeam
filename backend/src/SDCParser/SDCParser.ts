@@ -174,6 +174,14 @@ export class ListFieldParser extends QuestionParser {
 export class ListFieldItemParser extends NodeParser {
   result: Model.SDCListFieldItem;
   targeClass = Model.SDCListFieldItem;
+  parse(obj: any) {
+    this.result = new this.targeClass();
+    if (
+      "selectionDisablesChildren" in Object.keys(obj.ListItem[0].attributes)
+    ) {
+    }
+  }
+  parseChildren(obj: any) {}
 }
 
 export const sdcParser = new SDCParser();

@@ -106,7 +106,7 @@ export const listField = `
 `;
 
 export const listFieldItem = `
-<ListItem name="LI_57748" order="175" ID="57748.100004300" title="Pancreas" />
+<ListItem name="LI_57748" order="175" ID="57748.100004300" title="Pancreas">
   <Property name="p_rptTxt_45594_1" order="181" propName="reportText" val="{no text}" />
   <ListItemResponseField name="lirf_45594_2" order="182" responseRequired="true">
    <Response name="rsp_45594_3" order="183">

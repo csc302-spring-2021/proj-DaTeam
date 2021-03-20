@@ -115,4 +115,17 @@ describe("Parse TextField", () => {
 
 describe("Parse ListField", () => {});
 
-describe("Parse ListFieldItem", () => {});
+describe("Parse ListFieldItem", () => {
+  let result;
+  beforeAll(() => {
+    let json = SDCParser.sdcParser.xmlToJson(TestData.listFieldItem);
+    inspect(json);
+
+    const parser = new SDCParser.ListFieldItemParser(new StackUtil());
+    parser.parse(json);
+    result = parser.result;
+  });
+  test("Extracted basic info", () => {
+    expect(result).toHaveProperty("textResponse");
+  });
+});
