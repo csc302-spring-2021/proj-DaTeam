@@ -40,8 +40,9 @@ export class GenericJsonSerializer {
       (o) => o[this.classKey],
       (name) => {
         const targetClass = classMeta[name];
-        if (targetClass && targetClass.construct)
+        if (targetClass && targetClass.construct) {
           return new targetClass.construct();
+        }
         return {};
       },
       null,
@@ -58,10 +59,11 @@ export class GenericJsonSerializer {
    */
   protected static validate(obj: any, asClass: Function) {
     try {
-      if (!(obj instanceof asClass))
+      if (!(obj instanceof asClass)) {
         throw new ParsingError(
           `Expecting serialized object to be ${asClass.name} but got ${obj.constructor.name}`
         );
+      }
       GenericClassValidator.validate(obj);
     } catch (e) {
       if (e instanceof ValidationError) {
@@ -95,7 +97,7 @@ export class GenericJsonSerializer {
 
     if (template == null) template = construct(targetClassName);
 
-    if (targetClass.super)
+    if (targetClass.super) {
       this.deepCopy(
         classFinder,
         construct,
@@ -103,6 +105,7 @@ export class GenericJsonSerializer {
         obj,
         targetClass.super.name
       );
+    }
 
     // The validator did all the checking
     for (let [id, targetField] of Object.entries(targetClass.fields)) {
