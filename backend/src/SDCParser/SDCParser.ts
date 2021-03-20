@@ -209,6 +209,7 @@ export class ListFieldItemParser extends NodeParser {
       const subParser = new TextFieldParser(this.stack);
       subParser.parse(obj.ListItemResponseField[0]);
       this.result.textResponse = subParser.result;
+      this.result.textResponse.id = this.result.id;
       this.stack.leave();
     }
   }

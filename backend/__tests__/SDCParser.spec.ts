@@ -205,10 +205,12 @@ describe("Parse ListFieldItem", () => {
   test("Text field extracted", () => {
     expect(result).toHaveProperty("textResponse");
     expect(result.textResponse).toBeInstanceOf(Model.SDCTextField);
+    GenericClassValidator.validate(result.textResponse);
   });
   test("Children extracted", () => {
     expect(result).toHaveProperty("children");
     expect(result.children).toHaveLength(1);
     expect(result.children[0]).toBeInstanceOf(Model.SDCDisplayItem);
+    GenericClassValidator.validate(result.children[0]);
   });
 });
