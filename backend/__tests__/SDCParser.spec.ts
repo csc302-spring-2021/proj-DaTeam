@@ -131,11 +131,9 @@ describe("Parse TextField", () => {
   beforeAll(() => {
     const json = SDCParser.sdcParser.xmlToJson(TestData.textField);
     const obj1 = json.ResponseField[0];
-    inspect(obj1);
 
     const json2 = SDCParser.sdcParser.xmlToJson(TestData.textField2);
     const obj2 = json2.ResponseField[0];
-    inspect(obj2);
 
     const parser = new SDCParser.TextFieldParser(new StackUtil());
     parser.parse(obj1);
@@ -162,7 +160,6 @@ describe("Parse ListField main", () => {
   beforeAll(() => {
     const json = SDCParser.sdcParser.xmlToJson(TestData.listField);
     const obj = json.ListField[0];
-    inspect(obj);
 
     const parser = new SDCParser.ListFieldParser(new StackUtil());
     parser.parse(obj);
@@ -192,7 +189,6 @@ describe("Parse ListFieldItem", () => {
   beforeAll(() => {
     let json = SDCParser.sdcParser.xmlToJson(TestData.listFieldItem);
     const obj = json.ListItem[0];
-    inspect(obj);
 
     const parser = new SDCParser.ListFieldItemParser(new StackUtil());
     parser.parse(obj);

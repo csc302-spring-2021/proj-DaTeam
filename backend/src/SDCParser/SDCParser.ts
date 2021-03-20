@@ -182,7 +182,6 @@ export class ListFieldParser extends QuestionParser {
     const parser = new ListFieldItemParser(new StackUtil());
     if ("List" in obj && "ListItem" in obj.List[0]) {
       for (let item of obj.List[0].ListItem) {
-        console.log(item);
         parser.parse(item);
         this.result.options.push(parser.result);
       }
@@ -206,7 +205,6 @@ export class ListFieldItemParser extends NodeParser {
 
     // parse textfield
     if ("ListItemResponseField" in obj) {
-      console.log("called");
       this.stack.enter("ListItemResponseField");
       const subParser = new TextFieldParser(this.stack);
       subParser.parse(obj.ListItemResponseField[0]);
