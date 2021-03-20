@@ -74,9 +74,10 @@ abstract class NodeParser {
 
   populateProperties(obj: any) {
     if (!obj.attributes.ID) throw this.stack.genError("Missing attribute: ID");
+    if (obj.attributes.order)
+      this.result.order = parseInt(obj.attributes.order);
     this.result.id = obj.attributes.ID;
     this.result.title = obj.attributes.title;
-    this.result.order = obj.attributes.order;
   }
 }
 
@@ -174,14 +175,27 @@ export class ListFieldParser extends QuestionParser {
 export class ListFieldItemParser extends NodeParser {
   result: Model.SDCListFieldItem;
   targeClass = Model.SDCListFieldItem;
-  parse(obj: any) {
-    this.result = new this.targeClass();
-    if (
-      "selectionDisablesChildren" in Object.keys(obj.ListItem[0].attributes)
-    ) {
+  populateProperties(obj: any) {
+    super.populateProperties(obj);
+    if ("selectionDisablesChildren" in obj.attributes) {
+      this.result.selectionDisablesChildren =
+        obj.attributes.selectionDisablesChildren == "true";
+    }
+    if ("selectionDeselectsSiblings" in obj.attributes) {
+      this.result.selectionDeselectsSiblings =
+        obj.attributes.selectionDeselectsSiblings == "true";
+    }
+
+    // parse textfield
+    if ("ListItemResponseField" in obj) {
+      console.log("called");
+      this.stack.enter("ListItemResponseField");
+      const subParser = new TextFieldParser(this.stack);
+      subParser.parse(obj.ListItemResponseField[0]);
+      this.result.textResponse = subParser.result;
+      this.stack.leave();
     }
   }
-  parseChildren(obj: any) {}
 }
 
 export const sdcParser = new SDCParser();

@@ -106,12 +106,17 @@ export const listField = `
 `;
 
 export const listFieldItem = `
-<ListItem name="LI_57748" order="175" ID="57748.100004300" title="Pancreas">
+<ListItem name="LI_57748" order="175" ID="57748.100004300" title="Pancreas" selectionDeselectsSiblings="true" selectionDisablesChildren="true">
   <Property name="p_rptTxt_45594_1" order="181" propName="reportText" val="{no text}" />
   <ListItemResponseField name="lirf_45594_2" order="182" responseRequired="true">
    <Response name="rsp_45594_3" order="183">
     <string name="str_45594_4" order="184" />
    </Response>
   </ListItemResponseField>
+  <ChildItems name="ch_Body" order="16">
+  <DisplayedItem name="DI_39617" order="17" ID="39617.100004300" title="# This checklist applies principally to adrenal carcinomas in adults. Pediatric adrenal cortical tumors have different criteria for malignancy and are, in general, treated under protocols that may differ significantly from the recommendations for adult- type tumors.">
+   <Property name="p_rptTxt_39617_1" order="18" propName="reportText" val="{no text}" />
+  </DisplayedItem>
+ </ChildItems>
 </ListItem>
 `;
