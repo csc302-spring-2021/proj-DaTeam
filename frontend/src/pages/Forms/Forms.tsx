@@ -106,7 +106,12 @@ function FormsPanel() {
       className="z-20 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50"
     >
       <div className="space-y-2">
-        <h2 className="text-3xl font-medium tracking-tighter">Forms</h2>
+        <div className="flex justify-between align-center">
+          <h2 className="text-3xl font-medium tracking-tighter">Forms</h2>
+          <button className="font-semibold px-4 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+            Upload XML
+          </button>
+        </div>
         <p className="text-gray-600">
           Select a recent form or search for one to view or update it's
           structure
@@ -181,7 +186,7 @@ function FormDetailsPanel() {
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
   const [sdcform, setSdcform] = useState<Model.SDCNode | undefined>(undefined);
 
-  useEffect(():any => {
+  useEffect((): any => {
     let addedForm: Boolean = true;
     FormService.read(formId)
       .then((sdcform) => {
@@ -189,13 +194,13 @@ function FormDetailsPanel() {
           sdcform,
           Model.SDCNode
         );
-        if(addedForm){
-            setSdcform(decodedSdcNode);
+        if (addedForm) {
+          setSdcform(decodedSdcNode);
         }
       })
       .catch((err) => notify.error(err.message));
 
-      return () => addedForm = false;
+    return () => (addedForm = false);
   }, [formId, setSdcform]);
 
   return (
