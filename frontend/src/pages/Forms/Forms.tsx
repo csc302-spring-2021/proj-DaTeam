@@ -1,6 +1,6 @@
 import { GenericJsonSerializer, Model } from "@dateam/shared";
 import { motion } from "framer-motion";
-import { EffectCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Route, useParams } from "react-router-dom";
 
 import { pageVariants } from "../../App";

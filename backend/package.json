@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node ./build/Server.js",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles --testPathIgnorePatterns __tests__/Database.spec.ts",
+    "test:db": "jest __tests__/Database.spec.ts",
     "dev": "npx nodemon ./src/Server.ts",
     "db:up": "docker-compose -f docker-compose-db.yml --env-file ../.env up",
     "db:down": "docker-compose -f docker-compose-db.yml --env-file ../.env down",

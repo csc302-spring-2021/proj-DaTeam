@@ -2,261 +2,321 @@
      Primarily for parsing and validation purposes
  */
 
-import * as Model from "./ClassDef"
-import { textFieldTypeMeta } from "./TextFieldTypeMeta"
+import * as Model from "./ClassDef";
+import * as QueryObject from "./QueryObject";
+import { textFieldTypeMeta } from "./TextFieldTypeMeta";
 
-class ClassMetaType{
+class ClassMetaType {
+  /** Super class of this class */
+  super?: Function;
 
-     /** Super class of this class */
-     super?: Function
+  /** Constructor of this class */
+  construct?: { new (data?: any): Object };
 
-     /** Constructor of this class */
-     construct?: { new(data?: any): Object}
-
-     /** All fields contain in this class */
-     fields: { [id: string] : FieldMetaType }
+  /** All fields contain in this class */
+  fields: { [id: string]: FieldMetaType };
 }
 
-class FieldMetaType{
+class FieldMetaType {
+  /**
+   * Basic type of this field, should only be `String`, `Number`, `Boolean`, `Array`, `Object`
+   *
+   * If the type of the field is a custom object, use `Object` here
+   */
+  type: { new (): Object };
 
-     /**
-      * Basic type of this field, should only be `String`, `Number`, `Boolean`, `Array`, `Object`
-      *
-      * If the type of the field is a custom object, use `Object` here
-      */
-     type: { new(): Object}
+  /**
+   * Generic type of this field if `type` is `Array`,
+   *
+   * or the actual type of the field if `type` is `Object`
+   */
+  generic?: Function;
 
-     /**
-      * Generic type of this field if `type` is `Array`,
-      *
-      * or the actual type of the field if `type` is `Object`
-      */
-     generic?: Function
+  /** Default to false */
+  nullable?: boolean;
 
-     /** Default to false */
-     nullable?: boolean
-
-     /** Validator of this field, the input is the entire object, not just the field */
-     validator?: (obj: any) => void
+  /** Validator of this field, the input is the entire object, not just the field */
+  validator?: (obj: any) => void;
 }
 
 /** Dictionary containing class meta info */
 export const classMeta: { [id: string]: ClassMetaType } = {
-     Procedure:{
-          construct: Model.Procedure,
-          fields: {
-               uid: {
-                    type: String,
-                    nullable: true
-               },
-               id: {
-                    type: String,
-               },
-               assignedFormID: {
-                    type: String,
-                    nullable: true
-               }
+  Procedure: {
+    construct: Model.Procedure,
+    fields: {
+      uid: {
+        type: String,
+        nullable: true,
+      },
+      id: {
+        type: String,
+      },
+      assignedFormID: {
+        type: String,
+        nullable: true,
+      },
+    },
+  },
+  Patient: {
+    construct: Model.Patient,
+    fields: {
+      uid: {
+        type: String,
+        nullable: true,
+      },
+      id: {
+        type: String,
+      },
+      name: {
+        type: String,
+      },
+    },
+  },
+  SDCNode: {
+    // No constructor
+    fields: {
+      id: {
+        type: String,
+      },
+      uid: {
+        type: String,
+        nullable: true,
+      },
+      title: {
+        type: String,
+        nullable: true,
+      },
+      order: {
+        type: Number,
+        nullable: true,
+        validator: (o) => {
+          if (o.order < 0) throw new Error("order cannot be negetive");
+        },
+      },
+      children: {
+        type: Array,
+        generic: Model.SDCNode,
+        validator: (o) => {
+          for (let child of o.children) {
+            if (child instanceof Model.SDCForm) {
+              throw new Error("SDCForm cannot be a child");
+            }
           }
-     },
-     Patient:{
-          construct: Model.Patient,
-          fields: {
-               uid: {
-                    type: String,
-                    nullable: true
-               },
-               id: {
-                    type: String,
-               },
-               name: {
-                    type: String
-               }
+        },
+      },
+    },
+  },
+  SDCQuestion: {
+    // No constructor
+    super: Model.SDCNode,
+    fields: {},
+  },
+  SDCForm: {
+    super: Model.SDCNode,
+    construct: Model.SDCForm,
+    fields: {
+      lineage: {
+        type: String,
+      },
+      version: {
+        type: String,
+      },
+      header: {
+        type: String,
+        nullable: true,
+      },
+      footer: {
+        type: String,
+        nullable: true,
+      },
+      formProperties: {
+        type: Array,
+        generic: Model.SDCFormProperty,
+      },
+    },
+  },
+  SDCFormProperty: {
+    construct: Model.SDCFormProperty,
+    fields: {
+      order: {
+        type: Number,
+        nullable: true,
+        validator: (o) => {
+          if (o.order < 0) throw new Error("order cannot be negetive");
+        },
+      },
+      name: {
+        type: String,
+      },
+      propName: {
+        type: String,
+      },
+      val: {
+        type: String,
+      },
+    },
+  },
+  SDCSection: {
+    super: Model.SDCNode,
+    construct: Model.SDCSection,
+    fields: {},
+  },
+  SDCDisplayItem: {
+    super: Model.SDCNode,
+    construct: Model.SDCDisplayItem,
+    fields: {},
+  },
+  SDCTextField: {
+    super: Model.SDCQuestion,
+    construct: Model.SDCTextField,
+    fields: {
+      textAfterResponse: {
+        type: String,
+        nullable: true,
+      },
+      type: {
+        type: String,
+        validator: (o) => {
+          if (textFieldTypeMeta[o.type] == null) {
+            throw new Error(o.type + " is not a valid TextFieldType");
           }
-     },
-     SDCNode:{
-          // No constructor
-          fields: {
-               id: {
-                    type: String
-               },
-               uid: {
-                    type: String,
-                    nullable: true
-               },
-               title: {
-                    type: String,
-                    nullable: true
-               },
-               order: {
-                    type: Number,
-                    nullable: true,
-                    validator: o => { if (o.order < 0) throw new Error("order cannot be negetive") }
-               },
-               children: {
-                    type: Array,
-                    generic: Model.SDCNode,
-                    validator: o => {
-                         for (let child of o.children){
-                              if (child instanceof Model.SDCForm){
-                                   throw new Error("SDCForm cannot be a child")
-                              }
-                         }
-                    }
-               }
+        },
+      },
+    },
+  },
+  SDCListField: {
+    super: Model.SDCQuestion,
+    construct: Model.SDCListField,
+    fields: {
+      minSelections: {
+        type: Number,
+        validator: (o) => {
+          if (o.minSelections < 0) {
+            throw new Error("minSelections cannot be negetive");
           }
-     },
-     SDCQuestion:{
-          // No constructor
-          super: Model.SDCNode,
-          fields: {}
-     },
-     SDCForm: {
-          super: Model.SDCNode,
-          construct: Model.SDCForm,
-          fields: {
-               lineage: {
-                    type: String
-               },
-               version: {
-                    type: String
-               },
-               header: {
-                    type: String,
-                    nullable: true
-               },
-               footer: {
-                    type: String,
-                    nullable: true
-               },
-               formProperties: {
-                    type: Array,
-                    generic: Model.SDCFormProperty
-               }
+        },
+      },
+      maxSelections: {
+        type: Number,
+        validator: (o) => {
+          if (o.maxSelections < o.minSelections) {
+            throw new Error("maxSelections must be greater than minSelections");
           }
-     },
-     SDCFormProperty: {
-          construct: Model.SDCFormProperty,
-          fields: {
-               order: {
-                    type: Number,
-                    nullable: true,
-                    validator: o => { if (o.order < 0) throw new Error("order cannot be negetive") }
-               },
-               name: {
-                    type: String,
-               },
-               propName: {
-                    type: String,
-               },
-               val: {
-                    type: String,
-               },
-          }
-     },
-     SDCSection: {
-          super: Model.SDCNode,
-          construct: Model.SDCSection,
-          fields: {}
-     },
-     SDCDisplayItem: {
-          super: Model.SDCNode,
-          construct: Model.SDCDisplayItem,
-          fields: {}
-     },
-     SDCTextField: {
-          super: Model.SDCQuestion,
-          construct: Model.SDCTextField,
-          fields: {
-               textAfterResponse: {
-                    type: String,
-                    nullable: true,
-               },
-               type: {
-                    type: String,
-                    validator: o => {
-                         if (textFieldTypeMeta[o.type] == null){
-                              throw new Error(o.type + " is not a valid TextFieldType")
-                         }
-                    }
-               }
-          }
-     },
-     SDCListField: {
-          super: Model.SDCQuestion,
-          construct: Model.SDCListField,
-          fields: {
-               minSelections: {
-                    type: Number,
-                    validator: o => {
-                         if (o.minSelections < 0){
-                              throw new Error("minSelections cannot be negetive")
-                         }
-                    }
-               },
-               maxSelections: {
-                    type: Number,
-                    validator: o => {
-                         if (o.maxSelections < o.minSelections){
-                              throw new Error("maxSelections must be greater than minSelections")
-                         }
-                    }
-               },
-               options: {
-                    type: Array,
-                    generic: Model.SDCListFieldItem
-               },
-               lookupEndPoint: {
-                    type: String,
-                    nullable: true
-               }
-          }
-     },
-     SDCListFieldItem: {
-          super: Model.SDCNode,
-          construct: Model.SDCListFieldItem,
-          fields: {
-               textResponse: {
-                    type: Object,
-                    generic: Model.SDCTextField,
-                    nullable: true
-               },
-               selectionDeselectsSiblings: {
-                    type: Boolean
-               },
-               selectionDisablesChildren: {
-                    type: Boolean
-               }
-          }
-     },
-     SDCFormResponse: {
-          construct: Model.SDCFormResponse,
-          fields: {
-               uid: {
-                    type: String,
-                    nullable: true
-               },
-               formId: {
-                    type: String
-               },
-               patientID: {
-                    type: String
-               },
-               answers: {
-                    type: Array,
-                    generic: Model.SDCAnswer
-               }
-          }
-     },
-     SDCAnswer: {
-          construct: Model.SDCAnswer,
-          fields: {
-               questionID: {
-                    type: String
-               },
-               responses: {
-                    type: Array,
-                    generic: String
-               }
-          }
-     }
-}
+        },
+      },
+      options: {
+        type: Array,
+        generic: Model.SDCListFieldItem,
+      },
+      lookupEndPoint: {
+        type: String,
+        nullable: true,
+      },
+    },
+  },
+  SDCListFieldItem: {
+    super: Model.SDCNode,
+    construct: Model.SDCListFieldItem,
+    fields: {
+      textResponse: {
+        type: Object,
+        generic: Model.SDCTextField,
+        nullable: true,
+      },
+      selectionDeselectsSiblings: {
+        type: Boolean,
+      },
+      selectionDisablesChildren: {
+        type: Boolean,
+      },
+    },
+  },
+  SDCFormResponse: {
+    construct: Model.SDCFormResponse,
+    fields: {
+      uid: {
+        type: String,
+        nullable: true,
+      },
+      formId: {
+        type: String,
+      },
+      patientID: {
+        type: String,
+      },
+      answers: {
+        type: Array,
+        generic: Model.SDCAnswer,
+      },
+    },
+  },
+  SDCAnswer: {
+    construct: Model.SDCAnswer,
+    fields: {
+      questionID: {
+        type: String,
+      },
+      responses: {
+        type: Array,
+        generic: String,
+      },
+    },
+  },
+  Query: {
+    construct: QueryObject.Query,
+    fields: {
+      targetClass: {
+        type: String,
+      },
+      condition: {
+        type: Object,
+        generic: QueryObject.Condition,
+      },
+    },
+  },
+  Condition: {
+    fields: {},
+  },
+  ColumnCondition: {
+    super: QueryObject.Condition,
+    construct: QueryObject.ColumnCondition,
+    fields: {
+      opt: {
+        type: String,
+      },
+      column: {
+        type: String,
+      },
+      value: {
+        type: String,
+      },
+    },
+  },
+  Not: {
+    super: QueryObject.Condition,
+    construct: QueryObject.Not,
+    fields: {
+      condition: {
+        type: Object,
+        generic: QueryObject.Condition,
+      },
+    },
+  },
+  BinaryOpt: {
+    super: QueryObject.Condition,
+    construct: QueryObject.BinaryOpt,
+    fields: {
+      opt: {
+        type: String,
+      },
+      lhs: {
+        type: Object,
+        generic: QueryObject.Condition,
+      },
+      rhs: {
+        type: Object,
+        generic: QueryObject.Condition,
+      },
+    },
+  },
+};

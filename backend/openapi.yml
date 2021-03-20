@@ -36,8 +36,10 @@ paths:
             schema:
               $ref: "#/components/schemas/PatientRequestBody"
       responses:
-        204:
-          description: "Patient created successfully"
+        201:
+          description: "Patient created successfully, return UID"
+          content:
+            $ref: "#/components/responses/UID"
     get:
       description: "Get all patients"
       tags:
@@ -152,11 +154,9 @@ paths:
               $ref: "#/components/schemas/FormRequestBody"
       responses:
         201:
-          description: Successfully created form
+          description: Successfully created form, return UID
           content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Form"
+            $ref: "#/components/responses/UID"
         400:
           $ref: "#/components/responses/BadRequest"
 
@@ -222,8 +222,10 @@ paths:
             schema:
               $ref: "#/components/schemas/FormResponseRequestBody"
       responses:
-        204:
-          description: Response created successfully
+        201:
+          description: Response created successfully, return UID
+          content:
+            $ref: "#/components/responses/UID"
         400:
           $ref: "#/components/responses/BadRequest"
         404:
@@ -271,6 +273,11 @@ paths:
 
 components:
   responses:
+    UID:
+      text/plain:
+        schema:
+          type: string
+          example: 5d5bb199-59e2-400e-9f16-2d1d4d0db106
     NotFound:
       description: The specified resource was not found
       content:
@@ -314,6 +321,10 @@ components:
     PatientRequestBody:
       type: object
       properties:
+        __class:
+          type: string
+          description: Class identifier
+          default: Patient
         id:
           type: string
           description: External ID (typically OHIP) for identifying the patient
@@ -359,6 +370,7 @@ components:
       properties:
         __class:
           type: string
+          description: Class identifier
           default: "SDCForm"
         id:
           type: string
@@ -368,13 +380,27 @@ components:
           type: string
           description: The title of the form
           example: "Lung Biopsy Analysis"
+        lineage:
+          type: string
+          description: The lineage of the form
+          example: Covid-19-test
+        version:
+          type: string
+          description: The version of the form
+          example: 55728d
         order:
           type: number
           description: Order of this item in form
+        formProperties:
+          type: array
+          items:
+            type: object
+          example: []
         children:
           type: array
           items:
             type: object
+          example: []
 
     Form:
       type: object
@@ -406,11 +432,15 @@ components:
     FormResponseRequestBody:
       type: object
       properties:
-        form_id:
+        __class:
+          description: Class identifier
+          type: string
+          default: "SDCFormResponse"
+        formId:
           type: string
           description: ID of form
           format: uuid
-        patient_id:
+        patientID:
           type: string
           description: ID of patient
           format: uuid
@@ -419,7 +449,11 @@ components:
           items:
             type: object
             properties:
-              question_id:
+              __class:
+                description: Class identifier
+                type: string
+                default: "SDCAnswer"
+              questionID:
                 type: string
                 description: ID of question
               responses:
@@ -450,6 +484,7 @@ components:
       type: object
       properties:
         __class:
+          description: Class identifier
           type: string
           default: "SDCForm"
         id:

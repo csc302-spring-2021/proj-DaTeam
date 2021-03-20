@@ -1,20 +1,25 @@
 import { Mocks, GenericJsonSerializer, Model } from "@dateam/shared";
 import { Request, Response } from "express";
-import { HttpCode } from "../../utils/Error";
+import { HttpCode, sendError } from "../../utils/Error";
+import * as Utils from "../ControllerUtils";
 
 export const FormController = {
   create: function (req: Request, res: Response) {
-    res.sendStatus(HttpCode.NOT_IMPLEMENTED);
-    //res.status(HttpCode.OK).send();
+    Utils.create(req, res, Model.SDCForm).catch((e) =>
+      sendError(res, HttpCode.BAD_REQUEST, e)
+    );
   },
 
   read: function (req: Request, res: Response) {
-    const targetUID: string = req.url.substring(req.url.lastIndexOf("/") + 1);
-    const sdcForm: Model.SDCForm = Mocks.buildFormComplete();
-    sdcForm.uid = targetUID;
-    const serialized = GenericJsonSerializer.encode(sdcForm, Model.SDCForm);
+    Utils.read(req, res, Model.SDCForm, "formId").catch((e) =>
+      sendError(res, HttpCode.NOT_FOUND, e)
+    );
+  },
 
-    res.status(HttpCode.OK).send(serialized);
+  readResponses: function (req: Request, res: Response) {
+    const pk = req.params.formId;
+    // TODO: Search and find form responses
+    //dbManager.genericSearch(Model.SDCFormResponse, );
   },
 
   update: function (req: Request, res: Response) {
