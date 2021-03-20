@@ -208,8 +208,8 @@ export function genAnswer(): Model.SDCAnswer {
 }
 
 export function buildSimpleList(baseId?: string): Model.SDCListField {
-  const result = genListFieldComplete()
-  if (baseId) result.id = baseId
+  const result = genListFieldComplete();
+  if (baseId) result.id = baseId;
 
   for (let i = 0; i < 4; i++) {
     const listOption = genListFieldItemComplete();
@@ -217,7 +217,7 @@ export function buildSimpleList(baseId?: string): Model.SDCListField {
     listOption.title = `optiont ${i}`;
     result.options.push(listOption);
   }
-  return result
+  return result;
 }
 
 /**
@@ -261,7 +261,7 @@ export function buildFormComplete(): Model.SDCForm {
   textQuestion.id = "text-1";
   section.children.push(textQuestion);
 
-  const listQuestion = buildSimpleList("list-1")
+  const listQuestion = buildSimpleList("list-1");
   section.children.push(listQuestion);
 
   const listOption = genListFieldItemComplete();
@@ -308,89 +308,89 @@ export function buildFormSimpleList(): Model.SDCForm {
 }
 
 export function buildFormResponseSimpleList(): Model.SDCFormResponse {
-  const response = genFormResponsePartial()
+  const response = genFormResponsePartial();
 
   let answer = genAnswer();
   answer.questionID = "list";
   answer.responses = ["list-1"];
   response.answers.push(answer);
 
-  return response
+  return response;
 }
 
 export function buildFormOptionalQuestion(): Model.SDCForm {
   const form = buildFormSimpleList();
   findNode(form, "list").minSelections = 0;
-  return form
+  return form;
 }
 
 export function buildFormResponseOptionalQuestion(): Model.SDCFormResponse {
-  const response = genFormResponsePartial()
+  const response = genFormResponsePartial();
 
   let answer = genAnswer();
   answer.questionID = "list";
   answer.responses = [];
   response.answers.push(answer);
 
-  return response
+  return response;
 }
 
 export function buildFormMultipleQuestion(): Model.SDCForm {
   const form = buildFormSimpleList();
   findNode(form, "list").maxSelections = 4;
-  return form
+  return form;
 }
 
 export function buildFormResponseMultipleQuestion(): Model.SDCFormResponse {
-  const response = genFormResponsePartial()
+  const response = genFormResponsePartial();
 
   let answer = genAnswer();
   answer.questionID = "list";
   answer.responses = ["list-0", "list-1"];
   response.answers.push(answer);
 
-  return response
+  return response;
 }
 
 export function buildFormDeselectSiblings(): Model.SDCForm {
   const form = buildFormSimpleList();
-  findNode(form, "list-0").selectionDeselectsSiblings = true
-  return form
+  findNode(form, "list-0").selectionDeselectsSiblings = true;
+  return form;
 }
 
 export function buildFormResponseDeselectSiblings1(): Model.SDCFormResponse {
-  const response = genFormResponsePartial()
+  const response = genFormResponsePartial();
 
   let answer = genAnswer();
   answer.questionID = "list";
   answer.responses = ["list-0"];
   response.answers.push(answer);
 
-  return response
+  return response;
 }
 
 export function buildFormResponseDeselectSiblings2(): Model.SDCFormResponse {
-  const response = genFormResponsePartial()
+  const response = genFormResponsePartial();
 
   let answer = genAnswer();
   answer.questionID = "list";
   answer.responses = ["list-1", "list-2"];
   response.answers.push(answer);
 
-  return response
+  return response;
 }
 
 export function buildFormNestedList(): Model.SDCForm {
   const form = buildFormSimpleList();
 
-  findNode(form, "list-3").children.push(buildSimpleList("list-3-l"))
-  findNode(form, "list").children.push(buildSimpleList("list-l"))
+  findNode(form, "list-3").children.push(buildSimpleList("list-3-l"));
+  findNode(form, "list").children.push(buildSimpleList("list-l"));
 
-  return form
+  return form;
 }
 
 export function buildFormResponseNestedList(): Model.SDCFormResponse {
-  const response = genFormResponsePartial()
+  const response = genFormResponsePartial();
 
   let answer = genAnswer();
   answer.questionID = "list";
@@ -407,21 +407,23 @@ export function buildFormResponseNestedList(): Model.SDCFormResponse {
   answer.responses = ["list-l-0"];
   response.answers.push(answer);
 
-  return response
+  return response;
 }
 
 export function buildFormDeselectChildren(): Model.SDCForm {
   const form = buildFormNestedList();
 
-  findNode(form, "list-3").selectionDisablesChildren = true
+  findNode(form, "list-3").selectionDisablesChildren = true;
 
-  return form
+  return form;
 }
 
 export function buildFormResponseDeselectChildren(): Model.SDCFormResponse {
   const response = buildFormResponseNestedList();
 
-  response.answers = response.answers.filter(o => o.questionID !== "list-3-l")
+  response.answers = response.answers.filter(
+    (o) => o.questionID !== "list-3-l"
+  );
 
-  return response
+  return response;
 }
