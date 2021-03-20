@@ -48,7 +48,37 @@ describe("Parse DisplayedItem", () => {});
 
 describe("Parse Section", () => {});
 
-describe("Parse TextField", () => {});
+describe("Parse TextField", () => {
+  let result;
+  let result2;
+  beforeAll(() => {
+    const json = SDCParser.sdcParser.xmlToJson(TestData.textField);
+    const obj1 = json.ResponseField[0];
+    inspect(obj1);
+
+    const json2 = SDCParser.sdcParser.xmlToJson(TestData.textField2);
+    const obj2 = json2.ResponseField[0];
+    inspect(obj2);
+
+    const parser = new SDCParser.TextFieldParser(new StackUtil());
+    parser.parse(obj1);
+    result = parser.result;
+
+    parser.parse(obj2);
+    result2 = parser.result;
+  });
+  test("Extracted basic info", () => {
+    expect(result).toEqual(
+      expect.objectContaining({
+        textAfterResponse: "cm",
+        type: "decimal",
+      })
+    );
+  });
+  test("Extracted type from TextField without textAfterResponse", () => {
+    expect(result2).toHaveProperty("type", "string");
+  });
+});
 
 describe("Parse ListField", () => {});
 
