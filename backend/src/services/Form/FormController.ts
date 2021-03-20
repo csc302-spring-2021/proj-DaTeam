@@ -1,7 +1,6 @@
 import { Mocks, GenericJsonSerializer, Model } from "@dateam/shared";
 import { Request, Response } from "express";
 import { HttpCode } from "../../utils/Error";
-import { sdcParser } from "../../SDCParser";
 
 export const FormController = {
   create: function (req: Request, res: Response) {
