@@ -55,7 +55,7 @@ describe("Parse Text Question", () => {
   test("Base info extracted", () => {
     expect(result).toEqual(
       expect.objectContaining({
-        order: "82",
+        order: 82,
         id: "59852.100004300",
         title: "Histologic Type (Notes C through E)",
       })
@@ -115,4 +115,32 @@ describe("Parse TextField", () => {
 
 describe("Parse ListField", () => {});
 
-describe("Parse ListFieldItem", () => {});
+describe("Parse ListFieldItem", () => {
+  let result;
+  beforeAll(() => {
+    let json = SDCParser.sdcParser.xmlToJson(TestData.listFieldItem);
+    const obj = json.ListItem[0];
+    inspect(obj);
+
+    const parser = new SDCParser.ListFieldItemParser(new StackUtil());
+    parser.parse(obj);
+    result = parser.result;
+  });
+  test("Extracted basic info", () => {
+    expect(result).toEqual(
+      expect.objectContaining({
+        selectionDeselectsSiblings: true,
+        selectionDisablesChildren: true,
+      })
+    );
+  });
+  test("Text field extracted", () => {
+    expect(result).toHaveProperty("textResponse");
+    expect(result.textResponse).toBeInstanceOf(Model.SDCTextField);
+  });
+  test("Children extracted", () => {
+    expect(result).toHaveProperty("children");
+    expect(result.children).toHaveLength(1);
+    expect(result.children[0]).toBeInstanceOf(Model.SDCDisplayItem);
+  });
+});
