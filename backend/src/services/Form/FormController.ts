@@ -18,8 +18,14 @@ export const FormController = {
 
   readResponses: function (req: Request, res: Response) {
     const pk = req.params.formId;
-    // TODO: Search and find form responses
-    //dbManager.genericSearch(Model.SDCFormResponse, );
+    Utils.search(
+      req,
+      res,
+      Model.SDCFormResponse,
+      // TODO: fix database inject
+      { SDCFormResponse: [`formId = '${pk}'`] },
+      true
+    ).catch((e) => sendError(res, HttpCode.BAD_REQUEST, e));
   },
 
   update: function (req: Request, res: Response) {
@@ -30,5 +36,11 @@ export const FormController = {
   destroy: function (req: Request, res: Response) {
     res.sendStatus(HttpCode.NOT_IMPLEMENTED);
     //res.status(HttpCode.OK).send();
+  },
+
+  readAll: function (req: Request, res: Response) {
+    Utils.search(req, res, Model.SDCForm, {}, true).catch((e) =>
+      sendError(res, HttpCode.BAD_REQUEST, e)
+    );
   },
 };

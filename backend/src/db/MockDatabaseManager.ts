@@ -14,11 +14,6 @@ class MockDatabaseManager extends GenericDatabaseManager {
     this.db = new Map();
   }
 
-  /**
-   * Save an object into the database, return its primary key if defined
-   * @param obj object to store
-   * @param targetClass object class
-   */
   async genericCreate(obj: any, targetClass: new () => any): Promise<string> {
     if (!(obj instanceof targetClass)) {
       throw new Error("Input object is not " + targetClass.name);
@@ -26,12 +21,8 @@ class MockDatabaseManager extends GenericDatabaseManager {
     if (!this.db.get(targetClass.name)) {
       this.db.set(targetClass.name, new Map());
     }
-    let pk;
-    if (obj.uid) {
-      pk = obj.uid;
-    } else {
-      pk = uuid();
-    }
+    if (!obj.uid) obj.uid = uuid();
+    const pk = obj.uid;
     const serialized = serializer.encode(obj, targetClass);
     let innerDB = this.db.get(targetClass.name);
     innerDB.set(pk, serialized);
@@ -39,11 +30,6 @@ class MockDatabaseManager extends GenericDatabaseManager {
     return pk;
   }
 
-  /**
-   * Load an object from the database with the given primary key
-   * @param pk key to search with
-   * @param targetClass expected object class
-   */
   async genericRead(pk: string, targetClass: new () => any): Promise<any> {
     let innerDB = this.db.get(targetClass.name);
     if (!innerDB) {
@@ -63,17 +49,11 @@ class MockDatabaseManager extends GenericDatabaseManager {
     return result;
   }
 
-  /**
-   * Load all objects matching the search criteria
-   * @param targetClass expected object class
-   * @param searchParam seach query (**the queries should be built within the server**)
-   * @param partial whether or not the complete object structure should be rebuild
-   */
   async genericSearch(
     targetClass: new () => any,
     searchParam: SearchParam,
     partial: boolean
-  ): Promise<any> {
+  ): Promise<any[]> {
     let ret: any = [];
     if (this.db.has(targetClass.name)) {
       this.db
@@ -85,11 +65,6 @@ class MockDatabaseManager extends GenericDatabaseManager {
     return ret;
   }
 
-  /**
-   * Delete an object from the database with the given primary key
-   * @param pk key to search with
-   * @param targetClass object class
-   */
   async genericDelete(
     pk: string,
     targetClass: new () => any
