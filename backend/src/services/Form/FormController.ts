@@ -1,4 +1,4 @@
-import { Mocks, GenericJsonSerializer, Model } from "@dateam/shared";
+import { Model } from "@dateam/shared";
 import { Request, Response } from "express";
 import { HttpCode, sendError } from "../../utils/Error";
 import * as Utils from "../ControllerUtils";
@@ -30,12 +30,5 @@ export const FormController = {
   destroy: function (req: Request, res: Response) {
     res.sendStatus(HttpCode.NOT_IMPLEMENTED);
     //res.status(HttpCode.OK).send();
-  },
-
-  parse: function (req: Request, res: Response) {
-    const sdcForm = Mocks.buildFormComplete();
-    const serialized = GenericJsonSerializer.encode(sdcForm, Model.SDCForm);
-
-    res.status(HttpCode.OK).send(serialized);
   },
 };

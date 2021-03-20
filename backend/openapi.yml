@@ -38,8 +38,7 @@ paths:
       responses:
         201:
           description: "Patient created successfully, return UID"
-          content:
-            $ref: "#/components/responses/UID"
+          $ref: "#/components/responses/UID"
     get:
       description: "Get all patients"
       tags:
@@ -101,7 +100,7 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
-  /forms/parse:
+  /parser:
     post:
       tags:
         - parser
@@ -119,7 +118,7 @@ paths:
               stroke:
                 $ref: "#/components/examples/stroke"
       responses:
-        201:
+        200:
           description: Successfully parsed XML
           content:
             application/json:
@@ -155,8 +154,7 @@ paths:
       responses:
         201:
           description: Successfully created form, return UID
-          content:
-            $ref: "#/components/responses/UID"
+          $ref: "#/components/responses/UID"
         400:
           $ref: "#/components/responses/BadRequest"
 
@@ -224,8 +222,7 @@ paths:
       responses:
         201:
           description: Response created successfully, return UID
-          content:
-            $ref: "#/components/responses/UID"
+          $ref: "#/components/responses/UID"
         400:
           $ref: "#/components/responses/BadRequest"
         404:
@@ -274,10 +271,12 @@ paths:
 components:
   responses:
     UID:
-      text/plain:
-        schema:
-          type: string
-          example: 5d5bb199-59e2-400e-9f16-2d1d4d0db106
+      description: Unique Identifier
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: 5d5bb199-59e2-400e-9f16-2d1d4d0db106
     NotFound:
       description: The specified resource was not found
       content:
