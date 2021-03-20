@@ -97,7 +97,7 @@ export const textField2 = `
 `;
 
 export const listField = `
-<ListField name="lf_53526_2" order="172" maxSelections="0">
+<ListField name="lf_53526_2" order="172" minSelections="0">
 <List name="lst_53526_3" order="173">
  <ListItem name="LI_56752" order="174" ID="56752.100004300" title="Kidney" />
  <ListItem name="LI_57748" order="175" ID="57748.100004300" title="Pancreas" />

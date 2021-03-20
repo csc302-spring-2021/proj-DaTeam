@@ -1,6 +1,6 @@
 import * as SDCParser from "../build/SDCParser/SDCParser";
 import * as TestData from "./SDCTestData";
-import { Model, StackUtil } from "@dateam/shared";
+import { Model, StackUtil, GenericClassValidator } from "@dateam/shared";
 import util from "util";
 
 const log = console.log;
@@ -40,6 +40,9 @@ describe("Parse Form", () => {
     expect(result.children).toHaveLength(1);
     expect(result.children[0]).toBeInstanceOf(Model.SDCDisplayItem);
   });
+  test("Validator test", () => {
+    GenericClassValidator.validate(result);
+  });
 });
 
 describe("Parse Text Question", () => {
@@ -75,6 +78,47 @@ describe("Parse Text Question", () => {
     expect(result.children).toHaveLength(1);
     expect(result.children[0]).toBeInstanceOf(Model.SDCDisplayItem);
   });
+  test("Validator test", () => {
+    GenericClassValidator.validate(result);
+  });
+});
+
+describe("Parse List Question", () => {
+  let result;
+  beforeAll(() => {
+    const json = SDCParser.sdcParser.xmlToJson(TestData.questionList);
+    const obj = json.Question[0];
+
+    const parser = new SDCParser.QuestionParser(new StackUtil());
+    parser.parse(obj);
+    result = parser.result;
+  });
+  test("Base info extracted", () => {
+    expect(result).toEqual(
+      expect.objectContaining({
+        order: 82,
+        id: "59852.100004300",
+        title: "Histologic Type (Notes C through E)",
+      })
+    );
+  });
+  test("List field extracted", () => {
+    expect(result).toBeInstanceOf(Model.SDCListField);
+    expect(result).toEqual(
+      expect.objectContaining({
+        minSelections: 1,
+        maxSelections: 1,
+      })
+    );
+  });
+  test("Children extracted", () => {
+    expect(result).toHaveProperty("children");
+    expect(result.children).toHaveLength(1);
+    expect(result.children[0]).toBeInstanceOf(Model.SDCTextField);
+  });
+  test("Validator test", () => {
+    GenericClassValidator.validate(result);
+  });
 });
 
 describe("Parse DisplayedItem", () => {});
@@ -87,11 +131,9 @@ describe("Parse TextField", () => {
   beforeAll(() => {
     const json = SDCParser.sdcParser.xmlToJson(TestData.textField);
     const obj1 = json.ResponseField[0];
-    inspect(obj1);
 
     const json2 = SDCParser.sdcParser.xmlToJson(TestData.textField2);
     const obj2 = json2.ResponseField[0];
-    inspect(obj2);
 
     const parser = new SDCParser.TextFieldParser(new StackUtil());
     parser.parse(obj1);
@@ -113,14 +155,40 @@ describe("Parse TextField", () => {
   });
 });
 
-describe("Parse ListField", () => {});
+describe("Parse ListField main", () => {
+  let result;
+  beforeAll(() => {
+    const json = SDCParser.sdcParser.xmlToJson(TestData.listField);
+    const obj = json.ListField[0];
+
+    const parser = new SDCParser.ListFieldParser(new StackUtil());
+    parser.parse(obj);
+    result = parser.result;
+  });
+
+  test("Extracted basic info", () => {
+    expect(result).toEqual(
+      expect.objectContaining({
+        maxSelections: 1,
+        minSelections: 0,
+      })
+    );
+  });
+  test("Extracted options", () => {
+    expect(result).toHaveProperty("options");
+    expect(result.options).toHaveLength(2);
+    expect(result.options[0]).toBeInstanceOf(Model.SDCListFieldItem);
+    expect(result.options[1]).toBeInstanceOf(Model.SDCListFieldItem);
+    GenericClassValidator.validate(result.options[0]);
+    GenericClassValidator.validate(result.options[1]);
+  });
+});
 
 describe("Parse ListFieldItem", () => {
   let result;
   beforeAll(() => {
     let json = SDCParser.sdcParser.xmlToJson(TestData.listFieldItem);
     const obj = json.ListItem[0];
-    inspect(obj);
 
     const parser = new SDCParser.ListFieldItemParser(new StackUtil());
     parser.parse(obj);
