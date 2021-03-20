@@ -72,11 +72,13 @@ export const textField = `
 `;
 
 // completely barebones version
-export const textField2 = `<ResponseField>
-									<Response>
-										<string val="" />
-									</Response>
-								</ResponseField>`;
+export const textField2 = `
+<ResponseField>
+<Response>
+<string val="" />
+</Response>
+</ResponseField>
+`;
 
 export const listField = `
 <ListField name="lf_53526_2" order="172" maxSelections="0">
