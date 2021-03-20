@@ -14,28 +14,44 @@ export const form = `
 </FormDesign>
 `;
 
-export const question = `
+export const questionList = `
 <Question name="Q_59852" order="82" ID="59852.100004300" title="Histologic Type (Notes C through E)">
-<Property name="p_rptTxt_59852_1" order="83" propName="reportText" val="Histologic Type" />
-<ListField name="lf_59852_2" order="84">
- <List name="lst_59852_3" order="85">
-  <ListItem name="LI_2117" order="86" ID="2117.100004300" title="Adrenal cortical carcinoma" />
-  <ListItem name="LI_46925" order="87" ID="46925.100004300" title="Adrenal cortical carcinoma, oncocytic type" />
-  <ListItem name="LI_44449" order="88" ID="44449.100004300" title="Adrenal cortical carcinoma, myxoid type" />
-  <ListItem name="LI_59162" order="89" ID="59162.100004300" title="Adrenal cortical carcinoma, sarcomatoid type" />
- </List>
-</ListField>
+  <Property name="p_rptTxt_59852_1" order="83" propName="reportText" val="Histologic Type" />
+  <ListField name="lf_59852_2" order="84">
+    <List name="lst_59852_3" order="85">
+      <ListItem name="LI_2117" order="86" ID="2117.100004300" title="Adrenal cortical carcinoma" />
+      <ListItem name="LI_46925" order="87" ID="46925.100004300" title="Adrenal cortical carcinoma, oncocytic type" />
+      <ListItem name="LI_44449" order="88" ID="44449.100004300" title="Adrenal cortical carcinoma, myxoid type" />
+      <ListItem name="LI_59162" order="89" ID="59162.100004300" title="Adrenal cortical carcinoma, sarcomatoid type" />
+    </List>
+  </ListField>
+  <ChildItems name="ch_59852_1" order="90">
+    <Question name="Q_43670" order="91" ID="43670.100004300" title="Histologic Type Comments" mustImplement="false" minCard="0">
+      <ResponseField name="rf_43670_1" order="92">
+      <Response name="rsp_43670_2" order="93">
+        <string name="str_43670_3" order="94" />
+      </Response>
+      </ResponseField>
+    </Question>
+  </ChildItems>
+</Question>
+`;
+
+export const questionTest = `
+<Question name="Q_59852" order="82" ID="59852.100004300" title="Histologic Type (Notes C through E)">
+<ResponseField name="rf_2132_2" order="131">
+<Response name="rsp_2132_3" order="132">
+ <decimal name="dec_2132_4" order="133" />
+</Response>
+<TextAfterResponse name="rtt_2132_5" order="134" val="cm" />
+<ResponseUnits name="un_2132_6" order="135" val="cm" unitSystem="UCOM" />
+</ResponseField>
 <ChildItems name="ch_59852_1" order="90">
- <Question name="Q_43670" order="91" ID="43670.100004300" title="Histologic Type Comments" mustImplement="false" minCard="0">
-  <ResponseField name="rf_43670_1" order="92">
-   <Response name="rsp_43670_2" order="93">
-    <string name="str_43670_3" order="94" />
-   </Response>
-  </ResponseField>
- </Question>
+<DisplayedItem name="DI_39617" order="17" ID="39617.100004300" title="# This checklist applies principally to adrenal carcinomas in adults. Pediatric adrenal cortical tumors have different criteria for malignancy and are, in general, treated under protocols that may differ significantly from the recommendations for adult- type tumors.">
+<Property name="p_rptTxt_39617_1" order="18" propName="reportText" val="{no text}" />
+</DisplayedItem>
 </ChildItems>
 </Question>
-<Question name="Q_49275" order="95" ID="49275.100004300" title="Histologic Grade (Notes C through E)">
 `;
 
 export const displayedItem = `
