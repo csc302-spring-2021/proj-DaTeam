@@ -181,7 +181,7 @@ function FormDetailsPanel() {
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
   const [sdcform, setSdcform] = useState<Model.SDCNode | undefined>(undefined);
 
-  useEffect(():any => {
+  useEffect((): any => {
     let addedForm: Boolean = true;
     FormService.read(formId)
       .then((sdcform) => {
@@ -189,13 +189,13 @@ function FormDetailsPanel() {
           sdcform,
           Model.SDCNode
         );
-        if(addedForm){
-            setSdcform(decodedSdcNode);
+        if (addedForm) {
+          setSdcform(decodedSdcNode);
         }
       })
       .catch((err) => notify.error(err.message));
 
-      return () => addedForm = false;
+    return () => (addedForm = false);
   }, [formId, setSdcform]);
 
   return (
@@ -221,7 +221,7 @@ function FormDetailsPanel() {
           opacity: 0,
         },
       }}
-      className="z-10 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50 relative"
+      className="relative z-10 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50"
       data-testid="structure"
     >
       <Link to="/forms">
