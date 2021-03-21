@@ -33,7 +33,9 @@ class SDCParser {
 
   xmlToSDCForm(xmlData: string): Model.SDCForm {
     const formParser = new FormParser(this.stack);
-    const obj = this.xmlToJson(xmlData);
+    let obj = this.xmlToJson(xmlData);
+    if (obj.SDCPackage) obj = obj.SDCPackage[0];
+    if (obj.XMLPackage) obj = obj.XMLPackage[0];
     if (!obj.FormDesign) throw this.stack.genError("Missing child: FormDesign");
     formParser.parse(obj.FormDesign[0]);
     return formParser.result;
@@ -50,6 +52,7 @@ abstract class NodeParser {
   }
 
   parse(obj: any) {
+    if (!obj.attributes) obj.attributes = {};
     this.stack.setInspectedObject(obj.attributes);
     this.result = new this.targeClass();
     this.populateProperties(obj);
@@ -76,8 +79,9 @@ abstract class NodeParser {
 
   populateProperties(obj: any) {
     if (!obj.attributes.ID) throw this.stack.genError("Missing attribute: ID");
-    if (obj.attributes.order)
+    if (obj.attributes.order) {
       this.result.order = parseInt(obj.attributes.order);
+    }
     this.result.id = obj.attributes.ID;
     this.result.title = obj.attributes.title;
   }
@@ -111,6 +115,7 @@ export class FormParser extends NodeParser {
 
 export class QuestionParser extends NodeParser {
   parse(obj: any) {
+    if (!obj.attributes) obj.attributes = {};
     this.stack.setInspectedObject(obj.attributes);
     let subField: string;
     if (obj.ResponseField && obj.ListField) {
@@ -149,6 +154,7 @@ export class TextFieldParser extends QuestionParser {
   result: Model.SDCTextField;
   targeClass = Model.SDCTextField;
   parse(obj: any) {
+    if (!obj.attributes) obj.attributes = {};
     this.stack.setInspectedObject(obj.attributes);
     this.result = new this.targeClass();
     // check if key exists in TextAfterResponse
@@ -174,6 +180,7 @@ export class ListFieldParser extends QuestionParser {
   result: Model.SDCListField;
   targeClass = Model.SDCListField;
   parse(obj: any) {
+    if (!obj.attributes) obj.attributes = {};
     this.stack.setInspectedObject(obj.attributes);
     this.result = new this.targeClass();
     if ("maxSelections" in obj.attributes) {
