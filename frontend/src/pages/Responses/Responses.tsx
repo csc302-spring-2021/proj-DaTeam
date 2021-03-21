@@ -4,7 +4,7 @@ import { Route, useParams } from "react-router";
 import { Link } from "react-router-dom";
 
 import { pageVariants } from "../../App";
-import { Form } from "../../components/Form";
+import { FormRenderer } from "../../components/FormRenderer";
 import { FormInput } from "../../components/FormInput";
 import { CloseButton } from "../../components/CloseButton";
 import {
@@ -259,7 +259,7 @@ function FormRendererPanel() {
         <CloseButton />
       </Link>
 
-      <Form form={form} patient={patient} />
+      <FormRenderer form={form} patient={patient} />
     </motion.div>
   );
 }

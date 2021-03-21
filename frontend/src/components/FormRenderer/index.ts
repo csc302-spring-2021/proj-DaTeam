@@ -1,3 +1,3 @@
-import Form from "./Form";
+import FormRenderer from "./FormRenderer";
 
-export { Form };
+export { FormRenderer };

@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { Form } from ".";
+import { FormRenderer } from ".";
 
 test("render check for loading page", () => {
-  render(<Form />);
+  render(<FormRenderer />);
 });

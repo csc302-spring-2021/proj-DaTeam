@@ -10,7 +10,7 @@ interface IMockPrivateClass {
   __class?: "SDCSection" | "SDCDisplayItem" | "SDCTextField" | "SDCListField";
 }
 
-function Form({
+function FormRenderer({
   form: sdcform,
   patient,
 }: {
@@ -121,7 +121,7 @@ function Form({
   );
 }
 
-export default Form;
+export default FormRenderer;
 
 function ValueBlock({
   value,
