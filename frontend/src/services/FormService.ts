@@ -25,4 +25,20 @@ async function read(formId: number | string): Promise<Model.SDCForm> {
   }
 }
 
-export default { read };
+/**
+ * Preform a POST request to the /api/v1/forms route
+ *
+ * @form A SDC Form Object
+ */
+ async function create(form: Model.SDCForm): Promise<void> {
+  const formResponse = await fetch(`/api/v1/forms/`, {
+    method: "POST",
+  });
+  if (formResponse.status != 200) {
+    throw Error(
+      `Could not get form by ID. Error: ${formResponse.statusText}`
+    );
+  }
+}
+
+export default { read, create };
