@@ -50,6 +50,7 @@ abstract class NodeParser {
   }
 
   parse(obj: any) {
+    this.stack.setInspectedObject(obj.attributes);
     this.result = new this.targeClass();
     this.populateProperties(obj);
     this.parseChildren(obj);
@@ -65,9 +66,10 @@ abstract class NodeParser {
       for (let child of children[key]) {
         const parser = new parsers[key](this.stack);
         parser.parse(child);
+        this.stack.setInspectedObject(obj.attributes);
         this.result.children.push(parser.result);
       }
-      this.stack.enter(key);
+      this.stack.leave();
     }
     this.stack.leave();
   }
@@ -109,6 +111,7 @@ export class FormParser extends NodeParser {
 
 export class QuestionParser extends NodeParser {
   parse(obj: any) {
+    this.stack.setInspectedObject(obj.attributes);
     let subField: string;
     if (obj.ResponseField && obj.ListField) {
       throw this.stack.genError(
@@ -127,6 +130,7 @@ export class QuestionParser extends NodeParser {
     this.stack.enter(subField);
     subParser.parse(obj[subField][0]);
     this.result = subParser.result;
+    this.stack.setInspectedObject(obj.attributes);
     this.stack.leave();
     this.populateProperties(obj);
     this.parseChildren(obj);
@@ -145,6 +149,7 @@ export class TextFieldParser extends QuestionParser {
   result: Model.SDCTextField;
   targeClass = Model.SDCTextField;
   parse(obj: any) {
+    this.stack.setInspectedObject(obj.attributes);
     this.result = new this.targeClass();
     // check if key exists in TextAfterResponse
     if (
@@ -155,8 +160,6 @@ export class TextFieldParser extends QuestionParser {
       this.result.textAfterResponse =
         obj["TextAfterResponse"][0]["attributes"]["val"];
     }
-    // type is always stored after attribute key "attributes" *if* it exists, which it may not
-    // thus check if it exists first
     for (let type of Object.keys(obj.Response[0])) {
       if (type === "attributes") continue;
       if (this.result.type)
@@ -171,6 +174,7 @@ export class ListFieldParser extends QuestionParser {
   result: Model.SDCListField;
   targeClass = Model.SDCListField;
   parse(obj: any) {
+    this.stack.setInspectedObject(obj.attributes);
     this.result = new this.targeClass();
     if ("maxSelections" in obj.attributes) {
       this.result.maxSelections = parseInt(obj.attributes.maxSelections);
@@ -181,10 +185,12 @@ export class ListFieldParser extends QuestionParser {
 
     const parser = new ListFieldItemParser(new StackUtil());
     if ("List" in obj && "ListItem" in obj.List[0]) {
+      this.stack.enter("List.ListItem");
       for (let item of obj.List[0].ListItem) {
         parser.parse(item);
         this.result.options.push(parser.result);
       }
+      this.stack.leave();
     }
   }
 }
@@ -210,6 +216,7 @@ export class ListFieldItemParser extends NodeParser {
       subParser.parse(obj.ListItemResponseField[0]);
       this.result.textResponse = subParser.result;
       this.result.textResponse.id = this.result.id;
+      this.stack.setInspectedObject(obj.attributes);
       this.stack.leave();
     }
   }
