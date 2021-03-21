@@ -123,7 +123,7 @@ describe("Parse List Question", () => {
 
 describe("Parse DisplayedItem", () => {});
 
-describe.only("Parse Section", () => {
+describe("Parse Section", () => {
   let result, obj;
   beforeAll(() => {
     const json = SDCParser.sdcParser.xmlToJson(TestData.section);
@@ -144,7 +144,9 @@ describe.only("Parse Section", () => {
 
     // Verify Children length
     let numChildren = obj.ChildItems.length;
+    expect(result).toHaveProperty("children");
     expect(result.children).toHaveLength(numChildren);
+    expect(result.children[0]).toBeInstanceOf(Model.SDCQuestion);
   });
 });
 
