@@ -7,6 +7,8 @@ import { pageVariants } from "../../App";
 import { Form } from "../../components/Form";
 import { FormInput } from "../../components/FormInput";
 import { CloseButton } from "../../components/CloseButton";
+import { useFormResponses, useForms, usePatient } from "../../hooks/services";
+import { Model } from "@dateam/shared";
 
 export default function Responses() {
   return (
@@ -47,7 +49,7 @@ function FormCard({
   responseForm,
   isSelected = false,
 }: {
-  responseForm: { id: string; name: string; responses: number };
+  responseForm: Model.SDCForm;
   isSelected: boolean;
 }) {
   return (
@@ -68,7 +70,7 @@ function FormCard({
       >
         ID: {responseForm.id}
       </span>
-      <h3 className="text-lg font-medium">{responseForm.name}</h3>
+      <h3 className="text-lg font-medium">{responseForm.title}</h3>
       <p className="text-sm text-gray-400">X responses</p>
     </motion.div>
   );
@@ -76,17 +78,15 @@ function FormCard({
 
 function FormsPanel() {
   const { formId } = useParams<{ formId: string }>();
+  const { data: forms } = useForms();
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
 
-  const responseFormInfoArr = [
-    { id: "1", name: "Pancreatic Cancer Biopsy", responses: 25 },
-  ];
-  const responseFormInfoBlocks = responseFormInfoArr.map((responseForm, i) => {
+  const responseFormInfoBlocks = forms?.map((responseForm, i) => {
     return (
-      <Link to={`/responses/${responseForm.id}`} key={i}>
+      <Link to={`/responses/${responseForm.uid}`} key={i}>
         <FormCard
           responseForm={responseForm}
-          isSelected={formId === responseForm.id}
+          isSelected={formId === responseForm.uid}
         />
       </Link>
     );
@@ -138,16 +138,17 @@ function ResponsesCard({
   responseForm,
   isSelected = false,
 }: {
-  responseForm: { id: string; name: string };
+  responseForm: Model.SDCFormResponse;
   isSelected: boolean;
 }) {
+  const { data: patient } = usePatient(responseForm.patientID);
   return (
     <motion.div
       variants={{
         initial: { opacity: 0, y: 10 },
         animate: { opacity: 1, y: 0 },
       }}
-      key={responseForm.id}
+      key={responseForm.uid}
       className={`p-4 cursor-pointer ${
         isSelected
           ? "bg-gray-900 text-white"
@@ -157,31 +158,30 @@ function ResponsesCard({
       <span
         className={`text-xs ${isSelected ? "text-gray-400" : "text-gray-500"}`}
       >
-        ID: {responseForm.id}
+        ID: {responseForm.uid}
       </span>
-      <h3 className="text-lg font-medium">{responseForm.name}</h3>
+      <h3 className="text-lg font-medium">{patient?.name}</h3>
     </motion.div>
   );
 }
 
 function ResponsesPanel() {
-  const { responseId } = useParams<{ responseId: string }>();
+  const { formId, responseId } = useParams<{
+    formId: string;
+    responseId: string;
+  }>();
   const [formResponseSearch, setFormResponseSearch] = useState("");
-  const responseFormInfoArr = [
-    { id: "1", formId: "1", name: "Arnav" },
-    { id: "2", formId: "1", name: "Umar" },
-    { id: "3", formId: "1", name: "Vinay" },
-    { id: "4", formId: "1", name: "Jin" },
-  ];
-  const responseFormInfoBlocks = responseFormInfoArr.map((responseForm, i) => {
+  const { data: formResponses } = useFormResponses(formId);
+
+  const responseFormInfoBlocks = formResponses?.map((formResponse, i) => {
     return (
       <Link
-        to={`/responses/${responseForm.formId}/${responseForm.id}`}
-        key={responseForm.id}
+        to={`/responses/${formResponse.formId}/${formResponse.uid}`}
+        key={formResponse.uid}
       >
         <ResponsesCard
-          responseForm={responseForm}
-          isSelected={responseId === responseForm.id}
+          responseForm={formResponse}
+          isSelected={responseId === formResponse.uid}
         />
       </Link>
     );
