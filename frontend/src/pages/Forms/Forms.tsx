@@ -1,13 +1,12 @@
-import { GenericJsonSerializer, Model } from "@dateam/shared";
+import { GenericJsonSerializer, Mocks, Model } from "@dateam/shared";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, Route, useParams } from "react-router-dom";
 
 import { pageVariants } from "../../App";
 import { CloseButton } from "../../components/CloseButton";
 import { FormInput } from "../../components/FormInput";
-import { notify } from "../../components/Notification/Notification";
-import FormService from "../../services/FormService";
+import { useForm, useForms } from "../../hooks/services";
 
 export default function Forms() {
   return (
@@ -35,7 +34,7 @@ function FormCard({
   form,
   isSelected = false,
 }: {
-  form: { id: string; name: string };
+  form: Model.SDCForm;
   isSelected: boolean;
 }) {
   return (
@@ -56,7 +55,7 @@ function FormCard({
       >
         ID: {form.id}
       </span>
-      <h3 className="text-lg font-medium">{form.name}</h3>
+      <h3 className="text-lg font-medium">{form.title}</h3>
       <p className="text-sm text-gray-400">X questions</p>
     </motion.div>
   );
@@ -64,18 +63,13 @@ function FormCard({
 
 function FormsPanel() {
   const { formId } = useParams<{ formId: string }>();
+  const { data: forms } = useForms();
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
 
-  const formData = [
-    { id: "1", name: "Pancreatic Cancer Biopsy" },
-    { id: "2", name: "CAT Scan of Lung" },
-    { id: "3", name: "Chest X-Ray" },
-    { id: "4", name: "MRI of Brain" },
-  ];
-  const formCards = formData.map((form, i) => {
+  const formCards = forms?.map((form, i) => {
     return (
-      <Link to={`/forms/${form.id}`} key={form.id}>
-        <FormCard form={form} isSelected={formId === form.id} />
+      <Link to={`/forms/${form.uid}`} key={form.uid}>
+        <FormCard form={form} isSelected={formId === form.uid} />
       </Link>
     );
   });
@@ -179,24 +173,7 @@ function render(node: Model.SDCNode) {
 function FormDetailsPanel() {
   const { formId } = useParams<{ formId: string }>();
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
-  const [sdcform, setSdcform] = useState<Model.SDCNode | undefined>(undefined);
-
-  useEffect((): any => {
-    let addedForm: Boolean = true;
-    FormService.read(formId)
-      .then((sdcform) => {
-        const decodedSdcNode = GenericJsonSerializer.decode(
-          sdcform,
-          Model.SDCNode
-        );
-        if (addedForm) {
-          setSdcform(decodedSdcNode);
-        }
-      })
-      .catch((err) => notify.error(err.message));
-
-    return () => (addedForm = false);
-  }, [formId, setSdcform]);
+  const { data: sdcform } = useForm(formId);
 
   return (
     <motion.div
