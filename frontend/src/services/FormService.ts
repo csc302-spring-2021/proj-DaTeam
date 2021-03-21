@@ -33,6 +33,7 @@ async function read(formId: number | string): Promise<Model.SDCForm> {
  async function create(form: Model.SDCForm): Promise<void> {
   const formResponse = await fetch(`/api/v1/forms/`, {
     method: "POST",
+    body: JSON.stringify(form)
   });
   if (formResponse.status != 200) {
     throw Error(
