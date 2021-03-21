@@ -18,6 +18,7 @@ export class ParserAPI {
     this.router.use(
       express.raw({
         type: "application/xml",
+        limit: "50mb",
       })
     );
     this.router.post("/parser", ParseController.parse);
