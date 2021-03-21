@@ -52,15 +52,15 @@ export default function Responses() {
 }
 
 function FormCard({
-  responseForm,
+  form,
   isSelected = false,
 }: {
-  responseForm: Model.SDCForm;
+  form: Model.SDCForm;
   isSelected: boolean;
 }) {
   return (
     <motion.div
-      key={responseForm.id}
+      key={form.id}
       variants={{
         initial: { opacity: 0, y: 10 },
         animate: { opacity: 1, y: 0 },
@@ -74,9 +74,9 @@ function FormCard({
       <span
         className={`text-xs ${isSelected ? "text-gray-400" : "text-gray-500"}`}
       >
-        ID: {responseForm.id}
+        ID: {form.id}
       </span>
-      <h3 className="text-lg font-medium">{responseForm.title}</h3>
+      <h3 className="text-lg font-medium">{form.title}</h3>
       <p className="text-sm text-gray-400">X responses</p>
     </motion.div>
   );
@@ -91,7 +91,7 @@ function FormsPanel() {
     return (
       <Link to={`/responses/${responseForm.uid}`} key={i}>
         <FormCard
-          responseForm={responseForm}
+          form={responseForm}
           isSelected={formId === responseForm.uid}
         />
       </Link>
