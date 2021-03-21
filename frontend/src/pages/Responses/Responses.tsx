@@ -80,11 +80,6 @@ function FormsPanel() {
 
   const responseFormInfoArr = [
     { id: "1", name: "Pancreatic Cancer Biopsy", responses: 25 },
-    { id: "2", name: "Pancreatic Cancer Biopsy", responses: 25 },
-    { id: "3", name: "Pancreatic Cancer Biopsy", responses: 25 },
-    { id: "4", name: "Pancreatic Cancer Biopsy", responses: 25 },
-    { id: "5", name: "Pancreatic Cancer Biopsy", responses: 25 },
-    { id: "6", name: "Pancreatic Cancer Biopsy", responses: 25 },
   ];
   const responseFormInfoBlocks = responseFormInfoArr.map((responseForm, i) => {
     return (
@@ -212,7 +207,7 @@ function ResponsesPanel() {
       }}
       initial="initial"
       animate="animate"
-      className="relative z-10 w-1/2 w-full px-6 py-12  overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50"
+      className="relative z-10 w-1/2 w-full px-6 py-12 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50"
     >
       <Link to={`/responses`}>
         <CloseButton />
