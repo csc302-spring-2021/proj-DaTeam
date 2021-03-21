@@ -1,4 +1,5 @@
 import { Model, StackUtil, ParsingError } from "@dateam/shared";
+import { SDCFormProperty } from "@dateam/shared/src/ClassDef";
 import XMLParser from "fast-xml-parser";
 import he from "he";
 
@@ -104,12 +105,37 @@ export class FormParser extends NodeParser {
     this.result.version = obj.attributes.version;
     this.result.title = obj.attributes.formTitle;
     // todo: parse formProperties
+    for (let [index, property] of obj.Property.entries()) {
+      this.result.formProperties[index] = this.formPropertyParser(
+        index,
+        property
+      );
+    }
   }
   parseChildren(obj: any) {
     if (!obj.Body) throw this.stack.genError("Missing child: Body");
     this.stack.enter("Body");
     super.parseChildren(obj.Body[0]);
     this.stack.leave();
+  }
+  formPropertyParser(index: number, obj: any) {
+    let potentialResult = new SDCFormProperty();
+    try {
+      potentialResult.order = Number(obj.attributes.order);
+    } catch {} // Cast order to number if possible, catch an ignore error
+    if (!obj.attributes.name) {
+      throw this.stack.genError("Missing attribute: name");
+    }
+    potentialResult.name = obj.attributes.name;
+    if (!obj.attributes.propName) {
+      throw this.stack.genError("Missing attribute: propName");
+    }
+    potentialResult.propName = obj.attributes.propName;
+    if (!obj.attributes.val) {
+      throw this.stack.genError("Missing attribute: val");
+    }
+    potentialResult.val = obj.attributes.val;
+    return potentialResult;
   }
 }
 
