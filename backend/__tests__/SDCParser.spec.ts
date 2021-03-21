@@ -31,7 +31,7 @@ describe("Parse Form", () => {
     );
     expect(result).toHaveProperty("footer");
   });
-  test("Form properties extracted", () => {
+  test.skip("Form properties extracted", () => {
     expect(result).toHaveProperty("formProperties");
     expect(result.formProperties).toHaveLength(1);
   });
