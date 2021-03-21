@@ -123,7 +123,32 @@ describe("Parse List Question", () => {
 
 describe("Parse DisplayedItem", () => {});
 
-describe("Parse Section", () => {});
+describe("Parse Section", () => {
+  let result, obj;
+  beforeAll(() => {
+    const json = SDCParser.sdcParser.xmlToJson(TestData.section);
+    obj = json.Section[0];
+    const parser = new SDCParser.SectionParser(new StackUtil());
+    parser.parse(obj);
+    result = parser.result;
+  });
+  test("Extracted Basic Info", () => {
+    // Verify Type
+    expect(result).toBeInstanceOf(Model.SDCSection);
+    // Verify ID
+    let expectedId = obj.attributes.ID;
+    expect(result).toHaveProperty("id", expectedId);
+    // Verify Order
+    let expectedOrder = parseInt(obj.attributes.order, 10);
+    expect(result).toHaveProperty("order", expectedOrder);
+
+    // Verify Children length
+    let numChildren = obj.ChildItems.length;
+    expect(result).toHaveProperty("children");
+    expect(result.children).toHaveLength(numChildren);
+    expect(result.children[0]).toBeInstanceOf(Model.SDCQuestion);
+  });
+});
 
 describe("Parse TextField", () => {
   let result;
