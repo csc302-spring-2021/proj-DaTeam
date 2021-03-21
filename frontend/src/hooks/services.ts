@@ -3,10 +3,10 @@ import FormService from "../services/FormService";
 import PatientService from "../services/PatientService";
 import ResponseService from "../services/ResponseService";
 
-export function usePatient(id: string) {
+export function usePatient(id?: string) {
   const { isLoading, error, data } = useQuery(
     ["patients", id],
-    () => PatientService.read(id),
+    () => PatientService.read(id!),
     {
       enabled: Boolean(id),
     }
@@ -21,10 +21,10 @@ export function useForms() {
   return { isLoading, error, data };
 }
 
-export function useForm(id: string) {
+export function useForm(id?: string) {
   const { isLoading, error, data } = useQuery(
     ["forms", id],
-    () => FormService.read(id),
+    () => FormService.read(id!),
     {
       enabled: Boolean(id),
     }
@@ -32,10 +32,10 @@ export function useForm(id: string) {
   return { isLoading, error, data };
 }
 
-export function useFormResponses(formId: string) {
+export function useFormResponses(formId?: string) {
   const { isLoading, error, data } = useQuery(
     ["forms", formId, "responses"],
-    () => ResponseService.list(formId),
+    () => ResponseService.list(formId!),
     {
       enabled: Boolean(formId),
     }
@@ -43,10 +43,10 @@ export function useFormResponses(formId: string) {
   return { isLoading, error, data };
 }
 
-export function useFormResponse(responseId: string) {
+export function useFormResponse(responseId?: string) {
   const { isLoading, error, data } = useQuery(
     ["responses", responseId],
-    () => ResponseService.read(responseId),
+    () => ResponseService.read(responseId!),
     {
       enabled: Boolean(responseId),
     }

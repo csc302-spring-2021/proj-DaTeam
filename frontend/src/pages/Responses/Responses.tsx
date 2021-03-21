@@ -7,7 +7,13 @@ import { pageVariants } from "../../App";
 import { Form } from "../../components/Form";
 import { FormInput } from "../../components/FormInput";
 import { CloseButton } from "../../components/CloseButton";
-import { useFormResponses, useForms, usePatient } from "../../hooks/services";
+import {
+  useForm,
+  useFormResponse,
+  useFormResponses,
+  useForms,
+  usePatient,
+} from "../../hooks/services";
 import { Model } from "@dateam/shared";
 
 export default function Responses() {
@@ -233,7 +239,14 @@ function ResponsesPanel() {
 }
 
 function FormRendererPanel() {
-  const { formId } = useParams<{ formId: string }>();
+  const { formId, responseId } = useParams<{
+    formId: string;
+    responseId: string;
+  }>();
+  const { data: form } = useForm(formId);
+  const { data: response } = useFormResponse(responseId);
+  const { data: patient } = usePatient(response?.patientID);
+
   return (
     <motion.div
       data-testid="form-renderer-panel"
@@ -246,7 +259,7 @@ function FormRendererPanel() {
         <CloseButton />
       </Link>
 
-      <Form />
+      <Form form={form} patient={patient} />
     </motion.div>
   );
 }

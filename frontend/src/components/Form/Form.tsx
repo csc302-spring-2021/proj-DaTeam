@@ -1,24 +1,22 @@
-import { Children, useEffect, useState, ReactNode } from "react";
-import { GenericJsonSerializer, Model } from "@dateam/shared";
+import { useState, ReactNode } from "react";
+import { Model } from "@dateam/shared";
 import { Section } from "../../components/Section";
 import { DisplayItem } from "../../components/DisplayItem";
 import { TextField } from "../../components/TextField";
 import { ListField } from "../../components/ListField";
-import FormService from "../../services/FormService";
-import { notify } from "../Notification/Notification";
 import { NotFound } from "../../pages/NotFound";
-import { ListFieldItem } from "../../components/ListFieldItem";
-import { createLogicalOr, isPropertySignature } from "typescript";
-import ResponseService from "../../services/ResponseService";
-import PatientService from "../../services/PatientService";
 
 interface IMockPrivateClass {
   __class?: "SDCSection" | "SDCDisplayItem" | "SDCTextField" | "SDCListField";
 }
 
-function Form() {
-  const [sdcform, setSdcform] = useState<Model.SDCNode | undefined>(undefined);
-  const [patient, setPatient] = useState<Model.Patient | undefined>(undefined);
+function Form({
+  form: sdcform,
+  patient,
+}: {
+  form?: Model.SDCForm;
+  patient?: Model.Patient;
+}) {
   const [response, setResponse] = useState<{ [key: string]: any }>({});
 
   function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
@@ -75,52 +73,6 @@ function Form() {
   const onSubmitForm = () => {
     console.log(response);
   };
-
-  useEffect(() => {
-    FormService.read(123)
-      .then((sdcform) => {
-        const decodedSdcNode = GenericJsonSerializer.decode(
-          sdcform,
-          Model.SDCNode
-        );
-        setSdcform(decodedSdcNode);
-        /* Remove to use actual patient */
-        const patient = new Model.Patient({});
-        patient.id = "111";
-        patient.name = "Arnav Verma";
-        patient.uid = "testuuid";
-        setPatient(patient);
-      })
-      .catch((err) => notify.error(err.message));
-    FormService.list().then((res) => {
-      console.log("forms", res);
-      res.map((res2) => {
-        if (res2.uid) {
-          ResponseService.list(res2.uid)
-            .then((res3) => {
-              res3.map((res4) => {
-                PatientService.read(res4.patientID).then((res5) => {
-                  console.log("patient", res5);
-                });
-                if (res4.uid) {
-                  ResponseService.read(res4.uid).then((res9) => {
-                    console.log("responses", res9);
-                  });
-                }
-              });
-              res3.map((res6) => {
-                FormService.read(res6.formId).then((res7) => {
-                  console.log("forms", res7);
-                });
-              });
-
-              console.log("ppres", res3);
-            })
-            .catch();
-        }
-      });
-    });
-  }, []);
 
   if (!sdcform || !patient) {
     return <NotFound />;
