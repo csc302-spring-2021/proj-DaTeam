@@ -78,7 +78,7 @@ function FormCard({
         ID: {form.id}
       </span>
       <h3 className="text-lg font-medium">{form.title}</h3>
-      <p className="text-sm text-gray-400">X responses</p>
+      {/* <p className="text-sm text-gray-400">X responses</p> */}
     </motion.div>
   );
 }

@@ -10,7 +10,7 @@ async function create(patient: Model.Patient): Promise<void> {
   try {
     const patientResponse = await fetch(`/api/v1/patients`, {
       method: "POST",
-      body: JSON.stringify(patient),
+      body: GenericJsonSerializer.encode(patient, Model.Patient),
     });
 
     if (patientResponse.status != 201) {
