@@ -15,6 +15,7 @@ import {
   usePatient,
 } from "../../hooks/services";
 import { Model } from "@dateam/shared";
+import NewPatientModal from "./NewPatientModal";
 
 export default function Responses() {
   return (
@@ -178,6 +179,9 @@ function ResponsesPanel() {
   }>();
   const [formResponseSearch, setFormResponseSearch] = useState("");
   const { data: formResponses } = useFormResponses(formId);
+  const [showNewModal, setNewShowModal] = useState(false);
+
+  const onNewBtnClick = () => setNewShowModal(true);
 
   const responseFormInfoBlocks = formResponses?.map((formResponse, i) => {
     return (
@@ -215,13 +219,29 @@ function ResponsesPanel() {
       animate="animate"
       className="relative z-10 w-1/2 w-full px-6 py-12 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50"
     >
+      {showNewModal && (
+        <NewPatientModal
+          showModal={showNewModal}
+          setShowModal={setNewShowModal}
+        />
+      )}
       <Link to={`/responses`}>
         <CloseButton />
       </Link>
 
       <div className="space-y-8">
         <div className="space-y-2">
-          <h2 className="text-3xl font-medium tracking-tighter">Responses</h2>
+          <div className="flex justify-between">
+            <h2 className="text-3xl font-medium tracking-tighter">Responses</h2>
+            <button
+              onClick={onNewBtnClick}
+              className="w-20 h-8 mt-2 bg-gray-200 rounded-lg hover:bg-gray-400 text-bold"
+            >
+              {" "}
+              New{" "}
+            </button>
+          </div>
+
           <p className="text-gray-600">
             Responses are grouped by the form they come from.
           </p>
