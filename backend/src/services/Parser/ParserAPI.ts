@@ -15,12 +15,13 @@ export class ParserAPI {
 
   private parseForm() {
     // note: may need to switch back to another middleware to receive other types of data
-    this.router.use(
+    this.router.post(
+      "/parser",
       express.raw({
         type: "application/xml",
         limit: "50mb",
-      })
+      }),
+      ParseController.parse
     );
-    this.router.post("/parser", ParseController.parse);
   }
 }
