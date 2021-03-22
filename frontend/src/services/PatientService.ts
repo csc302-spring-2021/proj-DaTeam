@@ -8,9 +8,10 @@ import { GenericJsonSerializer, Model } from "@dateam/shared";
  */
 async function create(patient: Model.Patient): Promise<void> {
   try {
+    const patientEncoded = GenericJsonSerializer.encode(patient, Model.Patient);
     const patientResponse = await fetch(`/api/v1/patients`, {
       method: "POST",
-      body: GenericJsonSerializer.encode(patient, Model.Patient),
+      body: patientEncoded,
     });
 
     if (patientResponse.status != 201) {
