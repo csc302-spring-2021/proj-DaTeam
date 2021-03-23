@@ -1,18 +1,35 @@
-import { useState, ReactNode } from "react";
+import { useState, ReactNode, useEffect } from "react";
 import { Model } from "@dateam/shared";
 import { Section } from "../../components/Section";
 import { DisplayItem } from "../../components/DisplayItem";
 import { TextField } from "../../components/TextField";
 import { ListField } from "../../components/ListField";
 import { NotFound } from "../../pages/NotFound";
-
+import { usePatient } from "../../hooks/services";
+import PatientService from "../../services/PatientService";
+import { notify } from "../Notification/Notification";
 interface IFormRendererProps {
   form?: Model.SDCForm;
   patient?: Model.Patient;
 }
 
 function FormRenderer(props: IFormRendererProps) {
-  const { form: sdcform, patient } = props;
+  const { form: sdcform, patient: selectedPatient } = props;
+  const [patient, setPatient] = useState<Model.Patient>();
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const patientId = urlParams.get("patient");
+    if (patientId) {
+      PatientService.read(patientId)
+        .then((patient) => setPatient(patient))
+        .catch(() => notify.error("Failed to fetch new patient."));
+    } else if (selectedPatient) {
+      console.log(selectedPatient);
+      setPatient(selectedPatient);
+    }
+  }, [window.location.search, selectedPatient]);
 
   const [response, setResponse] = useState<{ [key: string]: any }>({});
   const BLANK_STRING = "-----";
@@ -63,7 +80,7 @@ function FormRenderer(props: IFormRendererProps) {
       return <>{childNodes}</>;
     }
   };
-  console.log(sdcform);
+
   const onSubmitForm = () => {
     console.log(response);
   };

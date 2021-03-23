@@ -1,5 +1,6 @@
 import { Model } from "@dateam/shared";
 import React, { useState } from "react";
+import { useParams, useHistory } from "react-router";
 import { FormInput } from "../../components/FormInput";
 import { Modal } from "../../components/Modal";
 import { notify } from "../../components/Notification/Notification";
@@ -12,6 +13,8 @@ function NewPatientModal(props: {
   const { showModal, setShowModal } = props;
   const [patientName, setPatientName] = useState("");
   const [patientId, setPatientId] = useState("");
+  const { formId } = useParams<{ formId: string }>();
+  const hist = useHistory();
 
   const onCreateClick = () => {
     const newPatient = new Model.Patient({
@@ -19,8 +22,9 @@ function NewPatientModal(props: {
       id: patientId,
     });
     PatientService.create(newPatient)
-      .then((res) => {
-        console.log(res);
+      .then((patientId) => {
+        console.log(patientId);
+        hist.push(`/responses/${formId}?patient=${patientId}`);
         setShowModal(!showModal);
       })
       .catch((err) => {
