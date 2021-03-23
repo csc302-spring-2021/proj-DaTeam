@@ -9,6 +9,7 @@ import { useForms, usePatient } from "../../hooks/services";
 import PatientService from "../../services/PatientService";
 import { notify } from "../Notification/Notification";
 import ResponseService from "../../services/ResponseService";
+import { useQueryClient } from "react-query";
 interface IFormRendererProps {
   form?: Model.SDCForm;
   patient?: Model.Patient;
@@ -18,6 +19,7 @@ interface IFormRendererProps {
 function FormRenderer(props: IFormRendererProps) {
   const { form: sdcform, patient: selectedPatient, sdcResponse } = props;
   const [patient, setPatient] = useState<Model.Patient>();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const queryString = window.location.search;
@@ -35,6 +37,7 @@ function FormRenderer(props: IFormRendererProps) {
   const [response, setResponse] = useState<{ [key: string]: any }>({});
   const BLANK_STRING = "-----";
   useEffect(() => {
+    console.log(sdcResponse?.answers);
     if (sdcResponse?.answers) {
       sdcResponse.answers.map((ans) => {
         const key = ans.questionID;
@@ -65,10 +68,11 @@ function FormRenderer(props: IFormRendererProps) {
       patientID: patient.uid,
       answers: sdcResponses,
     });
-    ResponseService.create(formRes).then((res) => {
-      notify.success("Form Created");
-      console.log("Created", res);
-    });
+    ResponseService.create(formRes)
+      .then((res) => {
+        return queryClient.refetchQueries("forms");
+      })
+      .then(() => notify.success("Form Created"));
   };
 
   const RenderNode = (sdcnode: Model.SDCNode) => {

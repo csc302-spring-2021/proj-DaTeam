@@ -16,6 +16,8 @@ function TextField(props: {
     const currentRes = responseState?.response[sdcTextField.id];
     if (typeof currentRes === "string") {
       setTextResponse(currentRes);
+    } else {
+      setTextResponse("");
     }
   }, [responseState]);
 
