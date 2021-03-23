@@ -6,42 +6,37 @@ import { TextField } from "../../components/TextField";
 import { ListField } from "../../components/ListField";
 import { NotFound } from "../../pages/NotFound";
 
-interface IMockPrivateClass {
-  __class?: "SDCSection" | "SDCDisplayItem" | "SDCTextField" | "SDCListField";
-}
-
-function FormRenderer({
-  form: sdcform,
-  patient,
-}: {
+interface IFormRendererProps {
   form?: Model.SDCForm;
   patient?: Model.Patient;
-}) {
+}
+
+function FormRenderer(props: IFormRendererProps) {
+  const { form: sdcform, patient } = props;
+
   const [response, setResponse] = useState<{ [key: string]: any }>({});
+  const BLANK_STRING = "-----";
 
-  console.log(sdcform);
-
-  function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
+  const RenderNode = (sdcnode: Model.SDCNode) => {
     const childNodes = sdcnode.children.map((childnode) => {
       return <div key={childnode.id}>{RenderNode(childnode)}</div>;
     });
-
     if (sdcnode instanceof Model.SDCSection) {
       return (
-        <Section sdcSection={sdcnode as Model.SDCSection}>{childNodes}</Section>
+        <Section
+          sdcSection={sdcnode as Model.SDCSection}
+          children={childNodes}
+        />
       );
     } else if (sdcnode instanceof Model.SDCDisplayItem) {
       return <DisplayItem sdcDisplayitem={sdcnode as Model.SDCDisplayItem} />;
     } else if (sdcnode instanceof Model.SDCTextField) {
       return (
-        <>
-          <TextField
-            responseState={{ response, setResponse }}
-            sdcTextField={sdcnode}
-          >
-            {childNodes}
-          </TextField>
-        </>
+        <TextField
+          responseState={{ response, setResponse }}
+          sdcTextField={sdcnode}
+          children={childNodes}
+        />
       );
     } else if (sdcnode instanceof Model.SDCListField) {
       const optionsNodes: {
@@ -57,25 +52,21 @@ function FormRenderer({
         };
       });
       return (
-        <>
-          <ListField
-            responseState={{ response, setResponse }}
-            sdcListField={sdcnode}
-            optionNodes={optionsNodes}
-          >
-            {childNodes}
-          </ListField>
-        </>
+        <ListField
+          responseState={{ response, setResponse }}
+          sdcListField={sdcnode}
+          optionNodes={optionsNodes}
+          children={childNodes}
+        />
       );
     } else {
       return <>{childNodes}</>;
     }
-  }
-
+  };
+  console.log(sdcform);
   const onSubmitForm = () => {
     console.log(response);
   };
-  const BLANK_STRING = "-----";
 
   if (!sdcform) {
     return <NotFound />;
@@ -84,7 +75,7 @@ function FormRenderer({
   return (
     <div data-testid="form" className="p-12 space-y-8">
       <h2 data-testid="form-title" className="text-3xl tracking-tighter">
-        Response of <span className="font-bold">{sdcform?.title}</span> for{" "}
+        Response of <span className="font-bold">{sdcform.title}</span> for{" "}
         <span className="font-bold"> {patient?.name || BLANK_STRING}</span>
       </h2>
       <div className="flex flex-col justify-between space-x-4 md:flex-row">
@@ -103,7 +94,7 @@ function FormRenderer({
           />
         </div>
       </div>
-      {RenderNode(sdcform)}
+      <div>{RenderNode(sdcform)}</div>
       <div className="flex flex-row-reverse">
         <button
           onClick={onSubmitForm}
