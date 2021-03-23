@@ -104,7 +104,10 @@ export class FormParser extends NodeParser {
     this.result.version = obj.attributes.version;
     this.result.title = obj.attributes.formTitle;
     for (let [index, property] of obj.Property.entries()) {
-      this.result.formProperties.push(this.formPropertyParser(index, property));
+      this.result.formProperties[index] = this.formPropertyParser(
+        index,
+        property
+      );
     }
   }
   parseChildren(obj: any) {
@@ -262,3 +265,4 @@ const parsers: { [id: string]: new (s: StackUtil) => NodeParser } = {
   Question: QuestionParser,
   ListItemResponseField: ListFieldItemParser,
 };
+rser();
