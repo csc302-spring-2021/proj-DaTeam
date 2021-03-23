@@ -1,15 +1,5 @@
 # Technical Product Report
 
-> ## Rubric:
->
-> - Clearly describes what was built.
-> - Uses meaningful artifacts (e.g. diagrams, links to source-code and/or pull-requests, etc.)
-> - Documents specific progress towards your goal.
-> - High-quality technical documentation
-> - Describes strengths and weaknesses of your process in an insightful way
-> - Referring to specific meeting minutes or other process artifacts.
-> - Makes realistic plan for final work towards demo
-
 ## Proposed Features
 
 For Phase 2, we plan on implementing the following use-cases:
@@ -28,12 +18,23 @@ For Phase 2, we plan on implementing the following use-cases:
 
 ## What We Actually Built
 
-- **TODO:** What did you actually build during this phase?
-  - How is this different from what you originally proposed? Why?
+### What did you actually build during this phase?
+
+- Render a form
+- Create a Patient and associate it with a Form Response
+- Fetching and displaying all the forms and responses
+- Display the form structure for each form
+- Parse and store form from XML data
+- Create and save form responses
+- Persist application data to relational database
+- Implemented form response validation (but did not integrate it in our app yet)
+
+### How is this different from what you originally proposed? Why?
+
+- We did not implement saving of responses for all question types
+- We did not integrate validation of form responses
 
 ## High-level design
-
-> High-level design of your software.
 
 - App is sliced up into two parts:
   - Frontend
@@ -48,14 +49,15 @@ For Phase 2, we plan on implementing the following use-cases:
   - Patients
   - etc.
 - In each domain area, we created separate controllers and routes to separate logic for easier unit testing
+
+![Data Flow Diagram](images/data-flow.png)
+
 - In development, we use Docker compose to spin up the frontend, backend, and database as separate containers on the same network
 - In production, we deploy the frontend and backend separately as Apps on Heroku due to a limititation of Heroku, they communicate with eachother via HTTP
 
-INSERT INFRASTRUCTURE DIAGRAM HERE
+![Infrastructure Diagram](images/infrastructure.png)
 
 ## Technical Highlights
-
-> Technical highlights: interesting bugs, challenges, lessons learned, observations, etc.
 
 - **Solution:** Custom ORM for mapping domain models (represented as JavaScript objects) to SQL queries
 - **Interesting Bugs:** We are trying our best to avoid database injection when implementing the database manager. However, we are unable to elimiate the risk of database injection for the search function. We are developing a search query system so that the query can be compiled securely within backend server.
@@ -65,26 +67,23 @@ INSERT INFRASTRUCTURE DIAGRAM HERE
   1. Disable minification - this is the easiest fix, but has the side-effect of increasing bundle size
   2. Replace/reconfigure the built-in minification to avoid stripping class constructor names - this is the better solution, but requires investigation into the settings of Webpack (the bundler used by our build tool)
 
-We decided that, in the interests of time and considering that the project size is small, we would go with the first option that would allow us to quickly get unblocked. We filed an issue for this problem, so that if we have time at the end of the project, we can come back to it and re-enable minification for better network performance
+  We decided that, in the interests of time and considering that the project size is small, we would go with the first option that would allow us to quickly get unblocked. We filed an issue for this problem, so that if we have time at the end of the project, we can come back to it and re-enable minification for better network performance
 
 - Lesson Learned: We initially had a single issue for the parser implementation but this was too big a task for one person, so we decided to split the task up into smaller sub-parser tasks that multiple developers could work on concurrently
 
 ## Reflection
 
-> Reflect on your teamwork and process. What worked well, what needs improvement.
->
-> - Ideally you will have specific artifacts from your development process to show (for instance, a burndown chart)
->   One big learning point was learning how to coordinate with git branches, rebases, and merge conflicts with teammates as all changes are important
-
 ### What worked well
 
+- Keeping track of tasks required for this specific milestone and deprioritizing tasks to the next milestone helped ensure that we weren't trying to do too much in a little amount of time (see [Phase 2 milestone on GitHub](https://github.com/csc302-spring-2021/proj-DaTeam/milestone/2))
 - Weekly meetings are great opportunities for us to talk about what we are working on, what we are blocked on, and what we want to work on next.
-- it was useful to have an extra set of eyes quickly review pull requests before submissions.
+- It was useful to have an extra set of eyes quickly review pull requests before submissions.
 - It was often useful to look at [mockups](https://www.figma.com/file/AkEpl4urre2SXIPiAfKulQ/SDC-Form-App?node-id=0%3A1) and [OpenAPI documentation](../../backend/openapi.yml) when discussing implementation to make sure everyone was on the same page.
 - VScode Liveshare is a useful tool for us to collaborate on documents simultaneously. This worked well especially while on a group call.
 - Labels on our Kanban board helped us organize our tasks; able to filter relevant TODOs. For example: group/backend label for tasks relevant to the backend team, area/tests for tasks related to testing.
 - GitHub discord integrations are good way for us all to be in the loop and to see updates.
 - Team compatibility 😀
+- One big learning point was learning how to coordinate with git branches, rebases, and merge conflicts with teammates as all changes are important
 
 ### What needs improvement
 
@@ -95,10 +94,14 @@ We decided that, in the interests of time and considering that the project size 
 
 ## Next Phase
 
-> Triage: What will you build for phase 3, the final demo?
+For phase 3, the final demo, we will implement the following features (ordered by priority):
 
-- Patients management
-- Filtering and searching for forms and responses
-- Delete forms and responses
-- Share URL for form response
-- Add Procedure
+1. Integrate form validation
+1. Patients and Procedures management
+1. Filtering and searching for forms and responses
+1. Share URL for form response
+1. Support non-integer types in text fields
+1. Add more tests for backend API
+1. Update responses and patients
+1. Delete forms and responses
+1. Data visualization
