@@ -42,10 +42,11 @@ async function create(form: Model.SDCForm): Promise<string> {
     },
     body: JSON.stringify(encodedForm),
   });
-  if (formResponse.status != 200) {
-    throw Error(`Could not get form by ID. Error: ${formResponse.statusText}`);
+  if (formResponse.status != 201) {
+    //throw Error(`Could not get form by ID. Error: ${formResponse.statusText}`);
   }
   const id = await formResponse.text();
+  console.log(id);
   return id;
 }
 
