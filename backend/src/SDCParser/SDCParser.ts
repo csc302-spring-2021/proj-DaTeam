@@ -265,4 +265,3 @@ const parsers: { [id: string]: new (s: StackUtil) => NodeParser } = {
   Question: QuestionParser,
   ListItemResponseField: ListFieldItemParser,
 };
-rser();
