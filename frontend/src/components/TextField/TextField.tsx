@@ -1,5 +1,5 @@
 import { Model } from "@dateam/shared";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormInput } from "../FormInput";
 
 function TextField(props: {
@@ -10,7 +10,14 @@ function TextField(props: {
   sdcTextField: Model.SDCTextField;
   children?: any;
 }) {
+  const { responseState, sdcTextField } = props;
   const [textResponse, setTextResponse] = useState<string>("");
+  useEffect(() => {
+    const currentRes = responseState?.response[sdcTextField.id];
+    if (typeof currentRes === "string") {
+      setTextResponse(currentRes);
+    }
+  }, []);
 
   return (
     <div

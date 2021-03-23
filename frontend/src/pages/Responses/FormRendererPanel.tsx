@@ -15,7 +15,7 @@ export default function FormRendererPanel() {
   const { data: form } = useForm(formId);
   const { data: response } = useFormResponse(responseId);
   const { data: patient } = usePatient(response?.patientID);
-
+  console.log(response);
   return (
     <motion.div
       data-testid="form-renderer-panel"
@@ -28,7 +28,9 @@ export default function FormRendererPanel() {
         <CloseButton />
       </Link>
 
-      {form && <FormRenderer form={form} patient={patient} />}
+      {form && (
+        <FormRenderer form={form} patient={patient} sdcResponse={response} />
+      )}
     </motion.div>
   );
 }

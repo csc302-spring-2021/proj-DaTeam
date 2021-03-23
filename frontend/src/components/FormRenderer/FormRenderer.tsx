@@ -12,10 +12,11 @@ import ResponseService from "../../services/ResponseService";
 interface IFormRendererProps {
   form?: Model.SDCForm;
   patient?: Model.Patient;
+  sdcResponse?: Model.SDCFormResponse;
 }
 
 function FormRenderer(props: IFormRendererProps) {
-  const { form: sdcform, patient: selectedPatient } = props;
+  const { form: sdcform, patient: selectedPatient, sdcResponse } = props;
   const [patient, setPatient] = useState<Model.Patient>();
 
   useEffect(() => {
@@ -33,8 +34,21 @@ function FormRenderer(props: IFormRendererProps) {
 
   const [response, setResponse] = useState<{ [key: string]: any }>({});
   const BLANK_STRING = "-----";
+  useEffect(() => {
+    if (sdcResponse) {
+      sdcResponse.answers.map((ans) => {
+        const key = ans.questionID;
+        const val = ans.responses ? ans.responses[0] : [];
+        setResponse((r) => {
+          r[key] = val;
+          return r;
+        });
+      });
+    }
+  }, []);
 
   const onSubmitForm = () => {
+    console.log("aabb", sdcResponse, response);
     if (!sdcform || !patient) {
       notify.error("Cannot create with a selected form or patient");
       return;
