@@ -15,7 +15,6 @@ describe("Parse Form", () => {
   beforeAll(() => {
     const json = SDCParser.sdcParser.xmlToJson(TestData.form);
     const obj = json.FormDesign[0];
-
     const parser = new SDCParser.FormParser(new StackUtil());
     parser.parse(obj);
     result = parser.result;
@@ -31,9 +30,13 @@ describe("Parse Form", () => {
     );
     expect(result).toHaveProperty("footer");
   });
-  test.skip("Form properties extracted", () => {
+  test("Form properties extracted", () => {
     expect(result).toHaveProperty("formProperties");
     expect(result.formProperties).toHaveLength(1);
+    expect(result.formProperties[0]).toBeInstanceOf(Model.SDCFormProperty);
+    expect(result.formProperties[0]).toHaveProperty("name");
+    expect(result.formProperties[0]).toHaveProperty("propName");
+    expect(result.formProperties[0]).toHaveProperty("val");
   });
   test("Children extracted", () => {
     expect(result).toHaveProperty("children");
