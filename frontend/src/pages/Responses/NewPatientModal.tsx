@@ -14,9 +14,10 @@ function NewPatientModal(props: {
   const [patientId, setPatientId] = useState("");
 
   const onCreateClick = () => {
-    const newPatient = new Model.Patient();
-    newPatient.name = patientName;
-    newPatient.id = patientId;
+    const newPatient = new Model.Patient({
+      name: patientName,
+      id: patientId,
+    });
     PatientService.create(newPatient)
       .then((res) => {
         console.log(res);

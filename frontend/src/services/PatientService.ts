@@ -9,13 +9,13 @@ import { GenericJsonSerializer, Model } from "@dateam/shared";
 async function create(patient: Model.Patient): Promise<void> {
   try {
     const patientEncoded = GenericJsonSerializer.encode(patient, Model.Patient);
-    const patientResponse = await fetch(` http://localhost:3000/api/v1/patients`, {
+    const patientResponse = await fetch(`/api/v1/patients`, {
       method: "POST",
-      body: patientEncoded,
+      body: JSON.stringify(patientEncoded),
       headers: {
-        'Content-Type': 'application/json',
-        'accept': 'text/plain',
-      }
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
     });
     console.log(patientEncoded);
 
