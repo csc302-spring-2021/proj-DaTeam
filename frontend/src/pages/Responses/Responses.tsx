@@ -266,6 +266,7 @@ function FormRendererPanel() {
   const { data: form } = useForm(formId);
   const { data: response } = useFormResponse(responseId);
   const { data: patient } = usePatient(response?.patientID);
+  console.log(form);
 
   return (
     <motion.div

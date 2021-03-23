@@ -6,14 +6,14 @@ function Nav() {
   return (
     <div
       data-testid="nav"
-      className="flex-shrink-0 flex-col w-16 h-screen bg-black shadow-2xl"
+      className="flex-col flex-shrink-0 w-16 h-screen bg-black shadow-2xl"
     >
       <Link data-testid="search-link" to="/search">
         <svg
           data-testid="menu-btn-search"
           className={
-            pathname === "/search"
-              ? "text-purple-400 m-4 py-1"
+            pathname.includes("/search")
+              ? "bg-purple-400 rounded-md m-4 p-1"
               : "hover:text-purple-400 text-white m-4 py-1"
           }
           xmlns="http://www.w3.org/2000/svg"
@@ -34,8 +34,8 @@ function Nav() {
         <svg
           data-testid="menu-btn-home"
           className={
-            pathname === "/home"
-              ? "text-purple-400 m-4 py-1"
+            pathname.includes("/home")
+              ? "bg-purple-400 rounded-md m-4 p-1"
               : "hover:text-purple-400 text-white m-4 py-1"
           }
           xmlns="http://www.w3.org/2000/svg"
@@ -56,8 +56,8 @@ function Nav() {
         <svg
           data-testid="menu-btn-responses"
           className={
-            pathname === "/responses"
-              ? "text-purple-400 m-4 py-1"
+            pathname.includes("/responses")
+              ? "bg-purple-400 rounded-md m-4 p-1"
               : "hover:text-purple-400 text-white m-4 py-1"
           }
           xmlns="http://www.w3.org/2000/svg"
@@ -78,8 +78,8 @@ function Nav() {
         <svg
           data-testid="menu-btn-forms"
           className={
-            pathname === "/forms"
-              ? "text-purple-400 m-4 py-1"
+            pathname.includes("/forms")
+              ? "bg-purple-400 rounded-md m-4 p-1"
               : "hover:text-purple-400 text-white m-4 py-1"
           }
           xmlns="http://www.w3.org/2000/svg"
