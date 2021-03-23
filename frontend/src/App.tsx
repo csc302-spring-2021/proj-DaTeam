@@ -8,6 +8,16 @@ import { Responses } from "./pages/Responses";
 import { Forms } from "./pages/Forms";
 import { Home } from "./pages/Home";
 import { AnimatePresence } from "framer-motion";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+    },
+  },
+});
 
 export const pageVariants = {
   initial: { opacity: 0 },
@@ -17,11 +27,11 @@ export const pageVariants = {
 
 function App() {
   return (
-    <div data-testid="app" className="bg-gray-100">
-      <Notification />
+    <QueryClientProvider client={queryClient}>
       <Suspense fallback={<Loading />}>
         <BrowserRouter>
-          <div className="flex flex-row">
+          <div data-testid="app" className="bg-gray-100 flex flex-row">
+            <Notification />
             <Nav />
             <div className="flex-1">
               <AnimatePresence>
@@ -38,7 +48,7 @@ function App() {
           </div>
         </BrowserRouter>
       </Suspense>
-    </div>
+    </QueryClientProvider>
   );
 }
 

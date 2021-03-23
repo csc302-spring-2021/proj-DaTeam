@@ -6,24 +6,34 @@ import { setupServer } from "msw/node";
 import { GenericJsonSerializer, Mocks, Model } from "@dateam/shared";
 
 import { Forms } from ".";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 function renderForms(initialEntries = ["/forms"]): { history: MemoryHistory } {
+  const queryClient = new QueryClient();
+
   const history = createMemoryHistory({ initialEntries });
   render(
-    <Router history={history}>
-      <Forms />
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router history={history}>
+        <Forms />
+      </Router>
+    </QueryClientProvider>
   );
 
   return { history };
 }
 
 const server = setupServer(
-  // capture "GET /forms/<id>" requests
   rest.get("/api/v1/forms/:formId", (req, res, ctx) => {
-    // respond using a mocked JSON body
     const form1 = Mocks.buildFormSimpleList();
     const json = GenericJsonSerializer.encode(form1, Model.SDCForm);
+    return res(ctx.json(json));
+  }),
+
+  rest.get("/api/v1/forms", (req, res, ctx) => {
+    const form1 = Mocks.buildFormSimpleList();
+    form1.uid = "form1";
+    const json = [GenericJsonSerializer.encode(form1, Model.SDCForm)];
     return res(ctx.json(json));
   })
 );
@@ -34,22 +44,22 @@ describe("Forms", () => {
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
-  it("renders forms", () => {
+  it("renders forms", async () => {
     renderForms();
     screen.getByTestId("forms");
 
-    screen.getByText("ID: 1");
-    screen.getByText("Pancreatic Cancer Biopsy");
+    await waitFor(() => screen.getByText(/ID: covid-19-test-.*/));
+    await waitFor(() => screen.getByText(/Covid19Test/));
   });
 
   it("navigates to a form", async () => {
     const { history } = renderForms();
 
-    fireEvent.click(screen.getByText("ID: 1"));
-
+    await waitFor(() => screen.getByText(/ID: covid-19-test-.*/));
+    fireEvent.click(screen.getByText(/ID: covid-19-test-.*/));
     await waitFor(() => screen.getByTestId("structure"));
 
-    expect(history.location.pathname).toBe("/forms/1");
+    expect(history.location.pathname).toBe("/forms/form1");
   });
 
   it("navigates back when you close panel", async () => {

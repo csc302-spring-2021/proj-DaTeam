@@ -1,13 +1,16 @@
-import { GenericJsonSerializer, Model } from "@dateam/shared";
+import { GenericJsonSerializer, Mocks, Model } from "@dateam/shared";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, Route, useParams } from "react-router-dom";
 
 import { pageVariants } from "../../App";
 import { CloseButton } from "../../components/CloseButton";
 import { FormInput } from "../../components/FormInput";
 import { notify } from "../../components/Notification/Notification";
+import { useForm, useForms } from "../../hooks/services";
+import ParserService from "../../services/ParserService";
 import FormService from "../../services/FormService";
+import { useQueryClient } from "react-query";
 
 export default function Forms() {
   return (
@@ -35,7 +38,7 @@ function FormCard({
   form,
   isSelected = false,
 }: {
-  form: { id: string; name: string };
+  form: Model.SDCForm;
   isSelected: boolean;
 }) {
   return (
@@ -56,7 +59,7 @@ function FormCard({
       >
         ID: {form.id}
       </span>
-      <h3 className="text-lg font-medium">{form.name}</h3>
+      <h3 className="text-lg font-medium">{form.title}</h3>
       <p className="text-sm text-gray-400">X questions</p>
     </motion.div>
   );
@@ -64,21 +67,35 @@ function FormCard({
 
 function FormsPanel() {
   const { formId } = useParams<{ formId: string }>();
+  const { data: forms } = useForms();
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
+  const queryClient = useQueryClient();
 
-  const formData = [
-    { id: "1", name: "Pancreatic Cancer Biopsy" },
-    { id: "2", name: "CAT Scan of Lung" },
-    { id: "3", name: "Chest X-Ray" },
-    { id: "4", name: "MRI of Brain" },
-  ];
-  const formCards = formData.map((form, i) => {
+  const formCards = forms?.map((form, i) => {
     return (
-      <Link to={`/forms/${form.id}`} key={form.id}>
-        <FormCard form={form} isSelected={formId === form.id} />
+      <Link to={`/forms/${form.uid}`} key={form.uid}>
+        <FormCard form={form} isSelected={formId === form.uid} />
       </Link>
     );
   });
+
+  const handlexmlfileupload = (event: any) => {
+    event.preventDefault();
+    const file = event.target.files[0];
+    ParserService.parse(file)
+      .then((form: Model.SDCForm) => {
+        return FormService.create(form);
+      })
+      .then((createdForm) => {
+        console.log(createdForm);
+        return queryClient.refetchQueries("forms");
+      })
+      .then(() => notify.success(`Form Created.`))
+      .catch((err) => {
+        notify.error(err.message);
+        /* console.log(err); */
+      });
+  };
 
   return (
     <motion.div
@@ -106,7 +123,18 @@ function FormsPanel() {
       className="z-20 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50"
     >
       <div className="space-y-2">
-        <h2 className="text-3xl font-medium tracking-tighter">Forms</h2>
+        <div className="flex justify-between align-center">
+          <h2 className="text-3xl font-medium tracking-tighter">Forms</h2>
+          <label className="px-4 py-2 font-semibold rounded cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+            <span className="mt-2 text-base leading-normal">Upload XML</span>
+            <input
+              type="file"
+              className="hidden"
+              accept=".xml"
+              onChange={(event) => handlexmlfileupload(event)}
+            />
+          </label>
+        </div>
         <p className="text-gray-600">
           Select a recent form or search for one to view or update it's
           structure
@@ -179,24 +207,7 @@ function render(node: Model.SDCNode) {
 function FormDetailsPanel() {
   const { formId } = useParams<{ formId: string }>();
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
-  const [sdcform, setSdcform] = useState<Model.SDCNode | undefined>(undefined);
-
-  useEffect(():any => {
-    let addedForm: Boolean = true;
-    FormService.read(formId)
-      .then((sdcform) => {
-        const decodedSdcNode = GenericJsonSerializer.decode(
-          sdcform,
-          Model.SDCNode
-        );
-        if(addedForm){
-            setSdcform(decodedSdcNode);
-        }
-      })
-      .catch((err) => notify.error(err.message));
-
-      return () => addedForm = false;
-  }, [formId, setSdcform]);
+  const { data: sdcform } = useForm(formId);
 
   return (
     <motion.div
@@ -221,7 +232,7 @@ function FormDetailsPanel() {
           opacity: 0,
         },
       }}
-      className="z-10 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50 relative"
+      className="relative z-10 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50"
       data-testid="structure"
     >
       <Link to="/forms">
