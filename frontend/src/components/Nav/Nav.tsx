@@ -6,16 +6,19 @@ function Nav() {
   return (
     <div
       data-testid="nav"
-      className="flex-col flex-shrink-0 w-16 h-screen bg-black shadow-2xl"
+      className="flex-col flex-shrink-0 items-center space-y-4 w-16 p-2 h-screen bg-black shadow-2xl"
     >
-      <Link data-testid="search-link" to="/search">
+      <Link
+        data-testid="search-link"
+        to="/search"
+        className={`p-2 rounded-md block text-white ${
+          pathname.includes("/search")
+            ? "bg-purple-400"
+            : "hover:text-purple-400"
+        }`}
+      >
         <svg
           data-testid="menu-btn-search"
-          className={
-            pathname.includes("/search")
-              ? "bg-purple-400 rounded-md m-4 p-1"
-              : "hover:text-purple-400 text-white m-4 py-1"
-          }
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -30,14 +33,15 @@ function Nav() {
         </svg>
       </Link>
 
-      <Link data-testid="home-link" to="/home">
+      <Link
+        data-testid="home-link"
+        to="/home"
+        className={`p-2 rounded-md block text-white ${
+          pathname.includes("/home") ? "bg-purple-400" : "hover:text-purple-400"
+        }`}
+      >
         <svg
           data-testid="menu-btn-home"
-          className={
-            pathname.includes("/home")
-              ? "bg-purple-400 rounded-md m-4 p-1"
-              : "hover:text-purple-400 text-white m-4 py-1"
-          }
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -52,14 +56,17 @@ function Nav() {
         </svg>
       </Link>
 
-      <Link data-testid="responses-link" to="/responses">
+      <Link
+        data-testid="responses-link"
+        to="/responses"
+        className={`p-2 rounded-md block text-white ${
+          pathname.includes("/responses")
+            ? "bg-purple-400"
+            : "hover:text-purple-400"
+        }`}
+      >
         <svg
           data-testid="menu-btn-responses"
-          className={
-            pathname.includes("/responses")
-              ? "bg-purple-400 rounded-md m-4 p-1"
-              : "hover:text-purple-400 text-white m-4 py-1"
-          }
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -74,14 +81,17 @@ function Nav() {
         </svg>
       </Link>
 
-      <Link data-testid="forms-link" to="/forms">
+      <Link
+        data-testid="forms-link"
+        to="/forms"
+        className={`p-2 rounded-md block text-white ${
+          pathname.includes("/forms")
+            ? "bg-purple-400"
+            : "hover:text-purple-400"
+        }`}
+      >
         <svg
           data-testid="menu-btn-forms"
-          className={
-            pathname.includes("/forms")
-              ? "bg-purple-400 rounded-md m-4 p-1"
-              : "hover:text-purple-400 text-white m-4 py-1"
-          }
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
