@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SDCPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:ihe:qrph:sdc:2016" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="urn:ihe:qrph:sdc:2016 ../Schemas/RFD+SDCRetrieveForm.xsd" packageID="PKG_ACR_CT_STROKE">
+    <XMLPackage>
+        <FormDesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="CT_Stroke_CCO.358_1.0.0.DRAFT_sdcFDF" baseURI="cap.org" fullURI="_baseURI=cap.org&amp;_lineage=CT_Stroke_CCO.358&amp;_version=1.0.0.DRAFT&amp;_docType=sdcFDF" formTitle="CCO Synoptic Template for  Stroke" lineage="CT_Stroke_CCO.358" filename="CT_Stroke_CCO.358_1.0.0.DRAFT_sdcFDF.xml" version="1.0.0.DRAFT" xmlns="urn:ihe:qrph:sdc:2016">
+            <Property name="Copyright" type="CAPeCC_static_text" styleClass="copyright" propName="Copyright" val="(c) 2018 College of American Pathologists.  All rights reserved.  License required for use." />
+            <Property name="GenericHeaderText" type="CAPeCC_static_text" propName="GenericHeaderText" val="CCO Radiology Synoptic Template" />
+            <Property name="Category" type="CAPeCC_meta" propName="Category" val="CNS" />
+            <Property name="OfficialName" type="CAPeCC_meta" propName="OfficialName" val="CCO Synoptic Template for  Stroke" />
+            <Property name="CAP_ProtocolName" type="CAPeCC_meta" propName="CAP_ProtocolName" />
+            <Property name="CAP_ProtocolVersion" type="CAPeCC_meta" propName="CAP_ProtocolVersion" />
+            <Property name="TemplateID" type="CAPeCC_meta" propName="TemplateID" val="358.1000043" />
+            <Property name="Restrictions" type="CAPeCC_meta" propName="Restrictions" val="This template applies to CT scans for stroke" />
+            <Property name="CAP_Required" type="CAPeCC_meta" propName="CAP_Required" val="true" />
+            <Property name="AccreditationDate" type="CAPeCC_meta dt.dateTime" propName="AccreditationDate" val="9/14/2018 12:00:00 AM" />
+            <Property name="WebPostingDate" type="CAPeCC_meta dt.dateTime" propName="WebPostingDate" val="9/14/2018 12:00:00 AM" />
+            <Property name="ShortName" type="CAPeCC_meta" propName="ShortName" val="CT_Stroke_CCO" />
+            <Property name="ApprovalStatus" type="CAPeCC_meta" propName="ReleaseStatus" val="DRAFT" />
+            <Property name="AJCC_Version" type="CAPeCC_meta" propName="AJCC_Version" val="8" />
+            <Body name="Body" ID="CT_Stroke_CCO.358_1.0.0.DRAFT_sdcFDF_Body">
+                <ChildItems name="ch_Body">
+                    <Section name="S_76242" ID="76242.100004300" title="#This template describes a Common Data Element for CT Stroke by the American College of Radiologists">
+                        <ChildItems name="ch_76242_1">
+                            <Question name="Q_Tum_Site_76234" ID="76234.100004300" readOnly="true">
+                                <ListField name="lf_76234_1">
+                                    <List name="lst_76234_2">
+                                        <ListItem name="LI_Adrenal_Gland_76235" ID="76235.100004300" title="Adrenocortical neoplasm" selected="true" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                        </ChildItems>
+                    </Section>
+                    <Section name="S_76221" ID="76221.100004300" title="Administrative &amp; Identification Data">
+                        <ChildItems name="ch_76221_1">
+                            <Question name="Q_76219" ID="76219.100004300" title="Report Date">
+                                <ResponseField name="rf_76219_1">
+                                    <Response name="rsp_76219_2">
+                                        <string name="str_76219_3" />
+                                    </Response>
+                                </ResponseField>
+                            </Question>
+                            <Question name="Q_76413" ID="76413.100004300" title="Report completed by ">
+                                <ResponseField name="rf_76413_1">
+                                    <Response name="rsp_76413_2">
+                                        <string name="str_76413_3" />
+                                    </Response>
+                                </ResponseField>
+                            </Question>
+                            <Question name="Q_76325" ID="76325.100004300" title="Procedure">
+                                <ListField name="lf_76325_1">
+                                    <List name="lst_76325_2">
+                                        <ListItem name="LI_NS_76240" ID="76240.100004300" title="LDCT " />
+                                        <ListItem name="LI_Oth_76239" ID="76239.100004300" title="Other (specify)">
+                                            <ListItemResponseField name="lirf_76239_1" responseRequired="true">
+                                                <Response name="rsp_76239_2">
+                                                    <string name="str_76239_3" />
+                                                </Response>
+                                            </ListItemResponseField>
+                                        </ListItem>
+                                    </List>
+                                </ListField>
+                            </Question>
+                        </ChildItems>
+                    </Section>
+                    <Section name="S_77659" ID="77659.100004300" title="Findings">
+                        <ChildItems name="ch_77659_4">
+                            <Question name="Q_77913" ID="77913.100004300" title="Hyperacute signs">
+                                <ListField name="lf_77913_1">
+                                    <List name="lst_77913_2">
+                                        <ListItem name="LI_77914" ID="77914.100004300" title="Yes" />
+                                        <ListItem name="LI_77915" ID="77915.100004300" title="No" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77916" ID="77916.100004300" title="Location">
+                                <ListField name="lf_77916_1" maxSelections="1">
+                                    <List name="lst_77916_2">
+                                        <ListItem name="LI_77918" ID="77918.100004300" title="Right frontal" />
+                                        <ListItem name="LI_77917" ID="77917.100004300" title="Temporal" />
+                                        <ListItem name="LI_77919" ID="77919.100004300" title="parietal" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77920" ID="77920.100004300" title="Vascular Territory">
+                                <ListField name="lf_77920_1">
+                                    <List name="lst_77920_2">
+                                        <ListItem name="LI_77921" ID="77921.100004300" title="ACA" />
+                                        <ListItem name="LI_77922" ID="77922.100004300" title="MCA" />
+                                        <ListItem name="LI_77923" ID="77923.100004300" title="PCA" />
+                                        <ListItem name="LI_77924" ID="77924.100004300" title="SCA" />
+                                        <ListItem name="LI_77925" ID="77925.100004300" title="AICA" />
+                                        <ListItem name="LI_77926" ID="77926.100004300" title="PICA" />
+                                        <ListItem name="LI_77927" ID="77927.100004300" title="Basil perforator" />
+                                        <ListItem name="LI_77928" ID="77928.100004300" title="Thalamoperforator " />
+                                        <ListItem name="LI_77929" ID="77929.100004300" title="AntChoroidal " />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77930" ID="77930.100004300" title="Hemorrhagic conversion">
+                                <ListField name="lf_77930_1">
+                                    <List name="lst_77930_2">
+                                        <ListItem name="LI_77931" ID="77931.100004300" title="Yes" />
+                                        <ListItem name="LI_77932" ID="77932.100004300" title="No" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77933" ID="77933.100004300" title="Mass effect">
+                                <ListField name="lf_77933_1">
+                                    <List name="lst_77933_2">
+                                        <ListItem name="LI_77934" ID="77934.100004300" title="Yes" />
+                                        <ListItem name="LI_77935" ID="77935.100004300" title="No" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77936" ID="77936.100004300" title="Vascular Mechanism/Pattern">
+                                <ListField name="lf_77936_1">
+                                    <List name="lst_77936_2">
+                                        <ListItem name="LI_77937" ID="77937.100004300" title="embolic" />
+                                        <ListItem name="LI_77938" ID="77938.100004300" title="perforator" />
+                                        <ListItem name="LI_77939" ID="77939.100004300" title=" borderzone ischemia" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77940" ID="77940.100004300" title="Midlineshift in mm">
+                                <ResponseField name="rf_77940_1">
+                                    <Response name="rsp_77940_2">
+                                        <string name="str_77940_3" />
+                                    </Response>
+                                </ResponseField>
+                            </Question>
+                            <Question name="Q_77941" ID="77941.100004300" title="Herniation">
+                                <ListField name="lf_77941_1">
+                                    <List name="lst_77941_2">
+                                        <ListItem name="LI_77942" ID="77942.100004300" title="No" />
+                                        <ListItem name="LI_77943" ID="77943.100004300" title="Subfalcine " />
+                                        <ListItem name="LI_77944" ID="77944.100004300" title="Transtentorial " />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77945" ID="77945.100004300" title="Hyperdense vessel?">
+                                <ListField name="lf_77945_1">
+                                    <List name="lst_77945_2">
+                                        <ListItem name="LI_77946" ID="77946.100004300" title="Yes" />
+                                        <ListItem name="LI_77947" ID="77947.100004300" title="No" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77948" ID="77948.100004300" title="Hyperdense Sign">
+                                <ListField name="lf_77948_1">
+                                    <List name="lst_77948_2">
+                                        <ListItem name="LI_77949" ID="77949.100004300" title="Middle cerebral" />
+                                        <ListItem name="LI_77950" ID="77950.100004300" title="Anteriorcerebral " />
+                                        <ListItem name="LI_77951" ID="77951.100004300" title="Intrasylvian cortical" />
+                                        <ListItem name="LI_77952" ID="77952.100004300" title="Basilar artery " />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77953" ID="77953.100004300" title="Arterial calcification ">
+                                <ListField name="lf_77953_1">
+                                    <List name="lst_77953_2">
+                                        <ListItem name="LI_77958" ID="77958.100004300" title="Yes" />
+                                        <ListItem name="LI_77959" ID="77959.100004300" title="No" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77954" ID="77954.100004300" title="Venous thrombus">
+                                <ListField name="lf_77954_1">
+                                    <List name="lst_77954_2">
+                                        <ListItem name="LI_77960" ID="77960.100004300" title="Yes" />
+                                        <ListItem name="LI_77961" ID="77961.100004300" title="No" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77955" ID="77955.100004300" title="Sinus location">
+                                <ListField name="lf_77955_1">
+                                    <List name="lst_77955_2">
+                                        <ListItem name="LI_77962" ID="77962.100004300" title="Dural venous sinus " />
+                                        <ListItem name="LI_77963" ID="77963.100004300" title="Cortical vein" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77956" ID="77956.100004300" title="Hydrocephalus">
+                                <ListField name="lf_77956_1">
+                                    <List name="lst_77956_2">
+                                        <ListItem name="LI_77964" ID="77964.100004300" title="No" />
+                                        <ListItem name="LI_77965" ID="77965.100004300" title="Yes" />
+                                    </List>
+                                </ListField>
+                            </Question>
+                            <Question name="Q_77957" ID="77957.100004300" title="ASPECTS classification">
+                                <ResponseField name="rf_77957_1">
+                                    <Response name="rsp_77957_2">
+                                        <string name="str_77957_3" />
+                                    </Response>
+                                </ResponseField>
+                            </Question>
+                        </ChildItems>
+                    </Section>
+                    <Question name="Q_Comments_76386" ID="76386.100004300" title="Comment(s)">
+                        <ResponseField name="rf_76386_1">
+                            <Response name="rsp_76386_2">
+                                <string name="str_76386_3" />
+                            </Response>
+                        </ResponseField>
+                    </Question>
+                </ChildItems>
+            </Body>
+            <Footer name="footer" ID="Footer.CT_Stroke_CCO.358_1.0.0.DRAFT_sdcFDF">
+                <Property type="meta" styleClass="copyright" propName="CopyrightFooter" val="(c) 2018 College of American Pathologists.  All rights reserved.  License required for use." />
+            </Footer>
+        </FormDesign>
+    </XMLPackage>
+</SDCPackage>
