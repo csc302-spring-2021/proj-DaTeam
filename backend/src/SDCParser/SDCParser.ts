@@ -103,7 +103,13 @@ export class FormParser extends NodeParser {
     }
     this.result.version = obj.attributes.version;
     this.result.title = obj.attributes.formTitle;
-    this.result.formProperties = obj.Property.map(this.formPropertyParser);
+    this.stack.enter("Property");
+    if (obj.Property) {
+      this.result.formProperties = obj.Property.map((o: any) =>
+        this.formPropertyParser(o)
+      ).filter((o: any) => o);
+    }
+    this.stack.leave();
   }
   parseChildren(obj: any) {
     if (!obj.Body) throw this.stack.genError("Missing child: Body");
@@ -112,18 +118,22 @@ export class FormParser extends NodeParser {
     this.stack.leave();
   }
   formPropertyParser(obj: any) {
+    this.stack.setInspectedObject(obj.attributes);
     let potentialResult = new Model.SDCFormProperty();
     potentialResult.order = parseInt(obj.attributes.order);
     if (!obj.attributes.name) {
-      throw this.stack.genError("Missing attribute: name");
+      // throw this.stack.genError("Missing attribute: name");
+      return null;
     }
     potentialResult.name = obj.attributes.name;
     if (!obj.attributes.propName) {
-      throw this.stack.genError("Missing attribute: propName");
+      // throw this.stack.genError("Missing attribute: propName");
+      return null;
     }
     potentialResult.propName = obj.attributes.propName;
     if (!obj.attributes.val) {
-      throw this.stack.genError("Missing attribute: val");
+      // throw this.stack.genError("Missing attribute: val");
+      return null;
     }
     potentialResult.val = obj.attributes.val;
     return potentialResult;
