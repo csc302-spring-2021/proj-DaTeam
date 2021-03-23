@@ -34,6 +34,23 @@ function FormRenderer(props: IFormRendererProps) {
   const [response, setResponse] = useState<{ [key: string]: any }>({});
   const BLANK_STRING = "-----";
 
+  const onSubmitForm = () => {
+    if (!sdcform || !patient) {
+      notify.error("Cannot create with a selected form or patient");
+      return;
+    }
+    const sdcResponses = Object.keys(response).map(
+      (key) =>
+        new Model.SDCAnswer({ questionID: key, responses: [response[key]] })
+    );
+    const formRes = new Model.SDCFormResponse({
+      formId: sdcform.uid,
+      patientID: patient.uid,
+      answers: sdcResponses,
+    });
+    ResponseService.create(formRes).then((res) => console.log(res));
+  };
+
   const RenderNode = (sdcnode: Model.SDCNode) => {
     const childNodes = sdcnode.children.map((childnode) => {
       return <div key={childnode.id}>{RenderNode(childnode)}</div>;
@@ -79,18 +96,6 @@ function FormRenderer(props: IFormRendererProps) {
     } else {
       return <>{childNodes}</>;
     }
-  };
-  const onSubmitForm = () => {
-    if (!sdcform || !patient) {
-      notify.error("Cannot create with a selected form or patient");
-      return;
-    }
-    const formRes = new Model.SDCFormResponse({
-      formId: sdcform.uid,
-      patientID: patient.uid,
-      answers: [],
-    });
-    ResponseService.create(formRes).then((res) => console.log(res));
   };
 
   if (!sdcform) {
