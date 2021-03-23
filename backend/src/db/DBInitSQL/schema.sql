@@ -154,8 +154,6 @@ CREATE INDEX ON procedure (id);
 
 CREATE INDEX ON patient (id);
 
-CREATE UNIQUE INDEX ON item (id, parentId);
-
 CREATE INDEX ON item (parentId);
 
 CREATE UNIQUE INDEX ON form (lineage, version);
