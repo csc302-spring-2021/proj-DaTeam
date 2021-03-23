@@ -17,7 +17,7 @@ function TextField(props: {
     if (typeof currentRes === "string") {
       setTextResponse(currentRes);
     }
-  }, []);
+  }, [responseState]);
 
   return (
     <div

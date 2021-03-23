@@ -35,17 +35,20 @@ function FormRenderer(props: IFormRendererProps) {
   const [response, setResponse] = useState<{ [key: string]: any }>({});
   const BLANK_STRING = "-----";
   useEffect(() => {
-    if (sdcResponse) {
+    if (sdcResponse?.answers) {
       sdcResponse.answers.map((ans) => {
         const key = ans.questionID;
         const val = ans.responses ? ans.responses[0] : [];
         setResponse((r) => {
           r[key] = val;
+          console.log(r);
           return r;
         });
       });
+    } else {
+      setResponse([]);
     }
-  }, []);
+  }, [sdcResponse]);
 
   const onSubmitForm = () => {
     console.log("aabb", sdcResponse, response);
@@ -62,7 +65,10 @@ function FormRenderer(props: IFormRendererProps) {
       patientID: patient.uid,
       answers: sdcResponses,
     });
-    ResponseService.create(formRes).then((res) => console.log(res));
+    ResponseService.create(formRes).then((res) => {
+      notify.success("Form Created");
+      console.log("Created", res);
+    });
   };
 
   const RenderNode = (sdcnode: Model.SDCNode) => {
