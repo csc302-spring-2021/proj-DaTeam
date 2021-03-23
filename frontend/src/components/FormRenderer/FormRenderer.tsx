@@ -5,9 +5,10 @@ import { DisplayItem } from "../../components/DisplayItem";
 import { TextField } from "../../components/TextField";
 import { ListField } from "../../components/ListField";
 import { NotFound } from "../../pages/NotFound";
-import { usePatient } from "../../hooks/services";
+import { useForms, usePatient } from "../../hooks/services";
 import PatientService from "../../services/PatientService";
 import { notify } from "../Notification/Notification";
+import ResponseService from "../../services/ResponseService";
 interface IFormRendererProps {
   form?: Model.SDCForm;
   patient?: Model.Patient;
@@ -26,10 +27,9 @@ function FormRenderer(props: IFormRendererProps) {
         .then((patient) => setPatient(patient))
         .catch(() => notify.error("Failed to fetch new patient."));
     } else if (selectedPatient) {
-      console.log(selectedPatient);
       setPatient(selectedPatient);
     }
-  }, [window.location.search, selectedPatient]);
+  }, [window.location.search, selectedPatient, sdcform]);
 
   const [response, setResponse] = useState<{ [key: string]: any }>({});
   const BLANK_STRING = "-----";
@@ -80,9 +80,17 @@ function FormRenderer(props: IFormRendererProps) {
       return <>{childNodes}</>;
     }
   };
-
   const onSubmitForm = () => {
-    console.log(response);
+    if (!sdcform || !patient) {
+      notify.error("Cannot create with a selected form or patient");
+      return;
+    }
+    const formRes = new Model.SDCFormResponse({
+      formId: sdcform.uid,
+      patientID: patient.uid,
+      answers: [],
+    });
+    ResponseService.create(formRes).then((res) => console.log(res));
   };
 
   if (!sdcform) {

@@ -6,14 +6,24 @@ import { GenericJsonSerializer, Model } from "@dateam/shared";
  * @param response
  *
  */
-async function create(response: Model.SDCFormResponse): Promise<void> {
-  const parserResponseRaw = await fetch(`/api/v1/patients`, {
+async function create(response: Model.SDCFormResponse): Promise<string> {
+  const responseDecoded = GenericJsonSerializer.encode(
+    response,
+    Model.SDCFormResponse
+  );
+  const responseFetch = await fetch(`/api/v1/responses`, {
     method: "POST",
-    body: JSON.stringify(response),
+    headers: {
+      Accept: "text/plain",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(responseDecoded),
   });
-  if (parserResponseRaw.status != 200) {
-    throw Error(`Could not get parser. Error: ${parserResponseRaw.statusText}`);
+  if (responseFetch.status != 201) {
+    throw Error(`Could not get parser. Error: ${responseFetch.statusText}`);
   }
+  const responseId = await responseFetch.text();
+  return responseId;
 }
 
 /**
