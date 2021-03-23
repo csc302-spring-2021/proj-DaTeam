@@ -71,7 +71,7 @@ export default function ResponsesPanel() {
             <h2 className="text-3xl font-medium tracking-tighter">Responses</h2>
             <button
               onClick={onNewBtnClick}
-              className="w-20 h-8 mt-2 bg-gray-200 rounded-lg hover:bg-gray-400 text-bold"
+              className="w-20 h-8 mt-2 bg-gray-300 rounded-lg hover:bg-gray-800 hover:text-white text-bold"
             >
               {" "}
               New{" "}

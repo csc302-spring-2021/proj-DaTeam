@@ -19,6 +19,8 @@ function FormRenderer({
 }) {
   const [response, setResponse] = useState<{ [key: string]: any }>({});
 
+  console.log(sdcform);
+
   function RenderNode(sdcnode: Model.SDCNode & IMockPrivateClass): ReactNode {
     const childNodes = sdcnode.children.map((childnode) => {
       return <div key={childnode.id}>{RenderNode(childnode)}</div>;
@@ -73,8 +75,9 @@ function FormRenderer({
   const onSubmitForm = () => {
     console.log(response);
   };
+  const BLANK_STRING = "-----";
 
-  if (!sdcform || !patient) {
+  if (!sdcform) {
     return <NotFound />;
   }
 
@@ -82,16 +85,20 @@ function FormRenderer({
     <div data-testid="form" className="p-12 space-y-8">
       <h2 data-testid="form-title" className="text-3xl tracking-tighter">
         Response of <span className="font-bold">{sdcform?.title}</span> for{" "}
-        <span className="font-bold"> {patient.name}</span>
+        <span className="font-bold"> {patient?.name || BLANK_STRING}</span>
       </h2>
       <div className="flex flex-col justify-between space-x-4 md:flex-row">
         <div className="w-1/2" data-testid="input-form-patientid">
-          <ValueBlock id="patientid" value={patient.id} label="OHIP number" />
+          <ValueBlock
+            id="patientid"
+            value={patient?.id || BLANK_STRING}
+            label="OHIP number"
+          />
         </div>
         <div className="w-1/2" data-testid="input-form-patientname">
           <ValueBlock
             id="patientname"
-            value={patient.name}
+            value={patient?.name || BLANK_STRING}
             label="Patient Name"
           />
         </div>
