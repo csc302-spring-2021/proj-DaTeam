@@ -6,24 +6,26 @@ import { GenericJsonSerializer, Model } from "@dateam/shared";
  * @param patient A patient object to create
  *
  */
-async function create(patient: Model.Patient): Promise<void> {
+async function create(patient: Model.Patient): Promise<string> {
   try {
     const patientEncoded = GenericJsonSerializer.encode(patient, Model.Patient);
     const patientResponse = await fetch(`/api/v1/patients`, {
       method: "POST",
       body: JSON.stringify(patientEncoded),
       headers: {
-        Accept: "application/json",
+        Accept: "text/plain",
         "Content-Type": "application/json",
       },
     });
-    console.log(patientEncoded);
+    const patientId = await patientResponse.text();
 
     if (patientResponse.status != 201) {
       throw Error(
         `Could not get form by ID. Error: ${patientResponse.statusText}`
       );
     }
+
+    return patientId;
   } catch (err) {
     throw err;
   }
