@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SDCPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:ihe:qrph:sdc:2016" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="urn:ihe:qrph:sdc:2016 ../Schemas/RFD+SDCRetrieveForm.xsd" packageID="PKG_ThyroidNoduleUS" lineage="PKG_ThyroidNoduleUS_1" version="2.1.2" fullURI="_baseURI=cancercare.on.ca&amp;_lineage=PKG_ThyroidNoduleUS_1;_version=2.1.1&amp;_docType=sdcPKG" baseURI="cancercare.on.ca">
+	<XMLPackage>
+		<FormDesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="US_Thyroid_CCO.359_2.1.2.DRAFT_sdcFDF" baseURI="cancercare.on.ca" fullURI="_baseURI=cancercare.on.ca&amp;_lineage=US_Thyroid_CCO.359&amp;_version=2.1.2.DRAFT&amp;_docType=sdcFDF" formTitle="CCO Synoptic Template for  Thyroid US" lineage="US_Thyroid_CCO.359" filename="US_Thyroid_CCO.359_2.1.2.DRAFT_sdcFDF.xml" version="2.1.2.DRAFT" xmlns="urn:ihe:qrph:sdc:2016">
+			<Property name="Copyright" type="CAPeCC_static_text" styleClass="copyright" propName="Copyright" val="(c) 2018 College of American Pathologists.  All rights reserved.  License required for use." />
+			<Property name="GenericHeaderText" type="CAPeCC_static_text" propName="GenericHeaderText" val="CCO Radiology Synoptic Template" />
+			<Property name="Category" type="CAPeCC_meta" propName="Category" val="Endocrine" />
+			<Property name="OfficialName" type="CAPeCC_meta" propName="OfficialName" val="CCO Synoptic Template for  Thyroid US" />
+			<Property name="CAP_ProtocolName" type="CAPeCC_meta" propName="CAP_ProtocolName" />
+			<Property name="CAP_ProtocolVersion" type="CAPeCC_meta" propName="CAP_ProtocolVersion" />
+			<Property name="TemplateID" type="CAPeCC_meta" propName="TemplateID" val="359.1000043" />
+			<Property name="Restrictions" type="CAPeCC_meta" propName="Restrictions" val="This template applies to Thyroid" />
+			<Property name="CAP_Required" type="CAPeCC_meta" propName="CAP_Required" val="true" />
+			<Property name="AccreditationDate" type="CAPeCC_meta dt.dateTime" propName="AccreditationDate" val="9/14/2018 12:00:00 AM" />
+			<Property name="WebPostingDate" type="CAPeCC_meta dt.dateTime" propName="WebPostingDate" val="9/14/2018 12:00:00 AM" />
+			<Property name="ShortName" type="CAPeCC_meta" propName="ShortName" val="US_Thyroid_CCO" />
+			<Property name="ApprovalStatus" type="CAPeCC_meta" propName="ReleaseStatus" val="DRAFT" />
+			<Property name="AJCC_Version" type="CAPeCC_meta" propName="AJCC_Version" val="8" />
+			<Body name="Body" ID="US_Thyroid_CCO.359_2.1.1.DRAFT_sdcFDF_Body">
+				<ChildItems name="ch_Body">
+					<Section name="S_77732" ID="77732.100004300" title="CLINICAL INFORMATION">
+						<ChildItems name="ch_77732_1">
+							<Question name="Q_77894" ID="77894.100004300" title="Clinical History:">
+								<ResponseField name="rf_77894_1">
+									<Response name="rsp_77894_2">
+										<string name="str_77894_3" />
+									</Response>
+								</ResponseField>
+							</Question>
+							<Question name="Q_77895" ID="77895.100004300" title="Personal history of thyroid malignancy">
+								<ListField name="lf_77895_1">
+									<List name="lst_77895_2">
+										<ListItem name="LI_77896" ID="77896.100004300" title="Yes" />
+										<ListItem name="LI_77897" ID="77897.100004300" title="No" />
+									</List>
+								</ListField>
+							</Question>
+							<Question name="Q_77905" ID="77905.100004300" title="Prior Biopsy">
+								<ListField name="lf_77905_1">
+									<List name="lst_77905_2">
+										<ListItem name="LI_77906" ID="77906.100004300" title="Yes:">
+											<ListItemResponseField name="lirf_77906_1">
+												<Response name="rsp_77906_2">
+													<string name="str_77906_3" />
+												</Response>
+												<TextAfterResponse val="(date)" />
+											</ListItemResponseField>
+										</ListItem>
+										<ListItem name="LI_77907" ID="77907.100004300" title="No" />
+									</List>
+								</ListField>
+							</Question>
+						</ChildItems>
+					</Section>
+					<Section name="S_77753" ID="77753.100004300" title="COMPARISON STUDY">
+						<ChildItems name="ch_77753_1">
+							<Question name="Q_77898" ID="77898.100004300" title="Comparison Study:">
+								<ListField name="lf_77898_1">
+									<List name="lst_77898_2">
+										<ListItem name="LI_77899" ID="77899.100004300" title="Oldest available prior US exam:">
+											<ListItemResponseField name="lirf_77899_1">
+												<Response name="rsp_77899_2">
+													<string name="str_77899_3" />
+												</Response>
+												<TextAfterResponse val="(date)" />
+											</ListItemResponseField>
+										</ListItem>
+										<ListItem name="LI_77901" ID="77901.100004300" title="No prior US" />
+										<ListItem name="LI_77902" ID="77902.100004300" title="Other modality">
+											<ListItemResponseField name="lirf_77902_1">
+												<Response name="rsp_77902_2">
+													<string name="str_77902_3" />
+												</Response>
+												<TextAfterResponse val="(modality and date)" />
+											</ListItemResponseField>
+										</ListItem>
+									</List>
+								</ListField>
+							</Question>
+						</ChildItems>
+					</Section>
+					<Section name="S_77663" ID="77663.100004300" title="PROCEDURE/TECHNICAL NOTE">
+						<ChildItems name="ch_77663_1">
+							<Question name="Q_77909" ID="77909.100004300" title="Technical Quality:">
+								<ListField name="lf_77909_1">
+									<List name="lst_77909_2">
+										<ListItem name="LI_77910" ID="77910.100004300" title="Satisfactory" />
+										<ListItem name="LI_77911" ID="77911.100004300" title=" Limited due to:">
+											<ListItemResponseField name="lirf_77911_1">
+												<Response name="rsp_77911_2">
+													<string name="str_77911_3" />
+												</Response>
+											</ListItemResponseField>
+										</ListItem>
+									</List>
+								</ListField>
+							</Question>
+						</ChildItems>
+					</Section>
+					<Section name="S_77740" ID="77740.100004300" title="FINDINGS">
+						<ChildItems name="ch_77740_1">
+							<Section name="S_77966" ID="77966.100004300" title="1. Thyroid Gland">
+								<ChildItems name="ch_77966_1">
+									<Question name="Q_77978" ID="77978.100004300" title="A. Right Lobe:">
+										<ListField name="lf_77978_1">
+											<List name="lst_77978_2" />
+										</ListField>
+										<ChildItems name="ch_77978_3">
+											<Question name="Q_77989" ID="77989.100004300" title="Size:">
+												<ListField name="lf_77989_1" maxSelections="1">
+													<List name="lst_77989_2">
+														<ListItem name="LI_77991" ID="77991.100004300" title="L: (cm)">
+															<ListItemResponseField name="lirf_77991_1">
+																<Response name="rsp_77991_2">
+																	<string name="str_77991_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+														<ListItem name="LI_77992" ID="77992.100004300" title="W: (cm)">
+															<ListItemResponseField name="lirf_77992_1">
+																<Response name="rsp_77992_2">
+																	<string name="str_77992_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+														<ListItem name="LI_77993" ID="77993.100004300" title="H: (cm)">
+															<ListItemResponseField name="lirf_77993_1">
+																<Response name="rsp_77993_2">
+																	<string name="str_77993_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+													</List>
+												</ListField>
+											</Question>
+											<Question name="Q_77990" ID="77990.100004300" title="Previous Size:">
+												<ListField name="lf_77990_1" maxSelections="1">
+													<List name="lst_77990_2">
+														<ListItem name="LI_77994" ID="77994.100004300" title="L: (cm)">
+															<ListItemResponseField name="lirf_77994_1">
+																<Response name="rsp_77994_2">
+																	<string name="str_77994_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+														<ListItem name="LI_77995" ID="77995.100004300" title="W: (cm)">
+															<ListItemResponseField name="lirf_77995_1">
+																<Response name="rsp_77995_2">
+																	<string name="str_77995_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+														<ListItem name="LI_77996" ID="77996.100004300" title="H: (cm)">
+															<ListItemResponseField name="lirf_77996_1">
+																<Response name="rsp_77996_2">
+																	<string name="str_77996_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+													</List>
+												</ListField>
+											</Question>
+										</ChildItems>
+									</Question>
+									<Question name="Q_77979" ID="77979.100004300" title="B. Left Lobe:">
+										<ListField name="lf_77979_1">
+											<List name="lst_77979_2" />
+										</ListField>
+										<ChildItems name="ch_77979_3">
+											<Question name="Q_77997" ID="77997.100004300" title="Size:">
+												<ListField name="lf_77997_1" maxSelections="1">
+													<List name="lst_77997_2">
+														<ListItem name="LI_78001" ID="78001.100004300" title="L: (cm)">
+															<ListItemResponseField name="lirf_78001_1">
+																<Response name="rsp_78001_2">
+																	<string name="str_78001_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+														<ListItem name="LI_77999" ID="77999.100004300" title="W: (cm)">
+															<ListItemResponseField name="lirf_77999_1">
+																<Response name="rsp_77999_2">
+																	<string name="str_77999_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+														<ListItem name="LI_78000" ID="78000.100004300" title="H: (cm)">
+															<ListItemResponseField name="lirf_78000_1">
+																<Response name="rsp_78000_2">
+																	<string name="str_78000_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+													</List>
+												</ListField>
+											</Question>
+											<Question name="Q_77998" ID="77998.100004300" title="Previous Size:">
+												<ListField name="lf_77998_1" maxSelections="1">
+													<List name="lst_77998_2">
+														<ListItem name="LI_78002" ID="78002.100004300" title="L: (cm)">
+															<ListItemResponseField name="lirf_78002_1">
+																<Response name="rsp_78002_2">
+																	<string name="str_78002_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+														<ListItem name="LI_78003" ID="78003.100004300" title="W:(cm)">
+															<ListItemResponseField name="lirf_78003_1">
+																<Response name="rsp_78003_2">
+																	<string name="str_78003_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+														<ListItem name="LI_78004" ID="78004.100004300" title="H: (cm)">
+															<ListItemResponseField name="lirf_78004_1">
+																<Response name="rsp_78004_2">
+																	<string name="str_78004_3" />
+																</Response>
+															</ListItemResponseField>
+														</ListItem>
+													</List>
+												</ListField>
+											</Question>
+										</ChildItems>
+									</Question>
+									<Question name="Q_77980" ID="77980.100004300" title="C.&#x9;Doppler Flow Whole Gland:">
+										<ListField name="lf_77980_1">
+											<List name="lst_77980_2">
+												<ListItem name="LI_77988" ID="77988.100004300" title="normal" />
+												<ListItem name="LI_77986" ID="77986.100004300" title="increased" />
+												<ListItem name="LI_77987" ID="77987.100004300" title="decreased" />
+											</List>
+										</ListField>
+									</Question>
+									<Question name="Q_77976" ID="77976.100004300" title="D. Thyroid Echotexture:">
+										<CodedValue>
+											<Code val="RID34346" />
+											<CodeText val="echotexture" />
+											<CodeSystem>
+												<CodeSystemName val="RADLEX" />
+											</CodeSystem>
+										</CodedValue>
+										<ListField name="lf_77976_1">
+											<List name="lst_77976_2">
+												<ListItem name="LI_77982" ID="77982.100004300" title="Parenchymal echogenicity is uniform.  No significant nodule.">
+													<CodedValue>
+														<Code val="RID34346" />
+														<CodeText val="homogeneous background echotexture" />
+														<CodeSystem>
+															<CodeSystemName val="RADLEX" />
+														</CodeSystem>
+													</CodedValue>
+												</ListItem>
+												<ListItem name="LI_77983" ID="77983.100004300" title="Subtle lobulation of outline and parenchymal heterogeneity without distinct nodules.">
+													<CodedValue>
+														<Code val="RID34350" />
+														<CodeText val="heterogeneous background echotexture" />
+														<CodeSystem>
+															<CodeSystemName val="RADLEX" />
+														</CodeSystem>
+													</CodedValue>
+												</ListItem>
+												<ListItem name="LI_77984" ID="77984.100004300" title="Parenchymal heterogeneity with numerous small hypoechoic nodules, consistent with Hashimotos (lymphocytic) thyroiditis">
+													<CodedValue>
+														<Code val="RID3669" />
+														<CodeText val="Hashimoto thyroiditis" />
+														<CodeSystem>
+															<CodeSystemName val="RADLEX" />
+														</CodeSystem>
+													</CodedValue>
+												</ListItem>
+												<ListItem name="LI_77981" ID="77981.100004300" title="No suspicious nodules warranting follow up or biopsy.">
+													<!-- <CodedValue>
+																		<Code val=" "/>
+																		<CodeText val=" "/>
+																		<CodeSystem>
+																			<CodeSystemName val="RADLEX"/>
+																		</CodeSystem>
+																</CodedValue>-->
+												</ListItem>
+												<ListItem name="LI_77985" ID="77985.100004300" title="Nodules warranting assessment, described below.">
+													<!-- <CodedValue>
+																		<Code val=" " />
+																		<CodeText val=" " />
+																		<CodeSystem>
+																			<CodeSystemName val="RADLEX"/>
+																		</CodeSystem>
+																	</CodedValue>-->
+												</ListItem>
+											</List>
+										</ListField>
+									</Question>
+								</ChildItems>
+							</Section>
+							<Section name="S_77967" ID="77967.100004300" title="2. Nodules  (Erase this section if no nodules to assess):">
+								<ChildItems name="ch_77967_1">
+									<Question name="Q_78005" ID="78005.100004300" title="A. Estimated total number of nodules &gt; and or = 1 cm:">
+										<ListField name="lf_78005_1">
+											<List name="lst_78005_2">
+												<ListItem name="LI_78006" ID="78006.100004300" title="1" />
+												<ListItem name="LI_78007" ID="78007.100004300" title="2" />
+												<ListItem name="LI_78008" ID="78008.100004300" title="3" />
+												<ListItem name="LI_78009" ID="78009.100004300" title="4" />
+												<ListItem name="LI_78010" ID="78010.100004300" title="5" />
+												<ListItem name="LI_78011" ID="78011.100004300" title="6 - 10" />
+												<ListItem name="LI_78012" ID="78012.100004300" title="&gt;10" />
+											</List>
+										</ListField>
+									</Question>
+									<Section name="S_dmk1" ID="78013.100004300" title="B.Nodule:" minCard="0" maxCard="4">
+										<ChildItems>
+											<Question name="Q_78013" ID="78013.100004300" title="B. Nodule [Repeating section lablel: L1, L2, L3, R1, R2, and/or R3]">
+												<ResponseField name="rf_78013_1">
+													<Response name="rsp_78013_2">
+														<string name="str_78013_3" />
+													</Response>
+												</ResponseField>
+												<ChildItems name="ch_78013_4">
+													<Question name="Q_78018" ID="78018.100004300" title="I.&#x9;Location: ">
+														<ListField name="lf_78018_1">
+															<List name="lst_78018_2">
+																<ListItem name="LI_78025" ID="78025.100004300" title="Right upper" />
+																<ListItem name="LI_78027" ID="78027.100004300" title="Right mid" />
+																<ListItem name="LI_78028" ID="78028.100004300" title="Right lower" />
+																<ListItem name="LI_78029" ID="78029.100004300" title="Left upper" />
+																<ListItem name="LI_78030" ID="78030.100004300" title="Left mid" />
+																<ListItem name="LI_78031" ID="78031.100004300" title="Left lower" />
+															</List>
+														</ListField>
+													</Question>
+													<Question name="Q_78019" ID="78019.100004300" title="II.&#x9;Nodule Size: ">
+														<ListField name="lf_78019_1">
+															<List name="lst_78019_2" />
+														</ListField>
+														<ChildItems name="ch_78019_3">
+															<Question name="Q_78033" ID="78033.100004300" title="Size:">
+																<ListField name="lf_78033_1" maxSelections="1">
+																	<List name="lst_78033_2">
+																		<ListItem name="LI_78034" ID="78034.100004300" title="L: (cm)">
+																			<ListItemResponseField name="lirf_78034_1">
+																				<Response name="rsp_78034_2">
+																					<string name="str_78034_3" />
+																				</Response>
+																			</ListItemResponseField>
+																		</ListItem>
+																		<ListItem name="LI_78035" ID="78035.100004300" title="W: (cm)">
+																			<ListItemResponseField name="lirf_78035_1">
+																				<Response name="rsp_78035_2">
+																					<string name="str_78035_3" />
+																				</Response>
+																			</ListItemResponseField>
+																		</ListItem>
+																		<ListItem name="LI_78039" ID="78039.100004300" title="H: (cm)">
+																			<ListItemResponseField name="lirf_78039_1">
+																				<Response name="rsp_78039_2">
+																					<string name="str_78039_3" />
+																				</Response>
+																			</ListItemResponseField>
+																		</ListItem>
+																		<ListItem name="LI_78040" ID="78040.100004300" title="Vol: (ml)">
+																			<ListItemResponseField name="lirf_78040_1">
+																				<Response name="rsp_78040_2">
+																					<string name="str_78040_3" />
+																				</Response>
+																			</ListItemResponseField>
+																		</ListItem>
+																	</List>
+																</ListField>
+															</Question>
+															<Question name="Q_78032" ID="78032.100004300" title="Previous Size: ">
+																<ListField name="lf_78032_1" maxSelections="1">
+																	<List name="lst_78032_2">
+																		<ListItem name="LI_78036" ID="78036.100004300" title="L: (cm)">
+																			<ListItemResponseField name="lirf_78036_1">
+																				<Response name="rsp_78036_2">
+																					<string name="str_78036_3" />
+																				</Response>
+																			</ListItemResponseField>
+																		</ListItem>
+																		<ListItem name="LI_78041" ID="78041.100004300" title="W: (cm)">
+																			<ListItemResponseField name="lirf_78041_1">
+																				<Response name="rsp_78041_2">
+																					<string name="str_78041_3" />
+																				</Response>
+																			</ListItemResponseField>
+																		</ListItem>
+																		<ListItem name="LI_78042" ID="78042.100004300" title="H: (cm)">
+																			<ListItemResponseField name="lirf_78042_1">
+																				<Response name="rsp_78042_2">
+																					<string name="str_78042_3" />
+																				</Response>
+																			</ListItemResponseField>
+																		</ListItem>
+																		<ListItem name="LI_78043" ID="78043.100004300" title="Vol: (ml)">
+																			<ListItemResponseField name="lirf_78043_1">
+																				<Response name="rsp_78043_2">
+																					<string name="str_78043_3" />
+																				</Response>
+																			</ListItemResponseField>
+																		</ListItem>
+																	</List>
+																</ListField>
+															</Question>
+														</ChildItems>
+													</Question>
+													<Question name="Q_78020" ID="78020.100004300" title="III.&#x9;Composition: ">
+														<ListField name="lf_78020_1">
+															<List name="lst_78020_2">
+																<ListItem name="LI_78046" ID="78046.100004300" title="(0 points) cystic/almost completely cystic " />
+																<ListItem name="LI_78047" ID="78047.100004300" title="(0 points) spongiform: &gt;50% small cystic spaces. DO NOT add points in other categories" />
+																<ListItem name="LI_78048" ID="78048.100004300" title="(1 point) mixed cystic and solid" />
+																<ListItem name="LI_78044" ID="78044.100004300" title="(2 points) solid/almost completely solid" />
+																<ListItem name="LI_78045" ID="78045.100004300" title="(2 points) shadowing calcifications prevent assessment" />
+															</List>
+														</ListField>
+													</Question>
+													<Question name="Q_78021" ID="78021.100004300" title="IV.&#x9;Echogenicity (assess solid component of mixed cystic and solid nodule):">
+														<CodedValue>
+															<Code val="RID3669" />
+															<CodeText val="Hashimoto thyroiditis" />
+															<CodeSystem>
+																<CodeSystemName val="RADLEX" />
+															</CodeSystem>
+														</CodedValue>
+														<ListField name="lf_78021_1">
+															<List name="lst_78021_2">
+																<ListItem name="LI_78049" ID="78049.100004300" title="(0 points) anechoic">
+																	<CodedValue>
+																		<Code val="RID34360" />
+																		<CodeText val="anechoic" />
+																		<CodeSystem>
+																			<CodeSystemName val="RADLEX" />
+																		</CodeSystem>
+																	</CodedValue>
+																</ListItem>
+																<ListItem name="LI_78050" ID="78050.100004300" title="(1 point) Iso/hyperechoic&#x9;">
+																	<CodedValue>
+																		<!-- option coded for isoehoic, Hyperechoic (Increased echogenicity relative to thyroid tissue) is RID6048 -->
+																		<Code val="RID6047" />
+																		<CodeText val="isoechoic" />
+																		<CodeSystem>
+																			<CodeSystemName val="RADLEX" />
+																		</CodeSystem>
+																	</CodedValue>
+																</ListItem>
+																<ListItem name="LI_78051" ID="78051.100004300" title="(2 points) hypoechoic">
+																	<CodedValue>
+																		<Code val="RID6046" />
+																		<CodeText val="hypoechoic" />
+																		<CodeSystem>
+																			<CodeSystemName val="RADLEX" />
+																		</CodeSystem>
+																	</CodedValue>
+																</ListItem>
+																<ListItem name="LI_78052" ID="78052.100004300" title="(3 points) very hypoechoic">
+																	<CodedValue>
+																		<Code val="RID49881" />
+																		<CodeText val="very hypoechoic" />
+																		<CodeSystem>
+																			<CodeSystemName val="RADLEX" />
+																		</CodeSystem>
+																	</CodedValue>
+																</ListItem>
+																<ListItem name="LI_78053" ID="78053.100004300" title="(2 points) echogenicity cannot be determined ">
+																	<!-- previously, shadowing calcifications prevent assessment, check with clinical advisory to code for this? -->
+																	<!-- <CodedValue>
+																				<Code val=" Not RadLex code at this time"/>
+																				<CodeText val="echogenicity cannot be determined"/>
+																				<CodeSystem>
+																					<CodeSystemName val="RADLEX"/>
+																				</CodeSystem>
+																				</CodedValue>-->
+																</ListItem>
+															</List>
+														</ListField>
+													</Question>
+													<Question name="Q_78022" ID="78022.100004300" title="V.&#x9;Shape:">
+														<ListField name="lf_78022_1">
+															<List name="lst_78022_2">
+																<ListItem name="LI_78054" ID="78054.100004300" title="(0 points) wider than tall or round" />
+																<ListItem name="LI_78055" ID="78055.100004300" title="(3 points) taller than wide" />
+															</List>
+														</ListField>
+													</Question>
+													<Question name="Q_78023" ID="78023.100004300" title="VI.&#x9;Margins:">
+														<ListField name="lf_78023_1">
+															<List name="lst_78023_2">
+																<ListItem name="LI_78056" ID="78056.100004300" title="(0 points) smooth" />
+																<ListItem name="LI_78057" ID="78057.100004300" title="(0 points) ill-defined" />
+																<ListItem name="LI_78058" ID="78058.100004300" title="(2 points) lobulated/irregular" />
+																<ListItem name="LI_78059" ID="78059.100004300" title="(3 points) extra-thyroidal extension" />
+																<ListItem name="LI_78060" ID="78060.100004300" title="(0 points) border not seen clearly" />
+															</List>
+														</ListField>
+													</Question>
+													<Question name="Q_78014" ID="78014.100004300" title="VII.&#x9;Echogenic foci (if more than one type, choose the one with highest score):">
+														<ListField name="lf_78014_1">
+															<List name="lst_78014_2">
+																<ListItem name="LI_78061" ID="78061.100004300" title="(0 points) none" />
+																<ListItem name="LI_78062" ID="78062.100004300" title="(0 points) large comet-tail artifacts" />
+																<ListItem name="LI_78063" ID="78063.100004300" title="(1 points) macrocalcifications" />
+																<ListItem name="LI_78064" ID="78064.100004300" title="(2 points) peripheral calcifications" />
+																<ListItem name="LI_78065" ID="78065.100004300" title="(3 points) punctate echogenic foci" />
+															</List>
+														</ListField>
+													</Question>
+													<Question name="Q_78016" ID="78016.100004300" title="VIII.&#x9;ACR TI-RADS total points: [tallied points from III-VII]">
+														<ResponseField name="rf_78016_1">
+															<Response name="rsp_78016_2">
+																<string name="str_78016_3" />
+															</Response>
+															<!-- <TextAfterResponse val="[tallied points from III-VII]"/> -->
+														</ResponseField>
+													</Question>
+													<Question name="Q_78017" ID="78017.100004300" title="IX.&#x9;ACR TI-RADS risk category: ">
+														<ListField name="lf_78017_1">
+															<List name="lst_78017_2">
+																<ListItem name="LI_78066" ID="78066.100004300" title="TR1 (0 points) Benign" />
+																<ListItem name="LI_78067" ID="78067.100004300" title="TR2 (2 points) Risk of malignancy &lt;2%" />
+																<ListItem name="LI_78068" ID="78068.100004300" title="TR3 (3 points) Risk of malignancy &lt;5%" />
+																<ListItem name="LI_78069" ID="78069.100004300" title="TR4 (4-6 points) Risk of malignancy 5-20%" />
+																<ListItem name="LI_78070" ID="78070.100004300" title="TR5 (&gt; or = 7 points) Risk of malignancy &gt;20%" />
+															</List>
+														</ListField>
+													</Question>
+												</ChildItems>
+											</Question>
+										</ChildItems>
+									</Section>
+								</ChildItems>
+							</Section>
+							<Section name="S_77739" ID="77739.100004300" title="3. LYMPH NODES">
+								<ChildItems name="ch_77739_1">
+									<Question name="Q_77968" ID="77968.100004300" title="A.&#x9;Levels evaluated:">
+										<ListField name="lf_77968_1">
+											<List name="lst_77968_2">
+												<ListItem name="LI_77969" ID="77969.100004300" title="Levels 2 - 4 (lateral) and 6 (central)" />
+												<ListItem name="LI_77970" ID="77970.100004300" title="Other">
+													<ChildItems name="ch_77970_1">
+														<Question name="Q_77971" ID="77971.100004300" title="[Enter text]">
+															<ResponseField name="rf_77971_1">
+																<Response name="rsp_77971_2">
+																	<string name="str_77971_3" />
+																</Response>
+															</ResponseField>
+														</Question>
+													</ChildItems>
+												</ListItem>
+											</List>
+										</ListField>
+									</Question>
+									<Question name="Q_LN_Status_77728" ID="77728.100004300" title="B. Suspicious lymph nodes: ">
+										<ListField name="lf_77728_1">
+											<List name="lst_77728_2">
+												<ListItem name="LI_77972" ID="77972.100004300" title="No" />
+												<ListItem name="LI_77973" ID="77973.100004300" title="Yes">
+													<ChildItems name="ch_77973_1">
+														<Question name="Q_77974" ID="77974.100004300" title="location: [Enter text]">
+															<ResponseField name="rf_77974_1">
+																<Response name="rsp_77974_2">
+																	<string name="str_77974_3" />
+																</Response>
+															</ResponseField>
+														</Question>
+														<Question name="Q_77975" ID="77975.100004300" title="short axis size: (cm)">
+															<ResponseField name="rf_77975_1">
+																<Response name="rsp_77975_2">
+																	<string name="str_77975_3" />
+																</Response>
+																<!-- <TextAfterResponse val="(cm)"/> -->
+															</ResponseField>
+														</Question>
+													</ChildItems>
+												</ListItem>
+											</List>
+										</ListField>
+									</Question>
+								</ChildItems>
+							</Section>
+						</ChildItems>
+					</Section>
+					<Section name="S_Comments_77727" ID="77727.100004300" title="OTHER">
+						<ChildItems name="ch_77727_1">
+							<Question name="Q_78175" ID="78175.100004300" title="Other comments:">
+								<ResponseField name="rf_78175_1">
+									<Response name="rsp_78175_2">
+										<string name="str_78175_3" />
+									</Response>
+								</ResponseField>
+							</Question>
+						</ChildItems>
+					</Section>
+					<Section name="S_78071" ID="78071.100004300" title="IMPRESSION">
+						<!-- Note to expert Panel: v23 of paper template has a section titles "Thyroid:", not needed? -->
+						<ChildItems name="ch_78071_1">
+							<Question name="Q_Oth_77689" ID="77689.100004300" title="A.&#x9;  Pick one of the following if no follow up required or leave blank if follow up is required:">
+								<ListField name="lf_77689_1">
+									<List name="lst_77689_2">
+										<ListItem name="LI_78072" ID="78072.100004300" title="Normal thyroid sonogram. No imaging follow up is recommended unless clinically indicated. " />
+										<ListItem name="LI_78073" ID="78073.100004300" title="Small thyroid nodules with convincingly benign features. No imaging follow up is recommended unless clinically indicated." />
+										<ListItem name="LI_78074" ID="78074.100004300" title="Consistent with Hashimoto's (lymphocytic) thyroiditis. No suspicious nodule.  No imaging follow up is recommended unless clinically indicated." />
+										<ListItem name="LI_78075" ID="78075.100004300" title="Nodules show stability over at least 5 years.  No further follow up recommended unless clinically indicated." />
+									</List>
+								</ListField>
+							</Question>
+							<Question name="Q_78076" ID="78076.100004300" title="B.   US guided FNA should be considered for nodule(s):">
+								<!--<DisplayedItem title="[Default None. If applicable, list which nodules should be considered for FNA]" ID="d_dmk1"/>-->
+								<ResponseField>
+									<Response>
+										<string val="None" />
+									</Response>
+									<TextAfterResponse val="If applicable, list which nodules should be considered for FNA" />
+								</ResponseField>
+							</Question>
+							<Question name="Q_dmk1" ID="78077.100004300" title="C.&#x9;Annual follow up US recommended until stability over 5 years has been demonstrated for the following nodule(s):">
+								<!-- <DisplayedItem title="[Default None or list nodules are recommended for follow up]" ID="d_dmk2"/> -->
+								<ResponseField>
+									<Response>
+										<string val="None" />
+									</Response>
+									<TextAfterResponse val="If applicable, list which nodules should be considered for follow up" />
+								</ResponseField>
+							</Question>
+							<Question name="Q_dmk2" ID="78078.100004300" title="D.&#x9;  Adenopathy:">
+								<ListField name="lf_dmk1">
+									<List name="lst_dmk2">
+										<ListItem name="LI_dmk1" ID="78072.100004300" title="None" />
+										<ListItem name="LI_dmk2" ID="78073.100004300" title="Yes">
+											<ChildItems name="ch_dmk2">
+												<Question name="Q_dmk10" ID="77971.100004300" title="[Enter text]">
+													<ResponseField name="rf_dmk1">
+														<Response name="rsp_dmk1">
+															<string name="str_dmk1" />
+														</Response>
+														<TextAfterResponse val="enter text if abnormal nodes are present" />
+													</ResponseField>
+												</Question>
+											</ChildItems>
+										</ListItem>
+									</List>
+								</ListField>
+							</Question>
+							<Question name="Q_dmk4" ID="78079.100004300" title="E.&#x9;  Other:">
+								<!-- <DisplayedItem title="[Default: no other abnormality demonstrated OR enter other pathology demonstrated here]" ID="d_dmk4"/> -->
+								<ResponseField>
+									<Response>
+										<string val="No other abnormality demonstrated." />
+									</Response>
+									<TextAfterResponse val="enter other pathology demonstrated here" />
+								</ResponseField>
+							</Question>
+							<DisplayedItem title="Note that nodules less than 1.5cm on the US may not be individually reported unless judged to warrant surveillance.&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Surveillance imaging is greatly facilitated by having the prior imaging file available.&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;For these recommendations, growth is defined as 50% increase in volume or 20% increase in each of two linear dimensions.&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;" ID="d_dmk3" />
+						</ChildItems>
+					</Section>
+				</ChildItems>
+			</Body>
+			<Footer name="footer" ID="Footer.US_Thyroid_CCO.359_1.0.0.DRAFT_sdcFDF">
+				<Property type="meta" styleClass="copyright" propName="CopyrightFooter" val="(c) 2018 College of American Pathologists.  All rights reserved.  License required for use." />
+			</Footer>
+		</FormDesign>
+	</XMLPackage>
+</SDCPackage>
