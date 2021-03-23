@@ -10,6 +10,7 @@ import { notify } from "../../components/Notification/Notification";
 import { useForm, useForms } from "../../hooks/services";
 import ParserService from "../../services/ParserService";
 import FormService from "../../services/FormService";
+import { useQueryClient } from "react-query";
 
 export default function Forms() {
   return (
@@ -68,6 +69,7 @@ function FormsPanel() {
   const { formId } = useParams<{ formId: string }>();
   const { data: forms } = useForms();
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
+  const queryClient = useQueryClient();
 
   const formCards = forms?.map((form, i) => {
     return (
@@ -82,17 +84,16 @@ function FormsPanel() {
     const file = event.target.files[0];
     ParserService.parse(file)
       .then((form: Model.SDCForm) => {
-        FormService.create(form)
-          .then((createdForm) => {
-            console.log(createdForm);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        return FormService.create(form);
       })
+      .then((createdForm) => {
+        console.log(createdForm);
+        return queryClient.refetchQueries("forms");
+      })
+      .then(() => notify.success(`Form Created.`))
       .catch((err) => {
         notify.error(err.message);
-        console.log(err);
+        /* console.log(err); */
       });
   };
 
