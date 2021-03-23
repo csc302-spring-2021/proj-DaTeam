@@ -103,12 +103,7 @@ export class FormParser extends NodeParser {
     }
     this.result.version = obj.attributes.version;
     this.result.title = obj.attributes.formTitle;
-    for (let [index, property] of obj.Property.entries()) {
-      this.result.formProperties[index] = this.formPropertyParser(
-        index,
-        property
-      );
-    }
+    this.result.formProperties = obj.Property.map(this.formPropertyParser);
   }
   parseChildren(obj: any) {
     if (!obj.Body) throw this.stack.genError("Missing child: Body");
@@ -116,11 +111,9 @@ export class FormParser extends NodeParser {
     super.parseChildren(obj.Body[0]);
     this.stack.leave();
   }
-  formPropertyParser(index: number, obj: any) {
+  formPropertyParser(obj: any) {
     let potentialResult = new Model.SDCFormProperty();
-    try {
-      potentialResult.order = Number(obj.attributes.order);
-    } catch {} // Cast order to number if possible, catch an ignore error
+    potentialResult.order = parseInt(obj.attributes.order);
     if (!obj.attributes.name) {
       throw this.stack.genError("Missing attribute: name");
     }

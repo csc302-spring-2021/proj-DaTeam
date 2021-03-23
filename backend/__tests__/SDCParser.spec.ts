@@ -34,9 +34,15 @@ describe("Parse Form", () => {
     expect(result).toHaveProperty("formProperties");
     expect(result.formProperties).toHaveLength(1);
     expect(result.formProperties[0]).toBeInstanceOf(Model.SDCFormProperty);
-    expect(result.formProperties[0]).toHaveProperty("name");
-    expect(result.formProperties[0]).toHaveProperty("propName");
-    expect(result.formProperties[0]).toHaveProperty("val");
+    expect(result.formProperties[0]).toEqual(
+      expect.objectContaining({
+        order: 1,
+        name: "Copyright",
+        propName: "Copyright",
+        val:
+          "(c) 2019 College of American Pathologists.  All rights reserved.  License required for use.",
+      })
+    );
   });
   test("Children extracted", () => {
     expect(result).toHaveProperty("children");
