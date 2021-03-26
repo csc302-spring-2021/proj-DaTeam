@@ -77,6 +77,36 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
+  /procedures:
+    post:
+      description: "Create a new procedure"
+      tags:
+        - procedure
+      requestBody:
+        required: true
+        description: SDC procedure
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProcedureRequestBody"
+      responses:
+        201:
+          description: "Procedure created successfully, return UID"
+          $ref: "#/components/responses/UID"
+    get:
+      description: "Get all procedures"
+      tags:
+        - procedure
+      responses:
+        200:
+          description: Return all procedures
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Procedure"
+
   /procedures/{procedureId}:
     get:
       description: Get a specific procedure
@@ -336,17 +366,32 @@ components:
     Procedure:
       type: object
       properties:
-        id:
+        uid:
           type: string
           description: Unique identifier for this procedure
           format: uuid
-        external_id:
+        id:
           type: string
-          description: External ID (ProcedureID in handout) for identifying the procedure
+          description: External ID (DiagnosticProcedureID in handout) for identifying the procedure
         name:
           type: string
           description: The name of the procedure
           example: "Lung Biopsy"
+
+    ProcedureRequestBody:
+      type: object
+      properties:
+        __class:
+          type: string
+          description: Class identifier
+          default: Procedure
+        id:
+          type: string
+          description: Diagnostic procedure ID
+        name:
+          type: string
+          description: The name of the diagnostic procedure
+          example: "CT Scan"
 
     FormPartial:
       type: object
