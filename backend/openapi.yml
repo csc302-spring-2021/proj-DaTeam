@@ -76,6 +76,30 @@ paths:
           $ref: "#/components/responses/BadRequest"
         404:
           $ref: "#/components/responses/NotFound"
+    put:
+      description: Update a patient
+      tags:
+        - patient
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: SDC Patient
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientRequestBody"
+      responses:
+        204:
+          description: Patient updated successfully
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
 
   /procedures:
     post:
@@ -125,6 +149,30 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/Procedure"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+    put:
+      description: Update a procedure
+      tags:
+        - procedure
+      parameters:
+        - name: procedureId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: SDC procedure
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProcedureRequestBody"
+      responses:
+        204:
+          description: Procedure updated successfully
         400:
           $ref: "#/components/responses/BadRequest"
         404:
@@ -282,6 +330,29 @@ paths:
           $ref: "#/components/responses/NotFound"
     put:
       description: Update a response
+      tags:
+        - response
+      parameters:
+        - name: responseId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormResponseRequestBody"
+      responses:
+        204:
+          description: Response updated successfully
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+    delete:
+      description: Delete a response
       tags:
         - response
       parameters:
