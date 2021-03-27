@@ -25,7 +25,7 @@ export class StackUtil {
     if (this.inspectedObject == null) return "";
     const obj = JSON.parse(JSON.stringify(this.inspectedObject));
     for (let key of Object.keys(obj)) {
-      if (typeof obj[key] === "object") {
+      if (obj[key] != null && typeof obj[key] === "object") {
         obj[key] = `[object ${obj[key].constructor.name}]`;
       }
     }

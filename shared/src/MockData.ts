@@ -25,6 +25,8 @@ export function genProcedureComplete(): Model.Procedure {
   const result = genProcedurePartial();
   result.uid = uuid();
   result.assignedFormID = uuid();
+  result.creationTime = new Date();
+  result.updateTime = new Date();
   return result;
 }
 
@@ -39,6 +41,8 @@ export function genPatientPartial(): Model.Patient {
 export function genPatientComplete(): Model.Patient {
   const result = genPatientPartial();
   result.uid = uuid();
+  result.creationTime = new Date();
+  result.updateTime = new Date();
   return result;
 }
 
@@ -62,6 +66,8 @@ export function genFormComplete(): Model.SDCForm {
     '<Header><Property type="meta" styleClass="copyright" order="410" propName="CopyrightHeader" val="(c) 2019 College of American Pathologists.  All rights reserved.  License required for use." /></Header>';
   result.footer =
     '<Footer><Property type="meta" styleClass="copyright" order="410" propName="CopyrightFooter" val="(c) 2019 College of American Pathologists.  All rights reserved.  License required for use." /></Footer>';
+  result.creationTime = new Date();
+  result.updateTime = new Date();
   return result;
 }
 
@@ -196,6 +202,8 @@ export function genFormResponsePartial(): Model.SDCFormResponse {
 export function genFormResponseComplete(): Model.SDCFormResponse {
   const result = genFormResponsePartial();
   result.uid = uuid();
+  result.creationTime = new Date();
+  result.updateTime = new Date();
   return result;
 }
 

@@ -6,6 +6,8 @@ export class Procedure {
   uid?: string;
   id: string;
   assignedFormID?: string; // uid of the form
+  creationTime?: Date;
+  updateTime?: Date;
 
   constructor(data?: any) {
     Object.assign(this, data);
@@ -16,6 +18,8 @@ export class Patient {
   uid?: string;
   id: string; // external patient id (OHIP)
   name: string;
+  creationTime?: Date;
+  updateTime?: Date;
 
   constructor(data?: any) {
     Object.assign(this, data);
@@ -41,6 +45,8 @@ export class SDCForm extends SDCNode {
   version: string;
   header?: string;
   footer?: string;
+  creationTime?: Date;
+  updateTime?: Date;
   formProperties: SDCFormProperty[] = [];
 }
 
@@ -81,6 +87,8 @@ export class SDCFormResponse {
   uid?: string; // uid is only assigned after it is stored in the database
   formId: string; // uid of the form
   patientID: string; // uid of the patient
+  creationTime?: Date;
+  updateTime?: Date;
   answers: SDCAnswer[] = [];
 
   constructor(data?: any) {
