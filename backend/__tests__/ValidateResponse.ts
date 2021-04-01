@@ -169,4 +169,22 @@ export default {
       };
     }
   },
+  hasPatientId(received, expectedId) {
+    // PreCondition: received is a Patient item
+    let form = serializer.decode(received, Model.Patient);
+    const pass = form.uid == expectedId;
+    if (pass) {
+      return {
+        message: () =>
+          `expected ${received} to not have patient id of ${expectedId}`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () =>
+          `expected ${received} to have patient id of ${expectedId}`,
+        pass: false,
+      };
+    }
+  },
 };
