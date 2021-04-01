@@ -29,7 +29,7 @@ beforeAll(() => {
 });
 
 // Mock Endpoint test example
-describe.only("GET /mock", () => {
+describe("GET /mock", () => {
   test("Mock Example", (done) => {
     request
       .get("/mock")
@@ -191,7 +191,7 @@ describe("POST /api/forms: Create a new form from an XML document", () => {
   });
 });
 
-describe.only("GET /api/forms/{formId}: Get a specific form", () => {
+describe("GET /api/forms/{formId}: Get a specific form", () => {
   let formId;
   beforeAll(() => {
     var mockForm = Mocks.buildFormComplete();
@@ -200,7 +200,7 @@ describe.only("GET /api/forms/{formId}: Get a specific form", () => {
       .then((id) => (formId = id));
   });
 
-  test.only("Return Form matching query", (done) => {
+  test("Return Form matching query", (done) => {
     request
       .get(`/api/forms/${formId}`)
       .expect("Content-Type", /json/)
