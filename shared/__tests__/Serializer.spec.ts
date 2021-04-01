@@ -53,10 +53,10 @@ describe("Query Object Serialization Tests", () => {
   });
   test("Complicated case", (done) => {
     const obj = QueryObject.query(
-      Model.Patient,
-      QueryObject.contains("name", "Henry").and(
-        QueryObject.greaterOrEq("age", "5")
-          .or(QueryObject.equals("age", "3"))
+      Model.SDCForm,
+      QueryObject.contains("title", "test").and(
+        QueryObject.greaterOrEq("order", "5")
+          .or(QueryObject.equals("order", "3"))
           .not()
       )
     );

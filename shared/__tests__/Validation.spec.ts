@@ -67,4 +67,48 @@ describe("Query Object Serialization Tests", () => {
     validateObj();
     done();
   });
+  test("Invalid class", (done) => {
+    obj = new QueryObject.Query({
+      targetClass: "Password",
+      condition: QueryObject.contains("user", "Henry"),
+    });
+    expect(validateObj).toThrow("Password is not a valid targetClass");
+    done();
+  });
+  test("Invalid column", (done) => {
+    obj = QueryObject.query(
+      Model.Patient,
+      QueryObject.contains("name", "Henry").and(
+        QueryObject.greaterOrEq("age", "5")
+          .or(QueryObject.equals("age", "3"))
+          .not()
+      )
+    );
+    expect(validateObj).toThrow("age is not a valid column");
+    done();
+  });
+  test("Invalid column opt", (done) => {
+    obj = QueryObject.query(
+      Model.Patient,
+      new QueryObject.ColumnCondition({
+        opt: "!=",
+        column: "id",
+        value: "5",
+      })
+    );
+    expect(validateObj).toThrow("!= is not a valid opt");
+    done();
+  });
+  test("Invalid binary opt", (done) => {
+    obj = QueryObject.query(
+      Model.Patient,
+      new QueryObject.BinaryOpt({
+        opt: "&&",
+        lhs: QueryObject.equals("name", "Henry"),
+        rhs: QueryObject.equals("name", "Henry"),
+      })
+    );
+    expect(validateObj).toThrow("&& is not a valid opt");
+    done();
+  });
 });
