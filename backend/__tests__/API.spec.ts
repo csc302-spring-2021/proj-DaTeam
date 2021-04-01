@@ -51,147 +51,79 @@ describe("GET /mock", () => {
  * Add a new test block for each API end point
  */
 
-describe("GET /api/patients/search: Search for a patient by ID or legal name", () => {
+describe("/api/v1/patients", () => {
   var mockPatient = Mock.getMockPatient();
   var patientId = mockPatient.id;
   var patientName = mockPatient.name;
 
-  test("Search by ID that exists", (done) => {
-    request
-      .get(`/api/patients/search?query=${patientId}`)
-      .expect("Content-Type", /json/)
-      .expect(HttpCode.OK)
-      .then((response) => {
-        expect(response.body).isList();
-        expect(response.body).not.isListEmpty();
-        expect(response.body).allPatientItems();
-        expect(response.body).containsPatient(patientName, patientId);
-        done();
-      })
-      .catch((err) => done(err));
+  test("GET: Get all patients", (done) => {
+    done();
   });
-  test("Search by name that exists", (done) => {
-    request
-      .get(`/api/patients/search?query=${patientName}`)
-      .expect("Content-Type", /json/)
-      .expect(HttpCode.OK)
-      .then((response) => {
-        expect(response.body).isList();
-        expect(response.body).not.isListEmpty();
-        expect(response.body).allPatientItems();
-        expect(response.body).containsPatient(patientName, patientId);
-        done();
-      })
-      .catch((err) => done(err));
+
+  test("POST: Create a new patient", (done) => {
+    done();
   });
-  test("Search by name that does not exist", (done) => {
-    request
-      .get("/api/patients/search?query=FakeName")
-      .expect("Content-Type", /json/)
-      .expect(HttpCode.OK)
-      .then((response) => {
-        expect(response.body).isList();
-        expect(response.body).isListEmpty();
-        done();
-      })
-      .catch((err) => done(err));
-  });
-  test("Search by ID that does not exist", (done) => {
-    request
-      .get("/api/patients/search?query=FakeID")
-      .expect("Content-Type", /json/)
-      .expect(HttpCode.OK)
-      .then((response) => {
-        expect(response.body).isList();
-        expect(response.body).isListEmpty();
-        done();
-      })
-      .catch((err) => done(err));
+
+  test("POST and GET: Create a new patient and verify persistence", (done) => {
+    done();
   });
 });
 
-describe("GET /api/patients/{patientId}: Get a specific patient", () => {
-  test("Return the specified patient", (done) => {
-    request
-      .get("/api/patients/{patientId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+describe("/api/v1/patients/{patiendId}", () => {
+  test("GET: Get a specified patient", (done) => {
+    done();
   });
-  test("Bad Request", (done) => {
-    request
-      .get("/api/patients/{patientId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Bad Request", (done) => {
+    // wrong parameter
+    done();
   });
-  test("Not Found", (done) => {
-    request
-      .get("/api/patients/{patientId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Not Found", (done) => {
+    // id doesnt exist
+    done();
   });
 });
 
-describe("GET /api/procedures/{procedureId}: Get a specific procedure", () => {
-  test("Returns the requested procedure", (done) => {
-    request
-      .get("/api/procedures/{procedureId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+describe("/api/v1/procedures/{procedureId}", () => {
+  test("GET: Get a specific procedure", (done) => {
+    done();
   });
-  test("Bad Request", (done) => {
-    request
-      .get("/api/procedures/{procedureId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Bad Request", (done) => {
+    // wrong parameter
+    done();
   });
-  test("Not Found", (done) => {
-    request
-      .get("/api/procedures/{procedureId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Not Found", (done) => {
+    // id doesnt exist
+    done();
   });
 });
 
-describe("POST /api/forms: Create a new form from an XML document", () => {
-  test("Successfully created form", (done) => {
-    request
-      .post("/api/forms")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+describe("/api/v1/parser", () => {
+  test("GET: Parses an SDC XML file into JSON", (done) => {
+    done();
   });
-  test("Bad Request", (done) => {
-    request
-      .post("/api/forms")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Bad Request", (done) => {
+    // wrong parameter or bad file
+    done();
   });
 });
 
-describe("GET /api/forms/{formId}: Get a specific form", () => {
+describe("/api/v1/forms", () => {
+  test("GET: Get all forms", (done) => {
+    done();
+  });
+  test("POST: Create new form", (done) => {
+    done();
+  });
+  test("POST and GET: Create new form and verify persistence", (done) => {
+    done();
+  });
+  test("POST: Bad Request", (done) => {
+    // wrong parameter?
+    done();
+  });
+});
+
+describe("/api/v1/forms/{formId}", () => {
   let formId;
   beforeAll(() => {
     var mockForm = Mocks.buildFormComplete();
@@ -199,125 +131,68 @@ describe("GET /api/forms/{formId}: Get a specific form", () => {
       .genericCreate(mockForm, Model.SDCForm)
       .then((id) => (formId = id));
   });
-
-  test("Return Form matching query", (done) => {
-    request
-      .get(`/api/forms/${formId}`)
-      .expect("Content-Type", /json/)
-      .expect(HttpCode.OK)
-      .then((response) => {
-        expect(response.body).isForm();
-        expect(response.body).hasFormId(formId);
-        done();
-      })
-      .catch((err) => done(err));
+  test("Get: Get a specific form", (done) => {
+    done();
   });
-  test("Bad Request", (done) => {
-    request
-      .get("/api/forms/{formId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("Get: Bad Request", (done) => {
+    // wrong parameter
+    done();
   });
-  test("Not Found", (done) => {
-    request
-      .get("/api/forms/{formId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("Get: Not Found", (done) => {
+    // id doesnt exist
+    done();
   });
 });
 
-describe("POST /api/responses: Create a new response", () => {
-  test("Response created successfully", (done) => {
-    request
-      .post("/api/responses")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+describe("/api/v1/forms/{formId}/responses", () => {
+  test("GET: Get all responses for a form", (done) => {
+    done();
   });
-  test("Bad Request", (done) => {
-    request
-      .post("/api/responses")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Bad Request", (done) => {
+    // wrong param
+    done();
   });
-  test("Not Found", (done) => {
-    request
-      .post("/api/responses")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Not Found", (done) => {
+    // id doesnt exist
+    done();
   });
 });
 
-describe("GET /api/responses/{responseId}: Get a specific form response", () => {
-  test("Returns the requested response", (done) => {
-    request
-      .get("/api/responses/{responseId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+describe("/api/v1/responses", () => {
+  test("POST: Create a new form resposne", (done) => {
+    done();
   });
-  test("Bad Request", (done) => {
-    request
-      .get("/api/responses/{responseId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Bad Request", (done) => {
+    // wrong param
+    done();
   });
-  test("Not Found", (done) => {
-    request
-      .get("/api/responses/{responseId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Not Found", (done) => {
+    // id doesnt exist
+    done();
   });
 });
 
-describe("PUT /api/responses/{responseId}: Update a response", () => {
-  test("Response created successfully", (done) => {
-    request
-      .put("/api/responses/{responseId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+describe("/api/v1/responses/{responseId}", () => {
+  test("GET: Get a specific form response", (done) => {
+    done();
   });
-  test("Bad Request", (done) => {
-    request
-      .put("/api/responses/{responseId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Bad Request", (done) => {
+    // wrong param
+    done();
   });
-  test("Not Found", (done) => {
-    request
-      .put("/api/responses/{responseId}")
-      .expect(HttpCode.NOT_IMPLEMENTED)
-      .end(function (err, res) {
-        if (err) return done(err);
-        return done();
-      });
+  test("GET: Not Found", (done) => {
+    // ID doesnt exists
+    done();
+  });
+  test("PUT: Update a specific form response", (done) => {
+    done();
+  });
+  test("PUT: Bad Request", (done) => {
+    // wrong param
+    done();
+  });
+  test("PUT: Not Found", (done) => {
+    // ID doesnt exists
+    done();
   });
 });
