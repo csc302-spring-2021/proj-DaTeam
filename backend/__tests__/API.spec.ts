@@ -52,20 +52,55 @@ describe("GET /mock", () => {
  */
 
 describe("/api/v1/patients", () => {
-  var mockPatient = Mock.getMockPatient();
-  var patientId = mockPatient.id;
-  var patientName = mockPatient.name;
-
   test("GET: Get all patients", (done) => {
-    done();
+    request
+      .get("/api/v1/patients")
+      .expect(HttpCode.OK)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        expect(response.body).isList();
+        expect(response.body).allPatientItems();
+        done();
+      })
+      .catch((err) => done(err));
   });
 
   test("POST: Create a new patient", (done) => {
-    done();
+    let patient = Mock.getMockPatient();
+    request
+      .post("/api/v1/patients")
+      .send(patient)
+      .expect(HttpCode.CREATED)
+      .expect("Content-Type", /text/)
+      .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
   });
 
   test("POST and GET: Create a new patient and verify persistence", (done) => {
-    done();
+    let patient = Mock.getMockPatient();
+    request
+      .post("/api/v1/patients")
+      .send(patient)
+      .expect(HttpCode.CREATED)
+      .expect("Content-Type", /text/)
+      .then((res) => {
+        let uid = res.body;
+        request
+          .get("/api/v1/patients")
+          .expect(HttpCode.OK)
+          .expect("Content-Type", /json/)
+          .then((response) => {
+            expect(response.body).isList();
+            expect(response.body).not.isListEmpty();
+            expect(response.body).allPatientItems();
+            expect(response.body).containsPatient(uid);
+            done();
+          })
+          .catch((err) => done(err));
+      })
+      .catch((err) => done(err));
   });
 });
 
