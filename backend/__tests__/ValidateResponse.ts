@@ -171,8 +171,8 @@ export default {
   },
   hasPatientId(received, expectedId) {
     // PreCondition: received is a Patient item
-    let form = serializer.decode(received, Model.Patient);
-    const pass = form.uid == expectedId;
+    let patient = serializer.decode(received, Model.Patient);
+    const pass = patient.uid == expectedId;
     if (pass) {
       return {
         message: () =>
@@ -183,6 +183,24 @@ export default {
       return {
         message: () =>
           `expected ${received} to have patient id of ${expectedId}`,
+        pass: false,
+      };
+    }
+  },
+  hasProcedureId(received, expectedId) {
+    // PreCondition: received is a procedure item
+    let proc = serializer.decode(received, Model.Procedure);
+    const pass = proc.uid == expectedId;
+    if (pass) {
+      return {
+        message: () =>
+          `expected ${received} to not have procedure id of ${expectedId}`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () =>
+          `expected ${received} to have procedure id of ${expectedId}`,
         pass: false,
       };
     }
