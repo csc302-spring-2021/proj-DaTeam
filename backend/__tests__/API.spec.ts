@@ -88,14 +88,12 @@ describe("/api/v1/patients", () => {
       .then((res) => {
         let uid = res.text;
         request
-          .get("/api/v1/patients")
+          .get(`/api/v1/patients/${uid}`)
           .expect(HttpCode.OK)
           .expect("Content-Type", /json/)
           .then((response) => {
-            expect(response.body).isList();
-            expect(response.body).not.isListEmpty();
-            expect(response.body).allPatientItems();
-            expect(response.body).containsPatient(uid);
+            expect(response.body).isPatient();
+            expect(response.body).hasPatientId(uid);
             done();
           })
           .catch((err) => done(err));
