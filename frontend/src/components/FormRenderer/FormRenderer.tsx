@@ -37,14 +37,13 @@ function FormRenderer(props: IFormRendererProps) {
   const [response, setResponse] = useState<{ [key: string]: any }>({});
   const BLANK_STRING = "-----";
   useEffect(() => {
-    console.log(sdcResponse?.answers);
+    // console.log(sdcResponse?.answers);
     if (sdcResponse?.answers) {
       sdcResponse.answers.map((ans) => {
         const key = ans.questionID;
         const val = ans.responses ? ans.responses[0] : [];
         setResponse((r) => {
           r[key] = val;
-          console.log(r);
           return r;
         });
       });
@@ -54,15 +53,22 @@ function FormRenderer(props: IFormRendererProps) {
   }, [sdcResponse]);
 
   const onSubmitForm = () => {
-    console.log("aabb", sdcResponse, response);
+    // console.log("aabb", sdcResponse, response);
     if (!sdcform || !patient) {
       notify.error("Cannot create with a selected form or patient");
       return;
     }
     const sdcResponses = Object.keys(response).map(
       (key) =>
-        new Model.SDCAnswer({ questionID: key, responses: [response[key]] })
+        new Model.SDCAnswer({
+          questionID: key,
+          responses:
+            response[key] instanceof Array
+              ? response[key]
+              : new Array(response[key]),
+        })
     );
+    // console.log("responsp", sdcResponses)
     const formRes = new Model.SDCFormResponse({
       formId: sdcform.uid,
       patientID: patient.uid,
@@ -70,6 +76,7 @@ function FormRenderer(props: IFormRendererProps) {
     });
     ResponseService.create(formRes)
       .then((res) => {
+        // console.log("Cr", res)
         return queryClient.refetchQueries("forms");
       })
       .then(() => notify.success("Form Created"));
