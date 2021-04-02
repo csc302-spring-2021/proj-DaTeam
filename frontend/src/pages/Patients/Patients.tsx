@@ -3,6 +3,7 @@ import { pageVariants } from "../../App";
 import { Model } from "@dateam/shared";
 import { usePatients } from "../../hooks/services";
 import NewPatientModel from "../Responses/NewPatientModal";
+import PatientService from "../../services/PatientService";
 import { useEffect, useState } from "react";
 import { FormInput } from "../../components/FormInput";
 
@@ -76,14 +77,15 @@ function PatientRowData(props: {
 
 function Patients() {
     const [showNewPatientModal, setShowNewPatientModal] = useState<boolean>(false);
-    const { data: patients, refetch: patientsRefetch } = usePatients();
     const [searchPatients, setSearchPatients] = useState<string>("");
+    const [currentSearch, setCurrentSearch] = useState<string>("");
+    const { data: patients, refetch: patientsRefetch } = usePatients(currentSearch);
 
     const onCreatePatientBtnClick = () => setShowNewPatientModal(true);
 
     const handleSearchPatientsSubmit = (event: any) => {
         event.preventDefault();
-        console.log(searchPatients);
+        setCurrentSearch(searchPatients);
     }
 
     return (
@@ -104,7 +106,7 @@ function Patients() {
                 data-testid="Patients"
                 className="relative overflow-y-auto rounded-lg shadow-xl bg-gray-50"
             >
-                <div className="flex h-screen">
+                <div className="mx-w-lg px-20 h-screen">
                     <div className="m-auto">
                         <div className="py-8">
                             <div>
