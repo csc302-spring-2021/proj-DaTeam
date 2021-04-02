@@ -26,7 +26,8 @@ function TextField(props: {
       data-testid="textfield"
       className="py-2 mt-2 text-lg font-bold rounded-lg"
     >
-      {props.sdcTextField.title}
+      {sdcTextField.title && sdcTextField.title + " - "}
+      {"ID: " + sdcTextField.id}
       <FormInput
         placeholder={props.sdcTextField.title}
         type="text"
