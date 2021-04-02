@@ -35,6 +35,7 @@ function ListField(props: IListFieldProps) {
     if (typeof res === "string") {
       setCurrentChoice([res]);
     } else {
+      console.log("RES", res);
       /* setCurrentChoice([]); */
     }
   }, [responseState]);

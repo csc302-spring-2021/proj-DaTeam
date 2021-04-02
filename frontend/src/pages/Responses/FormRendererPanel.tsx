@@ -15,7 +15,6 @@ export default function FormRendererPanel() {
   const { data: form } = useForm(formId);
   const { data: response } = useFormResponse(responseId);
   const { data: patient } = usePatient(response?.patientID);
-  console.log(response);
 
   return (
     <motion.div
