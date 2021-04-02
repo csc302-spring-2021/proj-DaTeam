@@ -73,7 +73,6 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
           isChecked ? "bg-blue-200" : "hover:bg-blue-100"
         }`}
       >
-        {String(isChecked) + String(response === optionNode.listFieldItem.id)}
         <input
           className="my-auto cursor-pointer"
           checked={isChecked}
