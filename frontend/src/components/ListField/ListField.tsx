@@ -35,11 +35,12 @@ function ListField(props: IListFieldProps) {
     if (typeof res === "string") {
       setCurrentChoice([res]);
     } else {
-      setCurrentChoice([]);
+      /* setCurrentChoice([]); */
     }
   }, [responseState]);
 
   useEffect(() => {
+    console.log("CRR", currentChoice);
     responseState.setResponse((o) => {
       o[sdcListField.id] = currentChoice;
       return o;

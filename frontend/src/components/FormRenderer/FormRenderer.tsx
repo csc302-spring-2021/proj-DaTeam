@@ -38,7 +38,6 @@ function FormRenderer(props: IFormRendererProps) {
   const BLANK_STRING = "-----";
 
   useEffect(() => {
-    console.log(sdcResponse);
     if (sdcResponse?.answers) {
       sdcResponse.answers.map((ans) => {
         const key = ans.questionID;
@@ -79,7 +78,7 @@ function FormRenderer(props: IFormRendererProps) {
       }
       return arr;
     }, [] as Model.SDCAnswer[]);
-    console.log(sdcResponses);
+
     const formRes = new Model.SDCFormResponse({
       formId: sdcform.uid,
       patientID: patient.uid,
@@ -127,7 +126,7 @@ function FormRenderer(props: IFormRendererProps) {
           listFieldItemChildren: optionChild,
         };
       });
-      // console.log(responses)
+
       return (
         <ListField
           responseState={{ response, setResponse }}

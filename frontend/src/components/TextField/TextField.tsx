@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FormInput } from "../FormInput";
 
 function TextField(props: {
-  responseState?: {
+  responseState: {
     setResponse: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>;
     response: { [key: string]: any };
   };
