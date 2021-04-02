@@ -46,7 +46,7 @@ export abstract class Condition {
  */
 export class ColumnCondition extends Condition {
   static readonly validOpts = [
-    "==",
+    "=",
     "<>",
     ">",
     "<",
@@ -104,7 +104,7 @@ export function query(targetClass: Function, condition: Condition): Query {
 /** Create negation of a condition */
 export const not = (c: Condition) => new Not(c);
 /** Column equals a value (number, string) */
-export const equals = conditionBuilder("==");
+export const equals = conditionBuilder("=");
 /** Column does not equal to a value (number, string) */
 export const notEquals = conditionBuilder("<>");
 /** Column starts with a string (string) */

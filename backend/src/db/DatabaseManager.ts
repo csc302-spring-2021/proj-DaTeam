@@ -1,7 +1,8 @@
 import pgPromise from "pg-promise";
 import * as promise from "bluebird";
 import { GenericDatabaseSerializer } from "./DBSerializer";
-import { SearchParam } from "./DBSerializer";
+import { SearchParam, QueryObjectCompiler } from "./DBSerializer";
+import { Query } from "@dateam/shared";
 
 export class GenericDatabaseManager {
   constructor() {}
@@ -31,7 +32,7 @@ export class GenericDatabaseManager {
    */
   async genericSearch(
     targetClass: new () => any,
-    searchParam: SearchParam,
+    queryObject: Query.Query | null,
     partial: boolean
   ): Promise<any[]> {
     throw new Error("genericSearch should be invoked by subclasses");
@@ -131,13 +132,15 @@ class DatabaseManager extends GenericDatabaseManager {
 
   async genericSearch(
     targetClass: new () => any,
-    searchParam: SearchParam,
+    queryObject: Query.Query | null,
     partial: boolean
   ): Promise<any[]> {
     const results = await this.db.tx((tx) =>
       GenericDatabaseSerializer.search(
         targetClass.name,
-        searchParam,
+        queryObject
+          ? QueryObjectCompiler.compile(queryObject)
+          : new SearchParam(),
         partial,
         tx
       )
