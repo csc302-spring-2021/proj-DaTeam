@@ -190,11 +190,27 @@ describe("/api/v1/procedures/{procedureId}", () => {
 
 describe("/api/v1/parser", () => {
   test("GET: Parses an SDC XML file into JSON", (done) => {
-    done();
+    let xmlData = Mock.getMockXMLData();
+    request
+      .post(`/api/v1/parser`)
+      .set("Content-Type", "application/xml")
+      .send(xmlData)
+      .expect(HttpCode.OK)
+      .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
   });
   test("GET: Bad Request", (done) => {
-    // wrong parameter or bad file
-    done();
+    let xmlData = Mock.getMockXMLData();
+    request
+      .post(`/api/v1/parser`)
+      .send(xmlData)
+      .expect(HttpCode.BAD_REQUEST)
+      .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
   });
 });
 
