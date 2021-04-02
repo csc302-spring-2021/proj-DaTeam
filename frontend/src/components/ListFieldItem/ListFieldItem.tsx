@@ -32,19 +32,6 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
 
   const [isChecked, setIsChecked] = useState(false);
   const [optionalText, setOptionalText] = useState("");
-  useEffect(() => {
-    // console.log("crr", currentChoice, optionNode.listFieldItem.id, response);
-    console.log(
-      "CCC",
-      response,
-      optionNode.listFieldItem.id,
-      response === optionNode.listFieldItem.id
-    );
-
-    if (response === optionNode.listFieldItem.id) {
-      setIsChecked(true);
-    }
-  }, [optionNode, currentChoice]);
 
   useEffect(() => {
     if (currentChoice && setCurrentChoice) {
@@ -54,6 +41,7 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
         setIsChecked(false);
       }
     }
+    // console.log(isChecked, "CHECK@")
   }, [optionNode, currentChoice]);
 
   const onCheck = (e: React.MouseEvent | React.ChangeEvent) => {
@@ -85,6 +73,7 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
           isChecked ? "bg-blue-200" : "hover:bg-blue-100"
         }`}
       >
+        {String(isChecked) + String(response === optionNode.listFieldItem.id)}
         <input
           className="my-auto cursor-pointer"
           checked={isChecked}

@@ -31,21 +31,13 @@ function ListField(props: IListFieldProps) {
   // Set choice for single answer responses
   const [currentChoice, setCurrentChoice] = useState<string[]>([]);
   useEffect(() => {
-    //console.log(sdcListField)
     const res = responseState.response[sdcListField.id];
-    console.log(res, responseState.response, sdcListField.id);
-    if (res instanceof Array) {
-      setCurrentChoice(res);
+    if (typeof res === "string") {
+      setCurrentChoice([res]);
+    } else {
+      setCurrentChoice([]);
     }
   }, [responseState]);
-
-  useEffect(() => {
-    // console.log(currentChoice, sdcListField.uid, sdcListField.id);
-    responseState.setResponse((o) => {
-      o[sdcListField.id] = currentChoice;
-      return o;
-    });
-  }, [currentChoice]);
 
   const collapseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
