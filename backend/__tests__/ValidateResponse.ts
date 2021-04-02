@@ -245,4 +245,22 @@ export default {
       };
     }
   },
+  hasResponseId(received, expectedId) {
+    // PreCondition: received is a form response item
+    let resp = serializer.decode(received, Model.SDCFormResponse);
+    const pass = resp.uid == expectedId;
+    if (pass) {
+      return {
+        message: () =>
+          `expected ${received} to not have response id of ${expectedId}`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () =>
+          `expected ${received} to have response id of ${expectedId}`,
+        pass: false,
+      };
+    }
+  },
 };
