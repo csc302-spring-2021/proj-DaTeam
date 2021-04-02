@@ -8,7 +8,6 @@ interface IListFieldItemProps<T> {
   optionNode: IOptionNode;
   setCurrentChoice?: React.Dispatch<React.SetStateAction<T>>;
   currentChoice?: T;
-  response?: string | string[];
   uncollaped?: boolean;
   isMultiSelect: boolean;
 }
@@ -27,7 +26,6 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
     optionNode,
     uncollaped,
     isMultiSelect,
-    response,
   } = props;
 
   const [isChecked, setIsChecked] = useState(false);

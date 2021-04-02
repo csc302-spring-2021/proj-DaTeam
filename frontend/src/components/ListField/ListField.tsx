@@ -39,6 +39,13 @@ function ListField(props: IListFieldProps) {
     }
   }, [responseState]);
 
+  useEffect(() => {
+    responseState.setResponse((o) => {
+      o[sdcListField.id] = currentChoice;
+      return o;
+    });
+  }, [currentChoice]);
+
   const collapseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -79,7 +86,6 @@ function ListField(props: IListFieldProps) {
                 setCurrentChoice={setCurrentChoice}
                 currentChoice={currentChoice}
                 optionNode={optionnode}
-                response={responseState.response[sdcListField.id]}
                 uncollaped={uncollapsed}
                 isMultiSelect={isMultiSelect}
               />
