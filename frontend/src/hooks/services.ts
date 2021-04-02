@@ -14,6 +14,13 @@ export function usePatient(id?: string) {
   return { isLoading, error, data };
 }
 
+export function usePatients() {
+    const { isLoading, error, data, refetch } = useQuery("patients", () => 
+        PatientService.list()
+    );
+    return { isLoading, error, data, refetch };
+}
+
 export function useForms() {
   const { isLoading, error, data } = useQuery("forms", () =>
     FormService.list()

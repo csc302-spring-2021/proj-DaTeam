@@ -61,7 +61,7 @@ async function read(patientID: string): Promise<Model.Patient> {
  * @param patientID A patient's UID
  *
  */
- async function readAll(): Promise<Model.Patient> {
+ async function list(): Promise<Model.Patient[]> {
     try {
       const patientResponse = await fetch(`/api/v1/patients`, {
         method: "GET",
@@ -80,4 +80,4 @@ async function read(patientID: string): Promise<Model.Patient> {
   }
   
 
-export default { create, read, readAll };
+export default { create, read, list };
