@@ -1,4 +1,4 @@
-import { classMeta, Model } from "@dateam/shared";
+import { classMeta, Model, Query } from "@dateam/shared";
 import { classDatabaseMeta } from "./ClassDatabaseMeta";
 import { Promise } from "bluebird";
 import {
@@ -11,6 +11,7 @@ import {
   RefForChild,
 } from "./DatabaseMetaInterface";
 import { ITask, as } from "pg-promise";
+import { QueryObjectCompiler } from "./QueryObjectCompiler";
 
 /** A generic that can serialize most classes based on `ClassDatabaseMeta` */
 export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
@@ -44,15 +45,18 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
       }
     }
     if (!dm.pk) {
-      throw new Error(
-        `Read by pk is not supported for class ${className}`
-      );
+      throw new Error(`Read by pk is not supported for class ${className}`);
     }
-    const seachParam: SearchParam = {};
-    seachParam[className] = [as.format(`${dm.table}.${dm.pk} = $1`, pk)];
+    const searchParam = QueryObjectCompiler.compile(
+      new Query.Query({
+        targetClass: className,
+        condition: Query.equals(dm.pk, pk),
+      }),
+      true
+    );
     const result = await new GenericDatabaseSerializer(tx)
       .findSerializer(className)
-      .read(className, seachParam);
+      .read(className, searchParam);
     if (result.length !== 1) {
       throw new Error(`Expecting 1 result for read but got ${result.length}`);
     }
@@ -62,14 +66,19 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
   /**
    * Load all objects matching the search criteria
    * @param className class of the object
-   * @param seachParam seach criteria
+   * @param searchParam seach criteria
    * @param partial whether or not the complete object structure should be rebuild
    * @param tx database transaction task object
    */
-  static async search(className: string, seachParam: SearchParam, partial: boolean, tx: ITask<{}>): Promise<any[]>{
+  static async search(
+    className: string,
+    searchParam: SearchParam,
+    partial: boolean,
+    tx: ITask<{}>
+  ): Promise<any[]> {
     return await new GenericDatabaseSerializer(tx, !partial)
-    .findSerializer(className)
-    .read(className, seachParam)
+      .findSerializer(className)
+      .read(className, searchParam);
   }
 
   /**
@@ -175,8 +184,8 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
     return pk[dm.pk!];
   }
 
-  async read(className: string, seachParam: SearchParam): Promise<any[]> {
-    const result = await this._read(className, seachParam);
+  async read(className: string, searchParam: SearchParam): Promise<any[]> {
+    const result = await this._read(className, searchParam);
     if (result == null)
       throw new Error(`${className} not defined in classDatabaseMeta`);
     return result;
@@ -187,19 +196,21 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
    */
   protected async _read(
     className: string,
-    seachParam: SearchParam
+    searchParam: SearchParam
   ): Promise<any[] | null> {
     const dm = classDatabaseMeta[className];
     const cm = classMeta[className];
     if (cm == null) throw new Error(`${className} not defined in classMeta`);
     // add the current class into tables to join
-    if (dm && seachParam[className] == null) seachParam[className] = [];
+    if (dm && searchParam.usedColumns[className] == null) {
+      searchParam.usedColumns[className] = [];
+    }
     // The search and building process must start
     // from the top level where dm is not null
     if (cm.super) {
       const result = await this.findSerializer(cm.super.name).read(
         cm.super.name,
-        seachParam
+        searchParam
       );
       if (result != null) return result;
     }
@@ -207,10 +218,10 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
 
     const tables: string[] = [];
     let conditions: string[] = [];
+    if (searchParam.query) conditions.push(searchParam.query);
 
-    for (let id of Object.keys(seachParam)) {
+    for (let id of Object.keys(searchParam.usedColumns)) {
       let dmi = classDatabaseMeta[id];
-      conditions = conditions.concat(seachParam[id]);
       if (dmi.pk && dmi != dm) {
         // dm must be a super class, dm.pk is not null
         conditions.push(`${dmi.table}.${dmi.pk} = ${dm.table}.${dm.pk}`);
@@ -230,7 +241,7 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
         this.findSerializer(className).build(
           o,
           className,
-          Object.keys(seachParam)
+          Object.keys(searchParam.usedColumns)
         )
       )
     );
@@ -258,15 +269,15 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
     const cm = classMeta[className];
 
     // do the query necessary for this class level
-    if (dm){
+    if (dm) {
       if (!queriedClasses.includes(className)) {
         const sdm = classDatabaseMeta[queriedClasses[0]];
         const query = `SELECT * FROM ${dm.table} WHERE ${dm.pk} = $(${sdm.pk})`;
         Object.assign(dbObj, await this.tx.one(query, dbObj));
         queriedClasses.push(className);
       }
-      for (let [id, dmField] of this.dmFields(className)){
-        dmField.restoreCase(id, dbObj)
+      for (let [id, dmField] of this.dmFields(className)) {
+        dmField.restoreCase(id, dbObj);
       }
     }
 
@@ -310,8 +321,8 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
         Object.assign(dbObj, await this.tx.one(query, dbObj));
         queriedClasses.push(className);
       }
-      for (let [id, dmField] of this.dmFields(className)){
-        dmField.restoreCase(id, dbObj)
+      for (let [id, dmField] of this.dmFields(className)) {
+        dmField.restoreCase(id, dbObj);
       }
 
       for (let [id, dmField] of this.dmFields(className)) {
@@ -322,15 +333,13 @@ export class GenericDatabaseSerializer extends IClassDatabaseSerializer {
           // cmField.generic!.name is the actual class of the child
           // dmField.childClass is the class where the `to` attribute is defined
           const childClass = cmField.generic!.name;
-          const searchParam: SearchParam = {};
-          searchParam[dmField.refClass.name] = [
-            as.format(
-              `${classDatabaseMeta[dmField.refClass.name].table}.${
-                dmField.to
-              } = $(${dmField.from})`,
-              dbObj
+          const searchParam = QueryObjectCompiler.compile(
+            Query.query(
+              dmField.refClass,
+              Query.equals(dmField.to, dbObj[dmField.from])
             ),
-          ];
+            true
+          );
           const result = await this.findSerializer(childClass).read(
             childClass,
             searchParam
@@ -378,15 +387,17 @@ class AnswerDatabaseSerializer extends GenericDatabaseSerializer {
    * Merge multiple records into one
    * if they have the same questionID and responseId
    */
-  async read(className: string, seachParam: SearchParam): Promise<any[]> {
-    const result = await super.read(className, seachParam);
+  async read(className: string, searchParam: SearchParam): Promise<any[]> {
+    const result = await super.read(className, searchParam);
     const map: { [id: string]: Model.SDCAnswer } = {};
     result.forEach((o) => {
       if (o.responseId == null || o.questionID == null || o.response == null) {
         throw new Error("Output object is not SDCAnswer");
       }
       const key = o.responseId + o.questionID;
-      if (map[key] == null) map[key] = new Model.SDCAnswer({ questionID: o.questionID });
+      if (map[key] == null) {
+        map[key] = new Model.SDCAnswer({ questionID: o.questionID });
+      }
       map[key].responses.push(o.response);
     });
     return Object.values(map);
