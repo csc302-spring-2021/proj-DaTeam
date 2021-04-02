@@ -55,4 +55,29 @@ async function read(patientID: string): Promise<Model.Patient> {
   }
 }
 
-export default { create, read };
+/**
+ * Preform a POST request to the /api/v1/patients route
+ *
+ * @param patientID A patient's UID
+ *
+ */
+ async function readAll(): Promise<Model.Patient> {
+    try {
+      const patientResponse = await fetch(`/api/v1/patients`, {
+        method: "GET",
+      });
+  
+      if (patientResponse.status != 200) {
+        throw Error(
+          `Could not get patients. Error: ${patientResponse.statusText}`
+        );
+      }
+      const patientResponseJson = await patientResponse.json();
+      return patientResponseJson;
+    } catch (err) {
+      throw err;
+    }
+  }
+  
+
+export default { create, read, readAll };
