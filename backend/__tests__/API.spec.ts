@@ -349,14 +349,29 @@ describe("/api/v1/forms/{formId}/responses", () => {
 
 describe("/api/v1/responses", () => {
   test("POST: Create a new form response", (done) => {
-    done();
+    let formRespose = Mock.getMockFormResponse();
+    request
+      .post(`/api/v1/responses`)
+      .send(formRespose)
+      .expect(HttpCode.CREATED)
+      .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
   });
-  test("GET: Bad Request", (done) => {
-    // wrong param
-    done();
+  test("POST: Bad Request", (done) => {
+    let formRespose = Mock.getMockPatient();
+    request
+      .post(`/api/v1/responses`)
+      .send(formRespose)
+      .expect(HttpCode.BAD_REQUEST)
+      .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
   });
-  test("GET: Not Found", (done) => {
-    // id doesnt exist
+  // Unable to trigger not found. Only able to trigger Bad Request
+  test.skip("POST: Not Found", (done) => {
     done();
   });
 });
