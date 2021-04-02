@@ -152,6 +152,46 @@ export default {
       };
     }
   },
+  isAllFormItems(received) {
+    // PreCondition: received is an array of Patient items
+    let pass = true;
+    received.forEach((element) => {
+      pass = pass && validate(element, Model.SDCForm);
+    });
+    if (pass) {
+      return {
+        message: () => `expected ${received} to not only contain Form Items`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () => `expected ${received} to contain only form items`,
+        pass: false,
+      };
+    }
+  },
+  containsID(received, expectedId, expectedType) {
+    // PreCondition: all items are of the same type: expectedType
+    let pass = false;
+    received.forEach((element) => {
+      let obj = serializer.decode(element, expectedType);
+
+      if (obj.uid == expectedId) {
+        pass = true;
+      }
+    });
+    if (pass) {
+      return {
+        message: () => `expected ${received} to not contain the specified ID`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () => `expected ${received} to contain the specified ID`,
+        pass: false,
+      };
+    }
+  },
   hasFormId(received, expectedId) {
     // PreCondition: received is a Form item
     let form = serializer.decode(received, Model.SDCForm);

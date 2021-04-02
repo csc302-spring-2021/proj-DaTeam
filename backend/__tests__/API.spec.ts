@@ -216,17 +216,62 @@ describe("/api/v1/parser", () => {
 
 describe("/api/v1/forms", () => {
   test("GET: Get all forms", (done) => {
-    done();
+    request
+      .get(`/api/v1/forms`)
+      .expect(HttpCode.OK)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        expect(response.body).isList();
+        done();
+      })
+      .catch((err) => done(err));
   });
   test("POST: Create new form", (done) => {
-    done();
+    let form = Mock.getMockForm();
+    request
+      .post(`/api/v1/forms`)
+      .send(form)
+      .expect(HttpCode.CREATED)
+      .expect("Content-Type", /text/)
+      .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
   });
   test("POST and GET: Create new form and verify persistence", (done) => {
-    done();
+    let form = Mock.getMockForm();
+    request
+      .post(`/api/v1/forms`)
+      .send(form)
+      .expect(HttpCode.CREATED)
+      .expect("Content-Type", /text/)
+      .then((res) => {
+        let uid = res.text;
+        request
+          .get(`/api/v1/forms`)
+          .expect(HttpCode.OK)
+          .expect("Content-Type", /json/)
+          .then((response) => {
+            expect(response.body).isList();
+            expect(response.body).not.isListEmpty();
+            expect(response.body).isAllFormItems();
+            expect(response.body).containsID(uid, Model.SDCForm);
+            done();
+          })
+          .catch((err) => done(err));
+      })
+      .catch((err) => done(err));
   });
   test("POST: Bad Request", (done) => {
-    // wrong parameter?
-    done();
+    let form = Mock.getMockPatient();
+    request
+      .post(`/api/v1/forms`)
+      .send(form)
+      .expect(HttpCode.BAD_REQUEST)
+      .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
   });
 });
 
