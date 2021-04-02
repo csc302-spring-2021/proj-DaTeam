@@ -29,7 +29,6 @@ function PatientTable(props: {
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     ACTIONS
                                 </th>
-
                             </tr>
                         </thead>
                         <tbody className="bg-white overflow-y-auto divide-y divide-gray-200">
@@ -134,7 +133,6 @@ function Patients() {
                                     New Patient
                              </button>
                             </div>
-
                         </div>
 
                         <div className="relative">
