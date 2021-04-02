@@ -14,9 +14,11 @@ export function usePatient(id?: string) {
   return { isLoading, error, data };
 }
 
-export function usePatients() {
-    const { isLoading, error, data, refetch } = useQuery("patients", () => 
-        PatientService.list()
+export function usePatients(searchTerm: string) {
+    const { isLoading, error, data, refetch  } = useQuery(
+        ["patients", searchTerm], 
+        () => PatientService.search(searchTerm)
+        
     );
     return { isLoading, error, data, refetch };
 }

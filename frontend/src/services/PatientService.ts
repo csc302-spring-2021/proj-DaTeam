@@ -1,4 +1,4 @@
-import { GenericJsonSerializer, Model } from "@dateam/shared";
+import { GenericJsonSerializer, Model, Query } from "@dateam/shared";
 
 /**
  * Preform a POST request to the /api/v1/patients route
@@ -56,9 +56,9 @@ async function read(patientID: string): Promise<Model.Patient> {
 }
 
 /**
- * Preform a POST request to the /api/v1/patients route
+ * Perform a GET request to the /api/v1/patients route
  *
- * @param patientID A patient's UID
+ *
  *
  */
  async function list(): Promise<Model.Patient[]> {
@@ -78,6 +78,44 @@ async function read(patientID: string): Promise<Model.Patient> {
       throw err;
     }
   }
+
+  /**
+ * Perform a GET request to the /api/v1/patients route
+ *
+ * @param searchTerm
+ *
+ */
+ async function search(searchTerm: string): Promise<Model.Patient[]> {
+    try {
+    const newQuery = Query.query(
+        Model.Patient,
+        Query.contains("name", searchTerm).or(
+            Query.equals("id", searchTerm)
+        )
+    );
+      const patientEncoded = GenericJsonSerializer.encode(newQuery, Query.Query);
+      const patientResponse = await fetch(`/api/v1/patients/search`, {
+        method: "POST",
+        body: JSON.stringify(patientEncoded),
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+      },
+      });
+  
+      if (patientResponse.status != 200) {
+        throw Error(
+          `Could not get patients. Error: ${patientResponse.statusText}`
+        );
+      }
+      const patientResponseJson = await patientResponse.json();
+      return patientResponseJson;
+    } catch (err) {
+      throw err;
+    }
+  }
   
 
-export default { create, read, list };
+  
+
+export default { create, read, list, search };
