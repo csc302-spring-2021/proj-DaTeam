@@ -13,6 +13,7 @@ export class FormAPI {
     this.getAllFormResponses();
     this.getAllForms();
     this.postForm();
+    this.searchForms();
     return this.router;
   }
 
@@ -30,5 +31,9 @@ export class FormAPI {
 
   private postForm() {
     this.router.post("/forms", FormController.create);
+  }
+
+  private searchForms() {
+    this.router.post("/forms/search", FormController.search);
   }
 }

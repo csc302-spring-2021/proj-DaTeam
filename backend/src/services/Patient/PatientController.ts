@@ -17,7 +17,9 @@ export const PatientController = {
   },
 
   search: function (req: Request, res: Response) {
-    res.sendStatus(HttpCode.NOT_IMPLEMENTED);
+    Utils.query(req, res, Model.Patient, true).catch((e) => {
+      sendError(res, HttpCode.BAD_REQUEST, e);
+    });
   },
 
   update: function (req: Request, res: Response) {

@@ -41,3 +41,18 @@ export async function search(
   res.type("json");
   res.status(HttpCode.OK).send(encoded);
 }
+
+export async function query(
+  req: Request,
+  res: Response,
+  targetClass: new () => any,
+  partial: boolean
+) {
+  const param: Query.Query = GenericJsonSerializer.decode(
+    req.body,
+    Query.Query
+  );
+  if (param.targetClass !== targetClass.name)
+    throw new Error("Query class incorrect");
+  await search(req, res, targetClass, param, partial);
+}
