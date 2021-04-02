@@ -85,7 +85,7 @@ function FormRenderer(props: IFormRendererProps) {
       patientID: patient.uid,
       answers: sdcResponses,
     });
-    ResponseService.create(formRes)
+    ResponseService.create(formRes, sdcform)
       .then((_) => {
         return queryClient.refetchQueries("forms");
       })

@@ -1,4 +1,8 @@
-import { GenericJsonSerializer, Model } from "@dateam/shared";
+import {
+  FormResponseValidator,
+  GenericJsonSerializer,
+  Model,
+} from "@dateam/shared";
 
 /**
  * Preform a POST request to the /api/v1/responses route
@@ -6,11 +10,19 @@ import { GenericJsonSerializer, Model } from "@dateam/shared";
  * @param response
  *
  */
-async function create(response: Model.SDCFormResponse): Promise<string> {
+async function create(
+  response: Model.SDCFormResponse,
+  form: Model.SDCForm
+): Promise<string> {
+  const errors = FormResponseValidator.validate(response, form);
+  if (errors.length > 0) {
+    throw Error(`Form is invalid, Error: ${errors[0]}`);
+  }
   const responseDecoded = GenericJsonSerializer.encode(
     response,
     Model.SDCFormResponse
   );
+
   const responseFetch = await fetch(`/api/v1/responses`, {
     method: "POST",
     headers: {
