@@ -1,10 +1,13 @@
 import { ITask } from "pg-promise";
 
 /**
- * Map from class name to query conditions
- * where conditions are related to the attributes of that class
+ * Contains an sql search clause and a map
+ * from class name to columns used in the query
  */
-export type SearchParam = { [className: string]: string[] };
+export class SearchParam {
+  query?: string;
+  usedColumns: { [className: string]: string[] } = {};
+}
 
 /**
  * An interface for Database Serializer.

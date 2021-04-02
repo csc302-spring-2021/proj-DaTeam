@@ -1,4 +1,4 @@
-import { GenericJsonSerializer } from "@dateam/shared";
+import { GenericJsonSerializer, Query } from "@dateam/shared";
 import { Request, Response } from "express";
 import { HttpCode } from "../utils/Error";
 import { databaseManager as dbManager } from "../db";
@@ -31,7 +31,7 @@ export async function search(
   req: Request,
   res: Response,
   targetClass: new () => any,
-  param: any,
+  param: Query.Query | null,
   partial: boolean
 ) {
   const results = await dbManager.genericSearch(targetClass, param, partial);

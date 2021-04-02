@@ -1,6 +1,5 @@
 import { GenericDatabaseManager } from "./DatabaseManager";
-import { SearchParam } from "./DBSerializer/DatabaseMetaInterface";
-import { GenericJsonSerializer as serializer } from "@dateam/shared";
+import { GenericJsonSerializer as serializer, Query } from "@dateam/shared";
 import { v4 as uuid } from "uuid";
 
 /**
@@ -51,7 +50,7 @@ class MockDatabaseManager extends GenericDatabaseManager {
 
   async genericSearch(
     targetClass: new () => any,
-    searchParam: SearchParam,
+    queryObject: Query.Query | null,
     partial: boolean
   ): Promise<any[]> {
     let ret: any = [];
