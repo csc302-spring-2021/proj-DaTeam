@@ -11,6 +11,7 @@ export class PatientAPI {
   public returnRouter() {
     this.getPatient();
     this.postPatient();
+    this.getAllPatients();
     return this.router;
   }
 
@@ -20,5 +21,9 @@ export class PatientAPI {
 
   private postPatient() {
     this.router.post("/patients", PatientController.create);
+  }
+
+  private getAllPatients() {
+    this.router.get("/patients", PatientController.readAll);
   }
 }
