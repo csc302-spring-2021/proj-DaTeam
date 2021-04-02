@@ -23,4 +23,10 @@ export const ResponseController = {
   destroy: function (req: Request, res: Response) {
     res.sendStatus(HttpCode.NOT_IMPLEMENTED);
   },
+
+  search: function (req: Request, res: Response) {
+    Utils.query(req, res, Model.SDCFormResponse, true).catch((e) => {
+      sendError(res, HttpCode.BAD_REQUEST, e);
+    });
+  },
 };
