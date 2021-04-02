@@ -101,6 +101,31 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
+  /patients/search:
+    post:
+      description: "Search for patients"
+      tags:
+        - patient
+      requestBody:
+        required: true
+        description: Query Object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryObject"
+      responses:
+        200:
+          description: Patients matching the search condition
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Patient"
+        400:
+          description: Query object is invalid
+          $ref: "#/components/responses/BadRequest"
+
   /procedures:
     post:
       description: "Create a new procedure"
@@ -177,6 +202,31 @@ paths:
           $ref: "#/components/responses/BadRequest"
         404:
           $ref: "#/components/responses/NotFound"
+
+  /procedures/search:
+    post:
+      description: "Search for procedures"
+      tags:
+        - procedure
+      requestBody:
+        required: true
+        description: Query Object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryObject"
+      responses:
+        200:
+          description: Procedures matching the search condition
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Procedure"
+        400:
+          description: Query object is invalid
+          $ref: "#/components/responses/BadRequest"
 
   /parser:
     post:
@@ -286,6 +336,31 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
+  /forms/search:
+    post:
+      description: "Search for forms"
+      tags:
+        - form
+      requestBody:
+        required: true
+        description: Query Object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryObject"
+      responses:
+        200:
+          description: Partial forms matching the search condition
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FormPartial"
+        400:
+          description: Query object is invalid
+          $ref: "#/components/responses/BadRequest"
+
   /responses:
     post:
       description: Create a new response
@@ -369,6 +444,31 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
+  /responses/search:
+    post:
+      description: "Search for responses"
+      tags:
+        - response
+      requestBody:
+        required: true
+        description: Query Object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryObject"
+      responses:
+        200:
+          description: Partial formResponse matching the search condition
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FormResponse"
+        400:
+          description: Query object is invalid
+          $ref: "#/components/responses/BadRequest"
+
 components:
   responses:
     UID:
@@ -401,6 +501,26 @@ components:
       required:
         - code
         - message
+
+    QueryObject:
+      type: object
+      properties:
+        __class:
+          type: string
+          description: Class identifier
+          default: Query
+        targetClass:
+          type: string
+          description: The class this query is for
+          example: "SDCForm"
+        condition:
+          type: object
+          description: Query condition
+          example:
+            __class: ColumnCondition
+            opt: contains
+            column: id
+            value: '111'
 
     Patient:
       type: object
