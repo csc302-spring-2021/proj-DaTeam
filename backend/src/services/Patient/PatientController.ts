@@ -27,4 +27,10 @@ export const PatientController = {
   destroy: function (req: Request, res: Response) {
     res.sendStatus(HttpCode.NOT_IMPLEMENTED);
   },
+
+  readAll: function (req: Request, res: Response) {
+    Utils.search(req, res, Model.Patient, null, true).catch((e) =>
+      sendError(res, HttpCode.BAD_REQUEST, e)
+    );
+  },
 };
