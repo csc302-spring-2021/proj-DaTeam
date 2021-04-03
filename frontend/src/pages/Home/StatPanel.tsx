@@ -67,7 +67,7 @@ function StatPanel() {
   }, [formResponses]);
 
   useEffect(() => {
-    if (data) {
+    if (data && formTemplate) {
       const dataArr = Object.keys(data).map((key: string) => {
         const countedChildren: any = {};
         data[key].forEach((key: string) => {
@@ -81,12 +81,12 @@ function StatPanel() {
         return { name: key, children };
       });
 
-      const chartData = { name: formId, children: dataArr };
+      const chartData = { name: formTemplate.title, children: dataArr };
       setChartData(chartData);
 
       /* chartRef.current?.replaceWith(svgNode) */
     }
-  }, [data, chartRef]);
+  }, [data, chartRef, formTemplate]);
 
   const width = 1200;
   const height = 970;
