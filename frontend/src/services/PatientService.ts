@@ -114,8 +114,4 @@ async function read(patientID: string): Promise<Model.Patient> {
       throw err;
     }
   }
-  
-
-  
-
 export default { create, read, list, search };

@@ -6,7 +6,7 @@ import { FormInput } from "../../components/FormInput";
 import { CloseButton } from "../../components/CloseButton";
 import { useFormResponses, usePatient } from "../../hooks/services";
 import { Model } from "@dateam/shared";
-import NewPatientModal from "./NewPatientModal";
+import { NewPatientModel } from "../../components/NewPatientModel";
 
 export default function ResponsesPanel() {
     const { formId, responseId } = useParams<{
@@ -15,9 +15,9 @@ export default function ResponsesPanel() {
     }>();
     const [formResponseSearch, setFormResponseSearch] = useState("");
     const { data: formResponses } = useFormResponses(formId);
-    const [showNewModal, setNewShowModal] = useState(false);
+    const [showNewModel, setNewShowModel] = useState(false);
 
-    const onNewBtnClick = () => setNewShowModal(true);
+    const onNewBtnClick = () => setNewShowModel(true);
 
     const responseFormInfoBlocks = formResponses?.map((formResponse, i) => {
         return (
@@ -35,10 +35,10 @@ export default function ResponsesPanel() {
 
     return (
         <>
-            {showNewModal && (
-                <NewPatientModal
-                    showModal={showNewModal}
-                    setShowModal={setNewShowModal}
+            {showNewModel && (
+                <NewPatientModel
+                    showModal={showNewModel}
+                    setShowModal={setNewShowModel}
                     goToRespones={true}
                 />
             )}
