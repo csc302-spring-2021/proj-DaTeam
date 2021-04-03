@@ -52,7 +52,7 @@ describe("GET /mock", () => {
  */
 
 describe("/api/v1/patients", () => {
-  test.skip("GET: Get all patients", (done) => {
+  test("GET: Get all patients", (done) => {
     request
       .get("/api/v1/patients")
       .expect(HttpCode.OK)
@@ -88,12 +88,13 @@ describe("/api/v1/patients", () => {
       .then((res) => {
         let uid = res.text;
         request
-          .get(`/api/v1/patients/${uid}`)
+          .get(`/api/v1/patients/`)
           .expect(HttpCode.OK)
           .expect("Content-Type", /json/)
           .then((response) => {
-            expect(response.body).isPatient();
-            expect(response.body).hasPatientId(uid);
+            expect(response.body).isList();
+            expect(response.body).allPatientItems();
+            expect(response.body).containsID(uid, Model.Patient);
             done();
           })
           .catch((err) => done(err));
