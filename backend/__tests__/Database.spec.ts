@@ -53,12 +53,17 @@ beforeAll(() => {
 });
 
 describe("Verify Create and Read from DB Works", () => {
-  let form1, form2, response, patient;
+  let form1, form2, response, patient, procedure;
   beforeAll(() => {
     form1 = Mocks.buildFormPartial();
     form2 = Mocks.buildFormComplete();
     response = Mocks.buildFormResponsePartial();
     patient = Mocks.genPatientPartial();
+    procedure = Mocks.genProcedurePartial();
+  });
+  test("Test Procedure Partial", async (done) => {
+    await expect(procedure).verifyCreateRead(Model.Procedure);
+    done();
   });
   test("Test Form Partial", async (done) => {
     await expect(form1).verifyCreateRead(Model.SDCForm);

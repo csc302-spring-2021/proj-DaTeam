@@ -54,6 +54,7 @@ CREATE TYPE textFieldType AS ENUM (
 CREATE TABLE procedure (
   uid uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   id text UNIQUE NOT NULL,
+  name text NOT NULL,
   assignedFormId uuid,
   creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
