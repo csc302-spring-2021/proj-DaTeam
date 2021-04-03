@@ -21,9 +21,8 @@ export default function FormsPanel(props: IFormsPanelProps) {
 
   const responseFormInfoBlocks = forms?.map((responseForm, i) => {
     return (
-      <Link to={`${baseUri}/${responseForm.uid}`} key={i}>
+      <Link to={`${baseUri}/${responseForm.uid}`} key={responseForm.uid}>
         <FormCard
-          key={i}
           form={responseForm}
           isSelected={formId === responseForm.uid}
         />

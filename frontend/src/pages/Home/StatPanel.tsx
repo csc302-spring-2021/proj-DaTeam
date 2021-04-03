@@ -44,7 +44,7 @@ function StatPanel() {
       .then((ansIdData) => {
         setData(ansIdData);
       });
-  }, [formId]);
+  }, [formResponses]);
 
   useEffect(() => {
     if (data) {
@@ -68,10 +68,11 @@ function StatPanel() {
     }
   }, [data, chartRef]);
 
+  const width = 1200;
+  const height = 970;
+
   useEffect(() => {
     if (chartRef.current && chartData && chartData.children.length > 0) {
-      const width = 1200;
-      const height = 970;
       const format = d3.format(",d");
       const color = d3.scaleOrdinal(
         d3.quantize(d3.interpolateRainbow, chartData.children.length + 1)
@@ -96,7 +97,11 @@ function StatPanel() {
 
       const root = partition(chartData);
       let focus = root;
-      const svg = d3.select(chartRef.current);
+      const svg = d3
+        .select(chartRef.current)
+        .attr("viewBox", [0, 0, width, height] as any)
+        .style("font", "16px sans-serif")
+        .style("display", "flex");
       const cell = svg
         .selectAll("g")
         .data(root.descendants())
@@ -177,8 +182,11 @@ function StatPanel() {
   }, [chartData, chartRef]);
 
   return (
-    <div className="w-full h-full">
-      <svg className="w-full h-full font-bold" ref={chartRef} />
+    <div className="w-full h-full overflow-scroll">
+      <svg
+        className="flex w-full h-full overflow-scroll font-bold"
+        ref={chartRef}
+      />
     </div>
   );
 }
