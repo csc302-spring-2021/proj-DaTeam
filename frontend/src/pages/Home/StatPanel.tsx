@@ -30,6 +30,7 @@ function StatPanel() {
     });
     Promise.all(responses)
       .then((resps) => {
+        console.log(resps);
         const ansIdData = {} as any;
         resps.forEach((res) => {
           res.answers.forEach((ans) => {
@@ -176,8 +177,6 @@ function StatPanel() {
         })
         .style("cursor", "pointer")
         .on("click", clicked);
-
-      console.log(chartData);
     }
   }, [chartData, chartRef]);
 
