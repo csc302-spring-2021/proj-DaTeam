@@ -1,5 +1,5 @@
 import { Model } from "@dateam/shared";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams, useHistory } from "react-router";
 import { FormInput } from "../../components/FormInput";
 import { Modal } from "../../components/Modal";
@@ -10,7 +10,7 @@ function NewPatientModal(props: {
     showModal: boolean;
     goToRespones: boolean;
     refetch?: any;
-    setShowModal: (val: boolean) => void;
+    setShowModal?: (val: boolean) => void;
 }) {
     const { showModal, setShowModal } = props;
     const [patientName, setPatientName] = useState("");
@@ -32,7 +32,9 @@ function NewPatientModal(props: {
                 if (props.refetch) {
                     props.refetch();
                 }
-                setShowModal(!showModal);
+                if (setShowModal) {
+                    setShowModal(!showModal);
+                }
             })
             .catch((err) => {
                 notify.error(err.message);
@@ -76,7 +78,7 @@ function NewPatientModal(props: {
                             />
                             <label className="text-sm text-gray-600">
                                 Typically this is the patient’s OHIP number.
-              </label>
+                            </label>
                         </div>
                         <button
                             onClick={onCreateClick}
