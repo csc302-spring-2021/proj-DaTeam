@@ -147,6 +147,44 @@ describe("/api/v1/patients/{patiendId}", () => {
       })
       .catch((err) => done(err));
   });
+  test.skip("PUT: Update a specific patient", (done) => {
+    // let uid = "fake_uid_doesnt_exist";
+    // request
+    //   .put(`/api/v1/patients/${uid}`)
+    //   .expect(HttpCode.NO_CONTENT)
+    //   .then((response) => {
+    //     done();
+    //   })
+    //   .catch((err) => done(err));
+    done();
+  });
+  test.skip("PUT: Bad Request", (done) => {
+    done();
+  });
+  test.skip("PUT: Not Found", (done) => {
+    done();
+  });
+});
+
+describe.skip("/api/v1/patients/search", () => {
+  test("POST: Search for Patients", (done) => {
+    done();
+  });
+  test("POST: Bad Request", (done) => {
+    done();
+  });
+});
+
+describe.skip("/api/v1/procedures", () => {
+  test("POST: Create a new procedure", (done) => {
+    done();
+  });
+  test("GET: Get all Procedures", (done) => {
+    done();
+  });
+  test("POST and GET: Create new procedure and verify persistence", (done) => {
+    done();
+  });
 });
 
 describe("/api/v1/procedures/{procedureId}", () => {
@@ -187,10 +225,56 @@ describe("/api/v1/procedures/{procedureId}", () => {
       })
       .catch((err) => done(err));
   });
+  test.skip("PUT: Update a specific procedure", (done) => {
+    // let proc = Mock.getMockProcedure();
+    // request
+    //   .post("/api/v1/procedures")
+    //   .send(proc)
+    //   .expect(HttpCode.CREATED)
+    //   .expect("Content-Type", /text/)
+    //   .then((res) => {
+    //     let uid = res.text;
+    //     request
+    //       .get(`/api/v1/procedures/${uid}`)
+    //       .expect(HttpCode.OK)
+    //       .expect("Content-Type", /json/)
+    //       .then((response) => {
+    //         expect(response.body).isProcedure();
+    //         expect(response.body).hasProcedureId(uid);
+    //         done();
+    //       })
+    //       .catch((err) => done(err));
+    //   })
+    //   .catch((err) => done(err));
+    done();
+  });
+  test.skip("PUT: Bad Request", (done) => {
+    done();
+  });
+  test.skip("PUT: Not Found", (done) => {
+    // let uid = "fake_uid_doesnt_exist";
+    // request
+    //   .get(`/api/v1/patients/${uid}`)
+    //   .expect(HttpCode.NOT_FOUND)
+    //   .then((response) => {
+    //     done();
+    //   })
+    //   .catch((err) => done(err));
+    done();
+  });
+});
+
+describe.skip("/api/v1/procedures/search", () => {
+  test("POST: Search for Procedures", (done) => {
+    done();
+  });
+  test("POST: Bad Request", (done) => {
+    done();
+  });
 });
 
 describe("/api/v1/parser", () => {
-  test("GET: Parses an SDC XML file into JSON", (done) => {
+  test("POST: Parses an SDC XML file into JSON", (done) => {
     let xmlData = Mock.getMockXMLData();
     request
       .post(`/api/v1/parser`)
@@ -202,7 +286,7 @@ describe("/api/v1/parser", () => {
       })
       .catch((err) => done(err));
   });
-  test("GET: Bad Request", (done) => {
+  test("POST: Bad Request", (done) => {
     let xmlData = Mock.getMockXMLData();
     request
       .post(`/api/v1/parser`)
@@ -344,6 +428,15 @@ describe("/api/v1/forms/{formId}/responses", () => {
       .catch((err) => done(err));
   });
   test.skip("GET: Not Found", (done) => {
+    done();
+  });
+});
+
+describe.skip("/api/v1/forms/search", () => {
+  test("POST: Search for Forms", (done) => {
+    done();
+  });
+  test("POST: Bad Request", (done) => {
     done();
   });
 });
