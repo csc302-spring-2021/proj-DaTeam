@@ -167,15 +167,53 @@ describe.skip("/api/v1/patients/search", () => {
   });
 });
 
-describe.skip("/api/v1/procedures", () => {
+describe("/api/v1/procedures", () => {
   test("POST: Create a new procedure", (done) => {
-    done();
+    let proc = Mock.getMockProcedure();
+    request
+      .post("/api/v1/procedures")
+      .send(proc)
+      .expect(HttpCode.CREATED)
+      .expect("Content-Type", /text/)
+      .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
   });
   test("GET: Get all Procedures", (done) => {
-    done();
+    request
+      .get("/api/v1/procedures")
+      .expect(HttpCode.OK)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        expect(response.body).isList();
+        expect(response.body).allProcedureItems();
+        done();
+      })
+      .catch((err) => done(err));
   });
   test("POST and GET: Create new procedure and verify persistence", (done) => {
-    done();
+    let proc = Mock.getMockProcedure();
+    request
+      .post("/api/v1/procedures")
+      .send(proc)
+      .expect(HttpCode.CREATED)
+      .expect("Content-Type", /text/)
+      .then((res) => {
+        let uid = res.text;
+        request
+          .get(`/api/v1/procedures/`)
+          .expect(HttpCode.OK)
+          .expect("Content-Type", /json/)
+          .then((response) => {
+            expect(response.body).isList();
+            expect(response.body).allProcedureItems();
+            expect(response.body).containsID(uid, Model.Procedure);
+            done();
+          })
+          .catch((err) => done(err));
+      })
+      .catch((err) => done(err));
   });
 });
 

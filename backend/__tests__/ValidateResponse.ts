@@ -130,6 +130,25 @@ export default {
       };
     }
   },
+  allProcedureItems(received) {
+    // PreCondition: received is an array
+    let pass = true;
+    received.forEach((element) => {
+      pass = pass && validate(element, Model.Procedure);
+    });
+    if (pass) {
+      return {
+        message: () =>
+          `expected ${received} to not only contain Procedure items`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () => `expected ${received} to only contain Procedure items`,
+        pass: false,
+      };
+    }
+  },
   containsPatient(received, patientId) {
     // PreCondition: received is an array of Patient items
     let pass = false;
