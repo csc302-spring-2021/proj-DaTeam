@@ -297,6 +297,25 @@ export function buildFormResponsePartial(): Model.SDCFormResponse {
   return response;
 }
 
+/**
+ * Generate a valid response to the question created by buildFormComplete
+ */
+export function buildFormResponsePartial2(): Model.SDCFormResponse {
+  const response = genFormResponsePartial();
+
+  let answer = genAnswer();
+  answer.questionID = "text-1";
+  answer.responses = ["5"];
+  response.answers.push(answer);
+
+  answer = genAnswer();
+  answer.questionID = "list-1";
+  answer.responses = ["list-1-1"];
+  response.answers.push(answer);
+
+  return response;
+}
+
 export function buildFormSimpleList(): Model.SDCForm {
   const form = genFormComplete();
   form.formProperties.push(genFormPropertyComplete());
@@ -355,6 +374,7 @@ export function buildFormResponseMultipleQuestion(): Model.SDCFormResponse {
 export function buildFormDeselectSiblings(): Model.SDCForm {
   const form = buildFormSimpleList();
   findNode(form, "list-0").selectionDeselectsSiblings = true;
+  findNode(form, "list").maxSelections = 2;
   return form;
 }
 
