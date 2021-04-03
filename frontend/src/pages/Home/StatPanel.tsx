@@ -1,25 +1,44 @@
-import { Model } from "@dateam/shared";
-import { SDCAnswer } from "@dateam/shared/build/ClassDef";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { notify } from "../../components/Notification/Notification";
 
-import { useFormResponses } from "../../hooks/services";
-import FormService from "../../services/FormService";
+import { useForm, useFormResponses } from "../../hooks/services";
+
 import ResponseService from "../../services/ResponseService";
 import * as d3 from "d3";
 import { useRef } from "react";
-import { icicle } from "./Icicle";
+import { Model } from "@dateam/shared";
 
 function StatPanel() {
   const { formId } = useParams<{
     formId: string;
   }>();
 
+  const { data: formTemplate } = useForm(formId);
   const { data: formResponses } = useFormResponses(formId);
   const [data, setData] = useState<any>({});
   const [chartData, setChartData] = useState<any>();
+  const [idMap, setIdMap] = useState<object>();
   const chartRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    let obj: object = {};
+    const formIdMap = (node: Model.SDCNode, obj: any) => {
+      const id = node.id;
+      const title = node.title ? node.title : "N/A";
+      obj[id] = title;
+      if (node.children) {
+        node.children.forEach((cnode) => formIdMap(cnode, obj));
+      }
+      if (node instanceof Model.SDCListField) {
+        node.options.forEach((onode) => formIdMap(onode, obj));
+      }
+    };
+    if (formTemplate) {
+      formIdMap(formTemplate, obj);
+      setIdMap(obj);
+      console.log(obj);
+    }
+  }, [formTemplate]);
 
   useEffect(() => {
     if (!formResponses) {
@@ -73,7 +92,12 @@ function StatPanel() {
   const height = 970;
 
   useEffect(() => {
-    if (chartRef.current && chartData && chartData.children.length > 0) {
+    if (
+      idMap &&
+      chartRef.current &&
+      chartData &&
+      chartData.children.length > 0
+    ) {
       const format = d3.format(",d");
       const color = d3.scaleOrdinal(
         d3.quantize(d3.interpolateRainbow, chartData.children.length + 1)
@@ -117,11 +141,15 @@ function StatPanel() {
         .attr("y", 13)
         .attr("fill-opacity", (d) => +labelVisible(d));
 
-      text.append("tspan").text((d) => (d.data as any).name);
+      text.append("tspan").text((d) => {
+        return (idMap as any)[(d.data as any).name]
+          ? (idMap as any)[(d.data as any).name]
+          : (d.data as any).name;
+      });
 
       const tspan = text
         .append("tspan")
-        .attr("fill-opacity", (d) => labelVisible(d) * 0.7)
+        .attr("fill-opacity", (d) => labelVisible(d) * 2.0)
         .text((d) => ` ${format(d.value!)}`);
 
       cell.append("title").text(
@@ -178,7 +206,7 @@ function StatPanel() {
         .style("cursor", "pointer")
         .on("click", clicked);
     }
-  }, [chartData, chartRef]);
+  }, [chartData, chartRef, idMap]);
 
   return (
     <div className="w-full h-full overflow-scroll">
