@@ -174,6 +174,9 @@ export class FormResponseValidator {
           listFieldItem.uid,
           "textResponse"
         );
+        if (!listFieldItem.selectionDisablesChildren) {
+          this.validationFlag.addByPassUIDField(listFieldItem.uid, "children");
+        }
         return false;
       }
     );
