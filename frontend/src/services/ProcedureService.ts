@@ -65,7 +65,9 @@ async function create(procedure: Model.Procedure): Promise<string> {
     try {
     const newQuery = Query.query(
         Model.Procedure,
-        Query.contains("id", searchTerm)
+        Query.contains("id", searchTerm).or(
+            Query.contains("name", searchTerm)
+        )
     );
       const proceduresEncoded = GenericJsonSerializer.encode(newQuery, Query.Query);
       const proceduresResponse = await fetch(`/api/v1/procedures/search`, {

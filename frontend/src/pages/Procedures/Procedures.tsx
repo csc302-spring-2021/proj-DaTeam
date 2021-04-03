@@ -51,7 +51,7 @@ function ProcedureRowData(props: { procedure: Model.Procedure }) {
         <tr className="flex w-full">
             <td className="px-6 py-4 w-1/4 whitespace-nowrap">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                    {props.procedure.assignedFormID}
+                    {props.procedure.name}
                 </p>
             </td>
             <td className="px-6 py-4 w-1/4 whitespace-nowrap">
