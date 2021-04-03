@@ -148,14 +148,6 @@ describe("/api/v1/patients/{patiendId}", () => {
       .catch((err) => done(err));
   });
   test.skip("PUT: Update a specific patient", (done) => {
-    // let uid = "fake_uid_doesnt_exist";
-    // request
-    //   .put(`/api/v1/patients/${uid}`)
-    //   .expect(HttpCode.NO_CONTENT)
-    //   .then((response) => {
-    //     done();
-    //   })
-    //   .catch((err) => done(err));
     done();
   });
   test.skip("PUT: Bad Request", (done) => {
@@ -226,40 +218,12 @@ describe("/api/v1/procedures/{procedureId}", () => {
       .catch((err) => done(err));
   });
   test.skip("PUT: Update a specific procedure", (done) => {
-    // let proc = Mock.getMockProcedure();
-    // request
-    //   .post("/api/v1/procedures")
-    //   .send(proc)
-    //   .expect(HttpCode.CREATED)
-    //   .expect("Content-Type", /text/)
-    //   .then((res) => {
-    //     let uid = res.text;
-    //     request
-    //       .get(`/api/v1/procedures/${uid}`)
-    //       .expect(HttpCode.OK)
-    //       .expect("Content-Type", /json/)
-    //       .then((response) => {
-    //         expect(response.body).isProcedure();
-    //         expect(response.body).hasProcedureId(uid);
-    //         done();
-    //       })
-    //       .catch((err) => done(err));
-    //   })
-    //   .catch((err) => done(err));
     done();
   });
   test.skip("PUT: Bad Request", (done) => {
     done();
   });
   test.skip("PUT: Not Found", (done) => {
-    // let uid = "fake_uid_doesnt_exist";
-    // request
-    //   .get(`/api/v1/patients/${uid}`)
-    //   .expect(HttpCode.NOT_FOUND)
-    //   .then((response) => {
-    //     done();
-    //   })
-    //   .catch((err) => done(err));
     done();
   });
 });
@@ -518,6 +482,15 @@ describe("/api/v1/responses/{responseId}", () => {
     done();
   });
   test.skip("PUT: Not Found", (done) => {
+    done();
+  });
+});
+
+describe.skip("/api/v1/responses/search", () => {
+  test("POST: Search for Responses", (done) => {
+    done();
+  });
+  test("POST: Bad Request", (done) => {
     done();
   });
 });
