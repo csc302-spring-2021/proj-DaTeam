@@ -18,7 +18,9 @@ export enum HttpCode {
 }
 
 export function sendError(res: Response, code: number, error: Error) {
-  console.log(error);
+  if (process.env.NODE_ENV !== "test") {
+    console.log(error);
+  }
   res.type("json");
   res.status(code).send({ message: error.message });
 }

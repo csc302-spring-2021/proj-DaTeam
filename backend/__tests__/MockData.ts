@@ -7,6 +7,8 @@ import {
   Mocks,
 } from "@dateam/shared";
 
+import { form } from "./SDCTestData";
+
 /** Mocks */
 
 export function getMockPatient() {
@@ -27,4 +29,8 @@ export function getMockForm() {
 export function getMockFormResponse() {
   const form_response = Mocks.genFormResponseComplete();
   return serializer.encode(form_response, Model.SDCFormResponse);
+}
+
+export function getMockXMLData() {
+  return form.toString();
 }
