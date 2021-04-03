@@ -51,6 +51,9 @@ export const classMeta: { [id: string]: ClassMetaType } = {
       id: {
         type: String,
       },
+      name: {
+        type: String,
+      },
       assignedFormID: {
         type: String,
         nullable: true,
