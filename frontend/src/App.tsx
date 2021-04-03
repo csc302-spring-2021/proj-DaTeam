@@ -10,6 +10,7 @@ import { Home } from "./pages/Home";
 import { Patients } from "./pages/Patients";
 import { AnimatePresence } from "framer-motion";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Procedures } from "./pages/Procedures";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -40,7 +41,7 @@ function App() {
                                     <Route path="/responses" component={Responses} />
                                     <Route exact path="/home" component={Home} />
                                     <Route path="/patients" component={Patients} />
-                                    <Route path="/procedures" component={Patients} />
+                                    <Route path="/procedures" component={Procedures} />
                                     <Route path="/forms" component={Forms} />
                                     <Route exact path="/404" component={NotFound} />
                                     <Redirect exact path="/" to="/responses" />

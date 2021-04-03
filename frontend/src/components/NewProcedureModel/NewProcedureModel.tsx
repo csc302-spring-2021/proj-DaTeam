@@ -53,7 +53,7 @@ function NewProcedureModel(props: {
                     </div>
                     <div className="flex flex-col mt-8 space-y-8">
                         <div className="w-1/2 space-y-2 text-left md:w-full">
-                            <label className="text-lg font-bold uppercase">Full Name</label>
+                            <label className="text-lg font-bold uppercase">Name</label>
                             <FormInput
                                 state={procedureName}
                                 setState={setProcedureName}
@@ -69,9 +69,6 @@ function NewProcedureModel(props: {
                                 type="text"
                                 placeholder=""
                             />
-                            <label className="text-sm text-gray-600">
-                                Typically this is the procedure’s OHIP number.
-                            </label>
                         </div>
                         <button
                             onClick={onCreateClick}

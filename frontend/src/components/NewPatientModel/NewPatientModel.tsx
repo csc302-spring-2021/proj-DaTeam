@@ -43,7 +43,7 @@ function NewPatientModal(props: {
     };
 
     return (
-        <div>
+        <div data-testid="newpatientmodel">
             <Modal setShowModal={setShowModal}>
                 <div className="flex flex-col p-4">
                     <div className="flex space-x-8">

@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import { pageVariants } from "../../App";
 import { Model } from "@dateam/shared";
-import { usePatients } from "../../hooks/services";
-import { NewPatientModel } from "../../components/NewPatientModel"
+import { useProcedures } from "../../hooks/services";
+import { NewProcedureModel } from "../../components/NewProcedureModel"
 import { useState } from "react";
 
-function PatientTable(props: { procedures?: Model.Patient[] }) {
+function ProcedureTable(props: { procedures?: Model.Procedure[] }) {
     return (
         <div className="shadow border-b border-gray-200 sm:rounded-lg w-full">
             <table className="min-w-full divide-y divide-gray-200">
@@ -38,28 +38,28 @@ function PatientTable(props: { procedures?: Model.Patient[] }) {
                     </tr>
                 </thead>
                 <tbody className="bg-white w-full max-h-96 flex flex-col divide-y overflow-y-auto divide-gray-200">
-                    {props.procedures?.map((patient: Model.Patient, i: number) => {
-                        return <PatientRowData key={i} patient={patient} />;
+                    {props.procedures?.map((procedure: Model.Procedure, i: number) => {
+                        return <ProcedureRowData key={i} procedure={procedure} />;
                     })}
                 </tbody>
             </table>
         </div>
     );
 }
-function PatientRowData(props: { patient: Model.Patient }) {
+function ProcedureRowData(props: { procedure: Model.Procedure }) {
     return (
         <tr className="flex w-full">
             <td className="px-6 py-4 w-1/4 whitespace-nowrap">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                    {props.patient.name}
+                    {props.procedure.assignedFormID}
                 </p>
             </td>
             <td className="px-6 py-4 w-1/4 whitespace-nowrap">
-                <p className="text-sm text-gray-900 truncate">{props.patient.id}</p>
+                <p className="text-sm text-gray-900 truncate">{props.procedure.id}</p>
             </td>
             <td className="px-6 py-4 w-1/4 whitespace-nowrap">
                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    {props.patient.uid}
+                    {props.procedure.uid}
                 </span>
             </td>
             <td className="px-6 py-4 w-1/4 text-right text-sm font-medium whitespace-nowrap">
@@ -72,16 +72,16 @@ function PatientRowData(props: { patient: Model.Patient }) {
 }
 
 function Procedures() {
-    const [showNewPatientModal, setShowNewPatientModal] = useState<boolean>(
+    const [showNewProcedureModal, setShowNewProcedureModal] = useState<boolean>(
         false
     );
     const [searchProcedures, setSearchProcedures] = useState<string>("");
     const [currentSearch, setCurrentSearch] = useState<string>("");
-    const { data: procedures, refetch: proceduresRefetch } = usePatients(
+    const { data: procedures, refetch: proceduresRefetch } = useProcedures(
         currentSearch
     );
 
-    const onCreatePatientBtnClick = () => setShowNewPatientModal(true);
+    const onCreateProcedureBtnClick = () => setShowNewProcedureModal(true);
 
     const handleSearchProceduresSubmit = (event: any) => {
         event.preventDefault();
@@ -90,12 +90,11 @@ function Procedures() {
 
     return (
         <>
-            {showNewPatientModal && (
-                <NewPatientModel
-                    showModal={showNewPatientModal}
-                    setShowModal={setShowNewPatientModal}
+            {showNewProcedureModal && (
+                <NewProcedureModel
+                    showModal={showNewProcedureModal}
+                    setShowModal={setShowNewProcedureModal}
                     refetch={proceduresRefetch}
-                    goToRespones={false}
                 />
             )}
             <motion.div
@@ -128,7 +127,7 @@ function Procedures() {
                             />
                         </form>
                         <button
-                            onClick={onCreatePatientBtnClick}
+                            onClick={onCreateProcedureBtnClick}
                             className="px-3 py-2 bg-gray-300 rounded-md hover:bg-gray-800 hover:text-white text-bold font-semibold"
                         >
                             New Procedure
@@ -136,7 +135,7 @@ function Procedures() {
                     </div>
 
                     <div className="relative">
-                        <PatientTable procedures={procedures} />
+                        <ProcedureTable procedures={procedures} />
                     </div>
                 </div>
             </motion.div>

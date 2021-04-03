@@ -8,7 +8,7 @@ import { GenericJsonSerializer, Model, Query } from "@dateam/shared";
  */
 async function create(procedure: Model.Procedure): Promise<string> {
   try {
-    const procedureEncoded = GenericJsonSerializer.encode(procedure, Model.Patient);
+    const procedureEncoded = GenericJsonSerializer.encode(procedure, Model.Procedure);
     const procedureResponse = await fetch(`/api/v1/procedures`, {
       method: "POST",
       body: JSON.stringify(procedureEncoded),
@@ -65,9 +65,7 @@ async function create(procedure: Model.Procedure): Promise<string> {
     try {
     const newQuery = Query.query(
         Model.Procedure,
-        Query.contains("name", searchTerm).or(
-            Query.equals("id", searchTerm)
-        )
+        Query.contains("id", searchTerm)
     );
       const proceduresEncoded = GenericJsonSerializer.encode(newQuery, Query.Query);
       const proceduresResponse = await fetch(`/api/v1/procedures/search`, {
