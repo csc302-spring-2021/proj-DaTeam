@@ -41,10 +41,11 @@ function App() {
                   <Route path="/home" component={Home} />
                   <Route exact path="/patients" component={Patients} />
                   <Route exact path="/procedures" component={Procedures} />
-                  <Route path="/responses" component={Responses} />
+                  <Route path="/responses/manage" component={Responses} />
                   <Route path="/forms" component={Forms} />
                   <Route exact path="/404" component={NotFound} />
-                  <Redirect exact path="/" to="/responses" />
+                  <Redirect exact path="/" to="/home" />
+                  <Redirect exact path="/responses" to="/responses/manage" />
                   <Redirect to="/404" />
                 </Switch>
               </AnimatePresence>
