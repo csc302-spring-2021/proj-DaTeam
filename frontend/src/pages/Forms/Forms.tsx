@@ -86,13 +86,11 @@ function FormsPanel() {
                 return FormService.create(form);
             })
             .then((createdForm) => {
-                console.log(createdForm);
                 return queryClient.refetchQueries("forms");
             })
             .then(() => notify.success(`Form Created.`))
             .catch((err) => {
                 notify.error(err.message);
-                /* console.log(err); */
             });
     };
 
