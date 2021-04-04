@@ -47,7 +47,7 @@ function StatPanel() {
         })
       );
 
-      const ansIdData = {} as any;
+      const ansIdData: { [key: string]: string[] } = {};
       responses.forEach((res) => {
         res.answers.forEach((ans) => {
           ansIdData[ans.questionID] = [...ans.responses].concat(
@@ -56,7 +56,7 @@ function StatPanel() {
         });
       });
       const dataArr = Object.keys(ansIdData).map((key: string) => {
-        const countedChildren: any = {};
+        const countedChildren: { [key: string]: number } = {};
         ansIdData[key].forEach((key: string) => {
           countedChildren[key] = countedChildren[key]
             ? countedChildren[key] + 1
@@ -70,8 +70,11 @@ function StatPanel() {
 
       const chartData = { name: form.title, children: dataArr };
 
-      let obj: object = {};
-      const formIdMap = (node: Model.SDCNode, obj: any) => {
+      let obj: { [key: string]: string } = {};
+      const formIdMap = (
+        node: Model.SDCNode,
+        obj: { [key: string]: string }
+      ) => {
         const id = node.id;
         const title = node.title ? node.title : "ID: " + node.id;
         obj[id] = title;
@@ -86,8 +89,6 @@ function StatPanel() {
 
       const info = { chartData, idMap: obj };
       sunburst(info.chartData, chartRef.current, info.idMap);
-
-      console.log(formResponses, form, chartRef);
     }
 
     generateChart();
