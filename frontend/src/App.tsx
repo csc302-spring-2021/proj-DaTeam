@@ -38,7 +38,7 @@ function App() {
             <div className="flex-1">
               <AnimatePresence>
                 <Switch>
-                  <Route exact path="/home" component={Home} />
+                  <Route path="/home" component={Home} />
                   <Route exact path="/patients" component={Patients} />
                   <Route exact path="/procedures" component={Procedures} />
                   <Route path="/responses" component={Responses} />
