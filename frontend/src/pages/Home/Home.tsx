@@ -12,7 +12,7 @@ export default function Home() {
       initial="initial"
       animate="animate"
       exit="exit"
-      data-testid="responses"
+      data-testid="home"
       className="h-screen mx-auto overflow-hidden"
     >
       <div className="flex h-full">
