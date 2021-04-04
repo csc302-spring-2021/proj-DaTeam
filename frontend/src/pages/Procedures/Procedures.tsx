@@ -89,56 +89,58 @@ function Procedures() {
     };
 
     return (
-        <div data-testid="procedures">
-            {showNewProcedureModal && (
-                <NewProcedureModel
-                    showModal={showNewProcedureModal}
-                    setShowModal={setShowNewProcedureModal}
-                    refetch={proceduresRefetch}
-                />
-            )}
-            <motion.div
-                variants={pageVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="relative max-w-5xl mx-auto px-8"
-            >
-                <div className="py-16 flex flex-col space-y-8">
-                    <div>
-                        <h2 className="text-3xl font-medium tracking-tighter">
-                            Procedures
+        <>
+            <div data-testid="procedures">
+                {showNewProcedureModal && (
+                    <NewProcedureModel
+                        showModal={showNewProcedureModal}
+                        setShowModal={setShowNewProcedureModal}
+                        refetch={proceduresRefetch}
+                    />
+                )}
+                <motion.div
+                    variants={pageVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    className="relative max-w-5xl mx-auto px-8"
+                >
+                    <div className="py-16 flex flex-col space-y-8">
+                        <div>
+                            <h2 className="text-3xl font-medium tracking-tighter">
+                                Procedures
             </h2>
-                        <p className="text-gray-600">
-                            Manage procedures in the health care system
+                            <p className="text-gray-600">
+                                Manage procedures in the health care system
             </p>
-                    </div>
+                        </div>
 
-                    <div className="flex justify-between align-center">
-                        <form className="w-1/2" onSubmit={handleSearchProceduresSubmit}>
-                            <input
-                                type="text"
-                                placeholder="Search Procedures"
-                                className="p-10 w-full h-6 px-4 py-5 bg-gray-200 rounded tracking-tighter"
-                                onChange={(event) =>
-                                    setSearchProcedures(event.target.value.trim())
-                                }
-                            />
-                        </form>
-                        <button
-                            onClick={onCreateProcedureBtnClick}
-                            className="px-3 py-2 bg-gray-300 rounded-md hover:bg-gray-800 hover:text-white text-bold font-semibold"
-                        >
-                            New Procedure
+                        <div className="flex justify-between align-center">
+                            <form className="w-1/2" onSubmit={handleSearchProceduresSubmit}>
+                                <input
+                                    type="text"
+                                    placeholder="Search Procedures"
+                                    className="p-10 w-full h-6 px-4 py-5 bg-gray-200 rounded tracking-tighter"
+                                    onChange={(event) =>
+                                        setSearchProcedures(event.target.value.trim())
+                                    }
+                                />
+                            </form>
+                            <button
+                                onClick={onCreateProcedureBtnClick}
+                                className="px-3 py-2 bg-gray-300 rounded-md hover:bg-gray-800 hover:text-white text-bold font-semibold"
+                            >
+                                New Procedure
             </button>
-                    </div>
+                        </div>
 
-                    <div className="relative">
-                        <ProcedureTable procedures={procedures} />
+                        <div className="relative">
+                            <ProcedureTable procedures={procedures} />
+                        </div>
                     </div>
-                </div>
-            </motion.div>
-        </div>
+                </motion.div>
+            </div>
+        </>
     );
 }
 

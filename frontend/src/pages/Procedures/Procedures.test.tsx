@@ -1,7 +1,7 @@
 import React from "react";
 import { Procedures } from "../Procedures";
 import { createMemoryHistory, MemoryHistory } from "history";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { Router } from "react-router";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
@@ -40,6 +40,7 @@ describe("Procedures", () => {
 
     it("renders procedures", async () => {
         renderProcedures();
-        expect(screen.getByTestId("procedures")).toBeVisible();
+        await waitFor(() => expect(screen.getByTestId("procedures")).toBeVisible());
+
     });
 });
