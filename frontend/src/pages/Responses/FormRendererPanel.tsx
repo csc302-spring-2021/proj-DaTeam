@@ -24,7 +24,7 @@ export default function FormRendererPanel() {
       exit={{ opacity: 0 }}
       className="relative w-full min-h-full overflow-y-auto rounded-lg shadow-2xl sm:w-1/2 lg:w-1/2 bg-gray-50"
     >
-      <Link to={`/responses/${formId}`}>
+      <Link to={`/responses/manage/${formId}`}>
         <CloseButton />
       </Link>
 
