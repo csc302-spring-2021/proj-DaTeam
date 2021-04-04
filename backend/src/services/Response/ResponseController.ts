@@ -12,7 +12,11 @@ export const ResponseController = {
         const validation = FormResponseValidator.validate(req.body, form);
         if (validation.length == 0) {
           Utils.create(req, res, Model.SDCFormResponse).catch((e: Error) =>
-            sendError(res, HttpCode.BAD_REQUEST, e)
+            sendError(
+              res,
+              HttpCode.BAD_REQUEST,
+              Error(validation.map((elem) => elem.message).join("\n"))
+            )
           );
         } else {
           sendError(res, HttpCode.BAD_REQUEST, Error("Invalid FormResponse"));
