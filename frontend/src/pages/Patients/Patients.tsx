@@ -89,7 +89,7 @@ function Patients() {
     };
 
     return (
-        <>
+        <div data-testid="patients">
             {showNewPatientModal && (
                 <NewPatientModel
                     showModal={showNewPatientModal}
@@ -103,7 +103,6 @@ function Patients() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                data-testid="patients"
                 className="relative max-w-5xl mx-auto px-8"
             >
                 <div className="py-16 flex flex-col space-y-8">
@@ -140,7 +139,7 @@ function Patients() {
                     </div>
                 </div>
             </motion.div>
-        </>
+        </div>
     );
 }
 
