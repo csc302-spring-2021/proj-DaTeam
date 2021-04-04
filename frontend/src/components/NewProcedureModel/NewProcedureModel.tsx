@@ -1,34 +1,27 @@
 import { Model } from "@dateam/shared";
 import { useState } from "react";
-import { useParams, useHistory } from "react-router";
-import { FormInput } from "../../components/FormInput";
-import { Modal } from "../../components/Modal";
-import { notify } from "../../components/Notification/Notification";
-import PatientService from "../../services/PatientService";
+import { FormInput } from "../FormInput";
+import { Modal } from "../Modal";
+import { notify } from "../Notification/Notification";
+import ProcedureService from "../../services/ProcedureService";
 
-function NewPatientModal(props: {
+function NewProcedureModel(props: {
     showModal: boolean;
-    goToRespones: boolean;
     refetch?: any;
     setShowModal?: (val: boolean) => void;
 }) {
     const { showModal, setShowModal } = props;
-    const [patientName, setPatientName] = useState("");
-    const [patientId, setPatientId] = useState("");
-    const { formId } = useParams<{ formId: string }>();
-    const hist = useHistory();
+    const [procedureName, setProcedureName] = useState("");
+    const [procedureId, setProcedureId] = useState("");
 
     const onCreateClick = () => {
-        const newPatient = new Model.Patient({
-            name: patientName,
-            id: patientId,
+        const newProcedure = new Model.Procedure({
+            name: procedureName,
+            id: procedureId,
         });
-        PatientService.create(newPatient)
-            .then((patientId) => {
-                console.log(patientId);
-                if (props.goToRespones) {
-                    hist.push(`/responses/${formId}?patient=${patientId}`);
-                }
+        ProcedureService.create(newProcedure)
+            .then((procedureId) => {
+                console.log(procedureId);
                 if (props.refetch) {
                     props.refetch();
                 }
@@ -43,7 +36,7 @@ function NewPatientModal(props: {
     };
 
     return (
-        <div data-testid="newpatientmodel">
+        <div data-testid="newproceduremodel">
             <Modal setShowModal={setShowModal}>
                 <div className="flex flex-col p-4">
                     <div className="flex space-x-8">
@@ -51,7 +44,7 @@ function NewPatientModal(props: {
                         <span className="flex flex-col">
                             {" "}
                             <h2 className="text-2xl font-semibold text-left">
-                                Enter the patient information.
+                                Add a new procedure
               </h2>
                             <h3 className="text-left text-gray-600">
                                 Fill in the following details and hit Create.
@@ -60,25 +53,22 @@ function NewPatientModal(props: {
                     </div>
                     <div className="flex flex-col mt-8 space-y-8">
                         <div className="w-1/2 space-y-2 text-left md:w-full">
-                            <label className="text-lg font-bold uppercase">Full Name</label>
+                            <label className="text-lg font-bold uppercase">Name</label>
                             <FormInput
-                                state={patientName}
-                                setState={setPatientName}
+                                state={procedureName}
+                                setState={setProcedureName}
                                 type="text"
                                 placeholder=""
                             />
                         </div>
                         <div className="flex flex-col w-1/2 space-y-2 text-left md:w-full">
-                            <label className="text-lg font-bold uppercase">Patient ID</label>
+                            <label className="text-lg font-bold uppercase">Procedure ID</label>
                             <FormInput
-                                state={patientId}
-                                setState={setPatientId}
+                                state={procedureId}
+                                setState={setProcedureId}
                                 type="text"
                                 placeholder=""
                             />
-                            <label className="text-sm text-gray-600">
-                                Typically this is the patient’s OHIP number.
-                            </label>
                         </div>
                         <button
                             onClick={onCreateClick}
@@ -112,4 +102,4 @@ function PersonSVG() {
     );
 }
 
-export default NewPatientModal;
+export default NewProcedureModel;
