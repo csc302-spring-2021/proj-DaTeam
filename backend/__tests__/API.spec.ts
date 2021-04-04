@@ -444,8 +444,23 @@ describe.skip("/api/v1/forms/search", () => {
 });
 
 describe("/api/v1/responses", () => {
+  let formId, patiendId;
+  beforeAll(async (done) => {
+    formId = await databaseManager.genericCreate(
+      Mocks.buildFormComplete(),
+      Model.SDCForm
+    );
+    patiendId = await databaseManager.genericCreate(
+      Mocks.genPatientComplete(),
+      Model.Patient
+    );
+    done();
+  });
   test("POST: Create a new form response", (done) => {
     let formRespose = Mock.getMockFormResponse();
+    formRespose.formId = formId;
+    formRespose.patientID = patiendId;
+    console.log(formId, patiendId);
     request
       .post(`/api/v1/responses`)
       .send(formRespose)
