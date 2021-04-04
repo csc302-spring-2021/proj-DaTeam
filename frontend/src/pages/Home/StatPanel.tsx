@@ -4,7 +4,6 @@ import { useParams } from "react-router";
 import { useForm, useFormResponses } from "../../hooks/services";
 
 import ResponseService from "../../services/ResponseService";
-import * as d3 from "d3";
 import { useRef } from "react";
 import { Model } from "@dateam/shared";
 import { sunburst } from "./Sunburst";
