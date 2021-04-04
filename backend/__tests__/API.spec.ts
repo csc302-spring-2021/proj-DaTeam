@@ -444,14 +444,47 @@ describe.skip("/api/v1/forms/search", () => {
 });
 
 describe("/api/v1/responses", () => {
+  let formId, patiendId;
+  beforeAll(async (done) => {
+    formId = await databaseManager.genericCreate(
+      Mocks.buildFormComplete(),
+      Model.SDCForm
+    );
+    patiendId = await databaseManager.genericCreate(
+      Mocks.genPatientComplete(),
+      Model.Patient
+    );
+    done();
+  });
   test("POST: Create a new form response", (done) => {
     let formRespose = Mock.getMockFormResponse();
+    formRespose.formId = formId;
+    formRespose.patientID = patiendId;
     request
       .post(`/api/v1/responses`)
       .send(formRespose)
       .expect(HttpCode.CREATED)
       .expect("Content-Type", /text/)
       .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
+  });
+  test("POST: Invalid form response", (done) => {
+    let formRespose = Mock.getMockFormResponse();
+    formRespose.answers = [];
+    formRespose.formId = formId;
+    formRespose.patientID = patiendId;
+    request
+      .post(`/api/v1/responses`)
+      .send(formRespose)
+      .expect(HttpCode.BAD_REQUEST)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        let message = response.text;
+        expect(message).not.toEqual(undefined);
+        let json = JSON.parse(message);
+        expect(json.message).toMatch(/SDCAnswer not found for question/);
         done();
       })
       .catch((err) => done(err));
