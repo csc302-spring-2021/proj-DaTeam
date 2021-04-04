@@ -89,7 +89,7 @@ function Procedures() {
     };
 
     return (
-        <>
+        <div data-testid="procedures">
             {showNewProcedureModal && (
                 <NewProcedureModel
                     showModal={showNewProcedureModal}
@@ -102,7 +102,6 @@ function Procedures() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                data-testid="procedures"
                 className="relative max-w-5xl mx-auto px-8"
             >
                 <div className="py-16 flex flex-col space-y-8">
@@ -139,7 +138,7 @@ function Procedures() {
                     </div>
                 </div>
             </motion.div>
-        </>
+        </div>
     );
 }
 
