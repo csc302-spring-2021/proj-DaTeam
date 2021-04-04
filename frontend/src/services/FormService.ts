@@ -32,7 +32,6 @@ async function read(formId: number | string): Promise<Model.SDCForm> {
  * @form A SDC Form Object
  */
 async function create(form: Model.SDCForm): Promise<string> {
-  console.log(GenericJsonSerializer.encode(form, Model.SDCForm));
   const encodedForm = GenericJsonSerializer.encode(form, Model.SDCForm);
   const formResponse = await fetch(`/api/v1/forms`, {
     method: "POST",
@@ -46,7 +45,6 @@ async function create(form: Model.SDCForm): Promise<string> {
     //throw Error(`Could not get form by ID. Error: ${formResponse.statusText}`);
   }
   const id = await formResponse.text();
-  console.log(id);
   return id;
 }
 

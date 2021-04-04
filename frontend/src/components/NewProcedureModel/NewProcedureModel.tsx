@@ -21,7 +21,6 @@ function NewProcedureModel(props: {
         });
         ProcedureService.create(newProcedure)
             .then((procedureId) => {
-                console.log(procedureId);
                 if (props.refetch) {
                     props.refetch();
                 }
@@ -31,7 +30,6 @@ function NewProcedureModel(props: {
             })
             .catch((err) => {
                 notify.error(err.message);
-                console.log(err);
             });
     };
 
