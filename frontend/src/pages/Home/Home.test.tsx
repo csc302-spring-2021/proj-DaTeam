@@ -1,7 +1,7 @@
 import React from "react";
 import { Home } from "../Home";
 import { createMemoryHistory, MemoryHistory } from "history";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { Router } from "react-router";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
@@ -40,6 +40,6 @@ describe("Home", () => {
 
     it("renders home", async () => {
         renderHome();
-        expect(screen.getByTestId("home")).toBeVisible();
+        await waitFor(() => expect(screen.getByTestId("home")).toBeVisible());
     });
 });
