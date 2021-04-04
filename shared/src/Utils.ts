@@ -1,4 +1,5 @@
 import * as Model from "./ClassDef";
+import util from "util";
 
 /** Offers call stack support for error */
 export class StackUtil {
@@ -25,7 +26,7 @@ export class StackUtil {
     if (this.inspectedObject == null) return "";
     const obj = JSON.parse(JSON.stringify(this.inspectedObject));
     for (let key of Object.keys(obj)) {
-      if (typeof obj[key] === "object") {
+      if (obj[key] != null && typeof obj[key] === "object") {
         obj[key] = `[object ${obj[key].constructor.name}]`;
       }
     }
@@ -157,4 +158,8 @@ export function findAnswer(
   if (matches.length === 0) throw new Error("id not found for " + id);
   if (matches.length > 1) throw new Error("duplicates found for id " + id);
   return matches[0];
+}
+
+export function inspect(o: any) {
+  console.log(util.inspect(o, false, null, true));
 }

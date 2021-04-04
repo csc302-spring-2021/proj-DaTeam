@@ -39,6 +39,16 @@ class FieldMetaType {
   validator?: (obj: any) => void;
 }
 
+// helpers
+/** Check if attribute is a valid date */
+function checkDate(fieldName: string) {
+  return (o: any) => {
+    if (isNaN(o[fieldName].getTime())) {
+      throw new Error("invalid date");
+    }
+  };
+}
+
 /** Dictionary containing class meta info */
 export const classMeta: { [id: string]: ClassMetaType } = {
   Procedure: {
@@ -58,6 +68,16 @@ export const classMeta: { [id: string]: ClassMetaType } = {
         type: String,
         nullable: true,
       },
+      creationTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("creationTime"),
+      },
+      updateTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("updateTime"),
+      },
     },
   },
   Patient: {
@@ -72,6 +92,16 @@ export const classMeta: { [id: string]: ClassMetaType } = {
       },
       name: {
         type: String,
+      },
+      creationTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("creationTime"),
+      },
+      updateTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("updateTime"),
       },
     },
   },
@@ -131,6 +161,16 @@ export const classMeta: { [id: string]: ClassMetaType } = {
       footer: {
         type: String,
         nullable: true,
+      },
+      creationTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("creationTime"),
+      },
+      updateTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("updateTime"),
       },
       formProperties: {
         type: Array,
@@ -250,6 +290,16 @@ export const classMeta: { [id: string]: ClassMetaType } = {
       answers: {
         type: Array,
         generic: Model.SDCAnswer,
+      },
+      creationTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("creationTime"),
+      },
+      updateTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("updateTime"),
       },
     },
   },

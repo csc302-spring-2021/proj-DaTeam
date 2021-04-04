@@ -4,12 +4,9 @@ import * as QueryObject from "../build/QueryObject";
 import { GenericClassValidator } from "../build/ClassValidator";
 
 describe("Mock Data Validator Test", () => {
-  for (let [name, func] of Object.entries(Mocks)) {
-    test(`Test validation for ${name}`, (done) => {
-      GenericClassValidator.validate(func());
-      done();
-    });
-  }
+  test.each(Object.entries(Mocks))("Test validation for %s", (name, func) => {
+    GenericClassValidator.validate(func());
+  });
 });
 
 describe("Verify Invalid Cases", () => {

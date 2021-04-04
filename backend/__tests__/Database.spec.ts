@@ -66,7 +66,15 @@ describe("Verify Create and Read from DB Works", () => {
     done();
   });
   test("Test Form Partial", async (done) => {
-    await expect(form1).verifyCreateRead(Model.SDCForm);
+    const uid = await databaseManager.genericCreate(form1, Model.SDCForm);
+    const loaded = await databaseManager.genericRead(uid, Model.SDCForm);
+    expect(loaded.creationTime).toBeInstanceOf(Date);
+    expect(loaded.updateTime).toBeInstanceOf(Date);
+    loaded.creationTime = null;
+    loaded.updateTime = null;
+    expect(strip(form1, Model.SDCForm)).toStrictEqual(
+      strip(loaded, Model.SDCForm)
+    );
     done();
   });
   test("Test Form Complete", async (done) => {
@@ -81,7 +89,21 @@ describe("Verify Create and Read from DB Works", () => {
     // this test depends on the previouse tests for the uid
     response.formId = form1.uid;
     response.patientID = patient.uid;
-    await expect(response).verifyCreateRead(Model.SDCFormResponse);
+    const uid = await databaseManager.genericCreate(
+      response,
+      Model.SDCFormResponse
+    );
+    const loaded = await databaseManager.genericRead(
+      uid,
+      Model.SDCFormResponse
+    );
+    expect(loaded.creationTime).toBeInstanceOf(Date);
+    expect(loaded.updateTime).toBeInstanceOf(Date);
+    loaded.creationTime = null;
+    loaded.updateTime = null;
+    expect(strip(response, Model.SDCFormResponse)).toStrictEqual(
+      strip(loaded, Model.SDCFormResponse)
+    );
     done();
   });
 });
