@@ -36,15 +36,14 @@ function FormRenderer(props: IFormRendererProps) {
 
   const [response, setResponse] = useState<{ [key: string]: any }>({});
   const BLANK_STRING = "-----";
+
   useEffect(() => {
-    console.log(sdcResponse?.answers);
     if (sdcResponse?.answers) {
       sdcResponse.answers.map((ans) => {
         const key = ans.questionID;
         const val = ans.responses ? ans.responses[0] : [];
         setResponse((r) => {
           r[key] = val;
-          console.log(r);
           return r;
         });
       });
@@ -54,25 +53,43 @@ function FormRenderer(props: IFormRendererProps) {
   }, [sdcResponse]);
 
   const onSubmitForm = () => {
-    console.log("aabb", sdcResponse, response);
     if (!sdcform || !patient) {
       notify.error("Cannot create with a selected form or patient");
       return;
     }
-    const sdcResponses = Object.keys(response).map(
-      (key) =>
-        new Model.SDCAnswer({ questionID: key, responses: [response[key]] })
-    );
+
+    const sdcResponses = Object.keys(response).reduce((arr, key) => {
+      const questionID = key;
+      const res = response[key];
+      if (res instanceof Array && res.length > 0) {
+        arr.push(
+          new Model.SDCAnswer({
+            questionID,
+            responses: res,
+          })
+        );
+      } else if (typeof res === "string") {
+        arr.push(
+          new Model.SDCAnswer({
+            questionID,
+            responses: new Array(response[key]),
+          })
+        );
+      }
+      return arr;
+    }, [] as Model.SDCAnswer[]);
+
     const formRes = new Model.SDCFormResponse({
       formId: sdcform.uid,
       patientID: patient.uid,
       answers: sdcResponses,
     });
-    ResponseService.create(formRes)
-      .then((res) => {
+    ResponseService.create(formRes, sdcform)
+      .then((_) => {
         return queryClient.refetchQueries("forms");
       })
-      .then(() => notify.success("Form Created"));
+      .then(() => notify.success("Form Created"))
+      .catch((err) => notify.error(err.message));
   };
 
   const RenderNode = (sdcnode: Model.SDCNode) => {
@@ -109,6 +126,7 @@ function FormRenderer(props: IFormRendererProps) {
           listFieldItemChildren: optionChild,
         };
       });
+
       return (
         <ListField
           responseState={{ response, setResponse }}

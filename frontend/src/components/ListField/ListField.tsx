@@ -8,7 +8,7 @@ export interface IOptionNode {
   listFieldItemChildren: JSX.Element[];
 }
 interface IListFieldProps {
-  responseState?: {
+  responseState: {
     setResponse: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>;
     response: { [key: string]: any };
   };
@@ -29,7 +29,24 @@ function ListField(props: IListFieldProps) {
   const [uncollapsed, setUncollapsed] = useState(true);
 
   // Set choice for single answer responses
-  const [currentSingleChoice, setCurrentSingleChoice] = useState<string[]>([]);
+  const [currentChoice, setCurrentChoice] = useState<string[]>([]);
+  useEffect(() => {
+    const res = responseState.response[sdcListField.id];
+    if (typeof res === "string") {
+      setCurrentChoice([res]);
+    } else {
+      console.log("RES", res);
+      /* setCurrentChoice([]); */
+    }
+  }, [responseState]);
+
+  useEffect(() => {
+    console.log("CRR", currentChoice);
+    responseState.setResponse((o) => {
+      o[sdcListField.id] = currentChoice;
+      return o;
+    });
+  }, [currentChoice]);
 
   const collapseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -63,13 +80,13 @@ function ListField(props: IListFieldProps) {
       <div className="">
         {uncollapsed &&
           optionNodes.map((optionnode) => {
-            /* currentSingleChoice.addValue([optionnode.listFieldItem.id]); */
+            /* currentChoice.addValue([optionnode.listFieldItem.id]); */
 
             return (
               <ListFieldItem
                 key={optionnode.listFieldItem.id}
-                setCurrentChoice={setCurrentSingleChoice}
-                currentChoice={currentSingleChoice}
+                setCurrentChoice={setCurrentChoice}
+                currentChoice={currentChoice}
                 optionNode={optionnode}
                 uncollaped={uncollapsed}
                 isMultiSelect={isMultiSelect}

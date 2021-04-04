@@ -29,7 +29,12 @@ export default function FormRendererPanel() {
       </Link>
 
       {form && (
-        <FormRenderer form={form} patient={patient} sdcResponse={response} />
+        <FormRenderer
+          key={formId + responseId}
+          form={form}
+          patient={patient}
+          sdcResponse={response}
+        />
       )}
     </motion.div>
   );
