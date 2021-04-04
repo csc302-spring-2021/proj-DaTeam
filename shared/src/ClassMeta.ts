@@ -39,6 +39,16 @@ class FieldMetaType {
   validator?: (obj: any) => void;
 }
 
+// helpers
+/** Check if attribute is a valid date */
+function checkDate(fieldName: string) {
+  return (o: any) => {
+    if (isNaN(o[fieldName].getTime())) {
+      throw new Error("invalid date");
+    }
+  };
+}
+
 /** Dictionary containing class meta info */
 export const classMeta: { [id: string]: ClassMetaType } = {
   Procedure: {
@@ -58,6 +68,16 @@ export const classMeta: { [id: string]: ClassMetaType } = {
         type: String,
         nullable: true,
       },
+      creationTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("creationTime"),
+      },
+      updateTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("updateTime"),
+      },
     },
   },
   Patient: {
@@ -72,6 +92,16 @@ export const classMeta: { [id: string]: ClassMetaType } = {
       },
       name: {
         type: String,
+      },
+      creationTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("creationTime"),
+      },
+      updateTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("updateTime"),
       },
     },
   },
@@ -131,6 +161,16 @@ export const classMeta: { [id: string]: ClassMetaType } = {
       footer: {
         type: String,
         nullable: true,
+      },
+      creationTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("creationTime"),
+      },
+      updateTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("updateTime"),
       },
       formProperties: {
         type: Array,
@@ -251,6 +291,16 @@ export const classMeta: { [id: string]: ClassMetaType } = {
         type: Array,
         generic: Model.SDCAnswer,
       },
+      creationTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("creationTime"),
+      },
+      updateTime: {
+        type: Date,
+        nullable: true,
+        validator: checkDate("updateTime"),
+      },
     },
   },
   SDCAnswer: {
@@ -270,10 +320,18 @@ export const classMeta: { [id: string]: ClassMetaType } = {
     fields: {
       targetClass: {
         type: String,
+        validator: (o) => {
+          if (!classMeta[o.targetClass]) {
+            throw new Error(o.targetClass + " is not a valid targetClass");
+          }
+        },
       },
       condition: {
         type: Object,
         generic: QueryObject.Condition,
+        validator: (o) => {
+          o.condition.__targetClass = o.targetClass;
+        },
       },
     },
   },
@@ -286,9 +344,25 @@ export const classMeta: { [id: string]: ClassMetaType } = {
     fields: {
       opt: {
         type: String,
+        validator: (o) => {
+          if (QueryObject.ColumnCondition.validOpts.indexOf(o.opt) == -1) {
+            throw new Error(o.opt + " is not a valid opt");
+          }
+        },
       },
       column: {
         type: String,
+        validator: (o) => {
+          let targetClass = o.__targetClass;
+          for (;;) {
+            if (classMeta[targetClass].fields[o.column]) return;
+            if (!classMeta[targetClass].super)
+              throw new Error(
+                `${o.column} is not a valid column on ${o.__targetClass}`
+              );
+            targetClass = classMeta[targetClass].super!.name;
+          }
+        },
       },
       value: {
         type: String,
@@ -302,6 +376,9 @@ export const classMeta: { [id: string]: ClassMetaType } = {
       condition: {
         type: Object,
         generic: QueryObject.Condition,
+        validator: (o) => {
+          o.condition.__targetClass = o.__targetClass;
+        },
       },
     },
   },
@@ -311,14 +388,25 @@ export const classMeta: { [id: string]: ClassMetaType } = {
     fields: {
       opt: {
         type: String,
+        validator: (o) => {
+          if (QueryObject.BinaryOpt.validOpts.indexOf(o.opt) == -1) {
+            throw new Error(o.opt + " is not a valid opt");
+          }
+        },
       },
       lhs: {
         type: Object,
         generic: QueryObject.Condition,
+        validator: (o) => {
+          o.lhs.__targetClass = o.__targetClass;
+        },
       },
       rhs: {
         type: Object,
         generic: QueryObject.Condition,
+        validator: (o) => {
+          o.rhs.__targetClass = o.__targetClass;
+        },
       },
     },
   },

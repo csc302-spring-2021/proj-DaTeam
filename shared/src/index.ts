@@ -13,5 +13,6 @@ export {
   findNode,
   findAnswer,
   printNode,
+  inspect,
 } from "./Utils";
 export * as Query from "./QueryObject";

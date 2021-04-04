@@ -13,47 +13,47 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Procedures } from "./pages/Procedures";
 
 const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            refetchOnWindowFocus: false,
-            refetchOnMount: false,
-        },
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
     },
+  },
 });
 
 export const pageVariants = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { opacity: 0 },
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
 };
 
 function App() {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <Suspense fallback={<Loading />}>
-                <BrowserRouter>
-                    <div data-testid="app" className="bg-gray-100 flex flex-row">
-                        <Notification />
-                        <Nav />
-                        <div className="flex-1">
-                            <AnimatePresence>
-                                <Switch>
-                                    <Route path="/responses" component={Responses} />
-                                    <Route exact path="/home" component={Home} />
-                                    <Route path="/patients" component={Patients} />
-                                    <Route path="/procedures" component={Procedures} />
-                                    <Route path="/forms" component={Forms} />
-                                    <Route exact path="/404" component={NotFound} />
-                                    <Redirect exact path="/" to="/responses" />
-                                    <Redirect to="/404" />
-                                </Switch>
-                            </AnimatePresence>
-                        </div>
-                    </div>
-                </BrowserRouter>
-            </Suspense>
-        </QueryClientProvider>
-    );
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Suspense fallback={<Loading />}>
+        <BrowserRouter>
+          <div data-testid="app" className="bg-gray-100 flex flex-row">
+            <Notification />
+            <Nav />
+            <div className="flex-1">
+              <AnimatePresence>
+                <Switch>
+                  <Route exact path="/home" component={Home} />
+                  <Route exact path="/patients" component={Patients} />
+                  <Route exact path="/procedures" component={Procedures} />
+                  <Route path="/responses" component={Responses} />
+                  <Route path="/forms" component={Forms} />
+                  <Route exact path="/404" component={NotFound} />
+                  <Redirect exact path="/" to="/responses" />
+                  <Redirect to="/404" />
+                </Switch>
+              </AnimatePresence>
+            </div>
+          </div>
+        </BrowserRouter>
+      </Suspense>
+    </QueryClientProvider>
+  );
 }
 
 export default App;

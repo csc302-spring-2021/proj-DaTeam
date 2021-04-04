@@ -27,7 +27,7 @@ export function getMockForm() {
 }
 
 export function getMockFormResponse() {
-  const form_response = Mocks.genFormResponseComplete();
+  const form_response = Mocks.buildFormResponsePartial();
   return serializer.encode(form_response, Model.SDCFormResponse);
 }
 

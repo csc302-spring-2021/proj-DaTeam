@@ -1,13 +1,38 @@
-import { Model } from "@dateam/shared";
+import {
+  Model,
+  FormResponseValidator,
+  GenericJsonSerializer,
+} from "@dateam/shared";
 import { Request, Response } from "express";
 import { HttpCode, sendError } from "../../utils/Error";
 import * as Utils from "../ControllerUtils";
+import { databaseManager as dbManager } from "../../db";
 
 export const ResponseController = {
   create: function (req: Request, res: Response) {
-    Utils.create(req, res, Model.SDCFormResponse).catch((e) =>
-      sendError(res, HttpCode.BAD_REQUEST, e)
-    );
+    let formResponse: Model.SDCFormResponse;
+    try {
+      formResponse = GenericJsonSerializer.decode(
+        req.body,
+        Model.SDCFormResponse
+      );
+    } catch (e) {
+      sendError(res, HttpCode.BAD_REQUEST, e);
+      return;
+    }
+    dbManager
+      .genericRead(formResponse.formId, Model.SDCForm)
+      .then((form: Model.SDCForm) => {
+        const validation = FormResponseValidator.validate(formResponse, form);
+        if (validation.length == 0) {
+          Utils.create(req, res, Model.SDCFormResponse);
+        } else {
+          throw new Error(validation.map((elem) => elem.message).join("\n"));
+        }
+      })
+      .catch((e) => {
+        sendError(res, HttpCode.BAD_REQUEST, e);
+      });
   },
 
   read: function (req: Request, res: Response) {

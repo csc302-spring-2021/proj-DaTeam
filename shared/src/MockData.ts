@@ -26,6 +26,8 @@ export function genProcedureComplete(): Model.Procedure {
   const result = genProcedurePartial();
   result.uid = uuid();
   result.assignedFormID = uuid();
+  result.creationTime = new Date();
+  result.updateTime = new Date();
   return result;
 }
 
@@ -40,6 +42,8 @@ export function genPatientPartial(): Model.Patient {
 export function genPatientComplete(): Model.Patient {
   const result = genPatientPartial();
   result.uid = uuid();
+  result.creationTime = new Date();
+  result.updateTime = new Date();
   return result;
 }
 
@@ -63,6 +67,8 @@ export function genFormComplete(): Model.SDCForm {
     '<Header><Property type="meta" styleClass="copyright" order="410" propName="CopyrightHeader" val="(c) 2019 College of American Pathologists.  All rights reserved.  License required for use." /></Header>';
   result.footer =
     '<Footer><Property type="meta" styleClass="copyright" order="410" propName="CopyrightFooter" val="(c) 2019 College of American Pathologists.  All rights reserved.  License required for use." /></Footer>';
+  result.creationTime = new Date();
+  result.updateTime = new Date();
   return result;
 }
 
@@ -197,6 +203,8 @@ export function genFormResponsePartial(): Model.SDCFormResponse {
 export function genFormResponseComplete(): Model.SDCFormResponse {
   const result = genFormResponsePartial();
   result.uid = uuid();
+  result.creationTime = new Date();
+  result.updateTime = new Date();
   return result;
 }
 
@@ -298,6 +306,25 @@ export function buildFormResponsePartial(): Model.SDCFormResponse {
   return response;
 }
 
+/**
+ * Generate a valid response to the question created by buildFormComplete
+ */
+export function buildFormResponsePartial2(): Model.SDCFormResponse {
+  const response = genFormResponsePartial();
+
+  let answer = genAnswer();
+  answer.questionID = "text-1";
+  answer.responses = ["5"];
+  response.answers.push(answer);
+
+  answer = genAnswer();
+  answer.questionID = "list-1";
+  answer.responses = ["list-1-1"];
+  response.answers.push(answer);
+
+  return response;
+}
+
 export function buildFormSimpleList(): Model.SDCForm {
   const form = genFormComplete();
   form.formProperties.push(genFormPropertyComplete());
@@ -356,6 +383,7 @@ export function buildFormResponseMultipleQuestion(): Model.SDCFormResponse {
 export function buildFormDeselectSiblings(): Model.SDCForm {
   const form = buildFormSimpleList();
   findNode(form, "list-0").selectionDeselectsSiblings = true;
+  findNode(form, "list").maxSelections = 2;
   return form;
 }
 
