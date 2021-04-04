@@ -14,80 +14,88 @@ function StatPanel() {
     formId: string;
   }>();
 
-  const { data: formTemplate } = useForm(formId);
-  const { data: formResponses } = useFormResponses(formId);
-  const [data, setData] = useState<any>({});
-  const [chartData, setChartData] = useState<any>();
-  const [isSet, setIsSet] = useState(false);
-  const [idMap, setIdMap] = useState<object>();
+  const { data: form, isLoading: isLoadingForm } = useForm(formId);
+  const {
+    data: formResponses,
+    isLoading: isLoadingFormResponses,
+  } = useFormResponses(formId);
+
   const chartRef = useRef<SVGSVGElement>(null);
 
+  const isLoading = isLoadingForm || isLoadingFormResponses;
+
   useEffect(() => {
-    if (formResponses && formTemplate && chartRef.current) {
-      d3.select(chartRef.current).selectAll("*").remove();
-      const responses = formResponses.map(async (res) => {
-        return await ResponseService.read(res.uid!);
-      });
-      Promise.all(responses)
-        .then((resps) => {
-          const ansIdData = {} as any;
-          resps.forEach((res) => {
-            res.answers.forEach((ans) => {
-              ansIdData[ans.questionID] = [...ans.responses].concat(
-                ansIdData[ans.questionID]
-                  ? ansIdData[ans.questionID]
-                  : "No Answer"
-              );
-            });
-          });
-          return ansIdData;
-        })
-        .then((data) => {
-          if (!formTemplate) {
-            return;
-          }
-          const dataArr = Object.keys(data).map((key: string) => {
-            const countedChildren: any = {};
-            data[key].forEach((key: string) => {
-              countedChildren[key] = countedChildren[key]
-                ? countedChildren[key] + 1
-                : 1;
-            });
-            const children = Object.keys(countedChildren).map(
-              (child: string) => {
-                return { name: child, value: countedChildren[child] };
-              }
-            );
-            return { name: key, children };
-          });
-
-          const chartData = { name: formTemplate.title, children: dataArr };
-          return chartData;
-        })
-        .then((chartData) => {
-          let obj: object = {};
-          const formIdMap = (node: Model.SDCNode, obj: any) => {
-            const id = node.id;
-            const title = node.title ? node.title : "ID: " + node.id;
-            obj[id] = title;
-            if (node.children) {
-              node.children.forEach((cnode) => formIdMap(cnode, obj));
-            }
-            if (node instanceof Model.SDCListField) {
-              node.options.forEach((onode) => formIdMap(onode, obj));
-            }
-          };
-
-          formIdMap(formTemplate, obj);
-          return { chartData, idMap: obj };
-        })
-        .then((info) => {
-          sunburst(info.chartData, chartRef.current, info.idMap);
-
-          console.log(formResponses, formTemplate, chartRef);
-        });
+    if (!chartRef.current) {
+      return;
     }
-  }, [formResponses, formTemplate, chartRef]);
+
+    // Clear existing D3 elements
+    d3.select(chartRef.current).selectAll("*").remove();
+
+    if (isLoading) {
+      return;
+    }
+
+    async function generateChart() {
+      if (!form || !formResponses) {
+        return;
+      }
+
+      const responses = await Promise.all(
+        formResponses.map(async (res) => {
+          return await ResponseService.read(res.uid!);
+        })
+      );
+
+      const ansIdData = {} as any;
+      responses.forEach((res) => {
+        res.answers.forEach((ans) => {
+          ansIdData[ans.questionID] = [...ans.responses].concat(
+            ansIdData[ans.questionID] ? ansIdData[ans.questionID] : "No Answer"
+          );
+        });
+      });
+      const dataArr = Object.keys(ansIdData).map((key: string) => {
+        const countedChildren: any = {};
+        ansIdData[key].forEach((key: string) => {
+          countedChildren[key] = countedChildren[key]
+            ? countedChildren[key] + 1
+            : 1;
+        });
+        const children = Object.keys(countedChildren).map((child: string) => {
+          return { name: child, value: countedChildren[child] };
+        });
+        return { name: key, children };
+      });
+
+      const chartData = { name: form.title, children: dataArr };
+
+      let obj: object = {};
+      const formIdMap = (node: Model.SDCNode, obj: any) => {
+        const id = node.id;
+        const title = node.title ? node.title : "ID: " + node.id;
+        obj[id] = title;
+        if (node.children) {
+          node.children.forEach((cnode) => formIdMap(cnode, obj));
+        }
+        if (node instanceof Model.SDCListField) {
+          node.options.forEach((onode) => formIdMap(onode, obj));
+        }
+      };
+      formIdMap(form, obj);
+
+      const info = { chartData, idMap: obj };
+      sunburst(info.chartData, chartRef.current, info.idMap);
+
+      console.log(formResponses, form, chartRef);
+    }
+
+    generateChart();
+
+    return () => {
+      d3.select(chartRef.current).selectAll("*").remove();
+    };
+  }, [chartRef, isLoading, formId]);
 
   return (
     <div className="w-3/4 h-full p-8 ">
