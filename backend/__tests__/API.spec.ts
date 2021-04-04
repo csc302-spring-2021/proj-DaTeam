@@ -460,13 +460,31 @@ describe("/api/v1/responses", () => {
     let formRespose = Mock.getMockFormResponse();
     formRespose.formId = formId;
     formRespose.patientID = patiendId;
-    console.log(formId, patiendId);
     request
       .post(`/api/v1/responses`)
       .send(formRespose)
       .expect(HttpCode.CREATED)
       .expect("Content-Type", /text/)
       .then((response) => {
+        done();
+      })
+      .catch((err) => done(err));
+  });
+  test("POST: Invalid form response", (done) => {
+    let formRespose = Mock.getMockFormResponse();
+    formRespose.answers = [];
+    formRespose.formId = formId;
+    formRespose.patientID = patiendId;
+    request
+      .post(`/api/v1/responses`)
+      .send(formRespose)
+      .expect(HttpCode.BAD_REQUEST)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        let message = response.text;
+        expect(message).not.toEqual(undefined);
+        let json = JSON.parse(message);
+        expect(json.message).toMatch(/SDCAnswer not found for question/);
         done();
       })
       .catch((err) => done(err));
