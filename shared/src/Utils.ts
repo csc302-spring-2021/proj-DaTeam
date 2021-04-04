@@ -1,4 +1,5 @@
 import * as Model from "./ClassDef";
+import util from "util";
 
 /** Offers call stack support for error */
 export class StackUtil {
@@ -25,7 +26,7 @@ export class StackUtil {
     if (this.inspectedObject == null) return "";
     const obj = JSON.parse(JSON.stringify(this.inspectedObject));
     for (let key of Object.keys(obj)) {
-      if (typeof obj[key] === "object") {
+      if (obj[key] != null && typeof obj[key] === "object") {
         obj[key] = `[object ${obj[key].constructor.name}]`;
       }
     }
@@ -93,39 +94,54 @@ export function printNode(
   curIndent: string = "",
   indent: string = "    "
 ) {
-  const print = (o: any) => {
-    console.log(curIndent + o);
-  };
-  let header = `<${node.constructor.name}> ${node.id} [${node.title}]`;
-  let answer = response?.answers.find((a) => a.questionID === node.id);
-  let printBody = () => {};
+  const buffer: string[] = [];
 
-  if (node instanceof Model.SDCListField) {
-    header += ` min: ${node.minSelections}, max: ${node.maxSelections}`;
-    printBody = () => {
-      print("options: ");
-      node.options.forEach((o) => printNode(o, response, curIndent + indent));
-      print("children: ");
-      curIndent += indent;
+  function _printNode(
+    node: Model.SDCNode,
+    response?: Model.SDCFormResponse,
+    curIndent: string = "",
+    indent: string = "    "
+  ) {
+    const print = (s: string) => {
+      buffer.push(curIndent + s);
     };
-  } else if (node instanceof Model.SDCListFieldItem) {
-    header += ` deSiblings: ${node.selectionDeselectsSiblings}, deChildren: ${node.selectionDisablesChildren}`;
-    printBody = () => {
-      if (node.textResponse) {
-        print("textResponse: ");
-        printNode(node.textResponse, response, curIndent + indent);
-      }
-    };
-  } else if (node instanceof Model.SDCTextField) {
-    header += ` type: ${node.type}, textAfter: ${node.textAfterResponse}`;
+
+    let header = `<${node.constructor.name}> ${node.id} [${node.title}]`;
+    let answer = response?.answers.find((a) => a.questionID === node.id);
+    let printBody = () => {};
+
+    if (node instanceof Model.SDCListField) {
+      header += ` min: ${node.minSelections}, max: ${node.maxSelections}`;
+      printBody = () => {
+        print("options: ");
+        node.options.forEach((o) =>
+          _printNode(o, response, curIndent + indent)
+        );
+        print("children: ");
+        curIndent += indent;
+      };
+    } else if (node instanceof Model.SDCListFieldItem) {
+      header += ` deSiblings: ${node.selectionDeselectsSiblings}, deChildren: ${node.selectionDisablesChildren}`;
+      printBody = () => {
+        if (node.textResponse) {
+          print("textResponse: ");
+          _printNode(node.textResponse, response, curIndent + indent);
+        }
+      };
+    } else if (node instanceof Model.SDCTextField) {
+      header += ` type: ${node.type}, textAfter: ${node.textAfterResponse}`;
+    }
+
+    print(header);
+    curIndent += indent;
+    if (answer) print(`answer: ${answer.responses}`);
+    printBody();
+
+    node.children.forEach((o) => _printNode(o, response, curIndent));
   }
+  _printNode(node, response, curIndent, indent);
 
-  print(header);
-  curIndent += indent;
-  if (answer) print(`answer: ${answer.responses}`);
-  printBody();
-
-  node.children.forEach((o) => printNode(o, response, curIndent));
+  console.log(buffer.join("\n"));
 }
 
 /** A helper function to access a sub node by id */
@@ -157,4 +173,8 @@ export function findAnswer(
   if (matches.length === 0) throw new Error("id not found for " + id);
   if (matches.length > 1) throw new Error("duplicates found for id " + id);
   return matches[0];
+}
+
+export function inspect(o: any) {
+  console.log(util.inspect(o, false, null, true));
 }

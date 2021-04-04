@@ -17,7 +17,9 @@ export const PatientController = {
   },
 
   search: function (req: Request, res: Response) {
-    res.sendStatus(HttpCode.NOT_IMPLEMENTED);
+    Utils.query(req, res, Model.Patient, true).catch((e) => {
+      sendError(res, HttpCode.BAD_REQUEST, e);
+    });
   },
 
   update: function (req: Request, res: Response) {
@@ -26,5 +28,11 @@ export const PatientController = {
 
   destroy: function (req: Request, res: Response) {
     res.sendStatus(HttpCode.NOT_IMPLEMENTED);
+  },
+
+  readAll: function (req: Request, res: Response) {
+    Utils.search(req, res, Model.Patient, null, true).catch((e) =>
+      sendError(res, HttpCode.BAD_REQUEST, e)
+    );
   },
 };

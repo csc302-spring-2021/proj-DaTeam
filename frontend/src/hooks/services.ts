@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import FormService from "../services/FormService";
 import PatientService from "../services/PatientService";
 import ResponseService from "../services/ResponseService";
+import ProcedureService from "../services/ProcedureService";
 
 export function usePatient(id?: string) {
   const { isLoading, error, data } = useQuery(
@@ -12,6 +13,24 @@ export function usePatient(id?: string) {
     }
   );
   return { isLoading, error, data };
+}
+
+export function usePatients(searchTerm: string) {
+    const { isLoading, error, data, refetch  } = useQuery(
+        ["patients", searchTerm], 
+        () => PatientService.search(searchTerm)
+        
+    );
+    return { isLoading, error, data, refetch };
+}
+
+export function useProcedures(searchTerm: string) {
+    const { isLoading, error, data, refetch  } = useQuery(
+        ["procedures", searchTerm], 
+        () => ProcedureService.search(searchTerm)
+        
+    );
+    return { isLoading, error, data, refetch };
 }
 
 export function useForms() {

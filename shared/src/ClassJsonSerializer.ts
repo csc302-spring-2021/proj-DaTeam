@@ -119,6 +119,10 @@ export class GenericJsonSerializer {
         } else if (targetField.type === Object) {
           template[id] = this.deepCopy(classFinder, construct, null, field);
         }
+      } else if (targetField.type === Date) {
+        // Date is a built in type in js that is not supported by json
+        template[id] =
+          field instanceof Date ? field.toISOString() : new Date(field);
       } else {
         template[id] = field;
       }

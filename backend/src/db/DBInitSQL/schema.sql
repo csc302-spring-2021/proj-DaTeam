@@ -54,15 +54,18 @@ CREATE TYPE textFieldType AS ENUM (
 CREATE TABLE procedure (
   uid uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   id text UNIQUE NOT NULL,
+  name text NOT NULL,
   assignedFormId uuid,
-  creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updateTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE patient (
   uid uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   id text,
   name text NOT NULL,
-  creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updateTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE item (
@@ -71,8 +74,7 @@ CREATE TABLE item (
   parentId uuid,
   itemType sdcItemType NOT NULL,
   title text,
-  displayOrder integer,
-  creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  displayOrder integer
 );
 
 CREATE TABLE form (
@@ -80,7 +82,9 @@ CREATE TABLE form (
   lineage text NOT NULL,
   version text NOT NULL,
   header text,
-  footer text
+  footer text,
+  creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updateTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE formProperty (
@@ -117,7 +121,8 @@ CREATE TABLE formResponse (
   uid uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   formId uuid NOT NULL,
   patientId uuid NOT NULL,
-  creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  creationTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updateTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE answer (

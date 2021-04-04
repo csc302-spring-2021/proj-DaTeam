@@ -76,6 +76,85 @@ paths:
           $ref: "#/components/responses/BadRequest"
         404:
           $ref: "#/components/responses/NotFound"
+    put:
+      description: Update a patient
+      tags:
+        - patient
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: SDC Patient
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientRequestBody"
+      responses:
+        204:
+          description: Patient updated successfully
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+
+  /patients/search:
+    post:
+      description: "Search for patients"
+      tags:
+        - patient
+      requestBody:
+        required: true
+        description: Query Object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryObject"
+      responses:
+        200:
+          description: Patients matching the search condition
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Patient"
+        400:
+          description: Query object is invalid
+          $ref: "#/components/responses/BadRequest"
+
+  /procedures:
+    post:
+      description: "Create a new procedure"
+      tags:
+        - procedure
+      requestBody:
+        required: true
+        description: SDC procedure
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProcedureRequestBody"
+      responses:
+        201:
+          description: "Procedure created successfully, return UID"
+          $ref: "#/components/responses/UID"
+    get:
+      description: "Get all procedures"
+      tags:
+        - procedure
+      responses:
+        200:
+          description: Return all procedures
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Procedure"
 
   /procedures/{procedureId}:
     get:
@@ -99,6 +178,55 @@ paths:
           $ref: "#/components/responses/BadRequest"
         404:
           $ref: "#/components/responses/NotFound"
+    put:
+      description: Update a procedure
+      tags:
+        - procedure
+      parameters:
+        - name: procedureId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: SDC procedure
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProcedureRequestBody"
+      responses:
+        204:
+          description: Procedure updated successfully
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+
+  /procedures/search:
+    post:
+      description: "Search for procedures"
+      tags:
+        - procedure
+      requestBody:
+        required: true
+        description: Query Object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryObject"
+      responses:
+        200:
+          description: Procedures matching the search condition
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Procedure"
+        400:
+          description: Query object is invalid
+          $ref: "#/components/responses/BadRequest"
 
   /parser:
     post:
@@ -208,6 +336,31 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
+  /forms/search:
+    post:
+      description: "Search for forms"
+      tags:
+        - form
+      requestBody:
+        required: true
+        description: Query Object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryObject"
+      responses:
+        200:
+          description: Partial forms matching the search condition
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FormPartial"
+        400:
+          description: Query object is invalid
+          $ref: "#/components/responses/BadRequest"
+
   /responses:
     post:
       description: Create a new response
@@ -260,6 +413,12 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormResponseRequestBody"
       responses:
         204:
           description: Response updated successfully
@@ -267,6 +426,48 @@ paths:
           $ref: "#/components/responses/BadRequest"
         404:
           $ref: "#/components/responses/NotFound"
+    delete:
+      description: Delete a response
+      tags:
+        - response
+      parameters:
+        - name: responseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Response updated successfully
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+
+  /responses/search:
+    post:
+      description: "Search for responses"
+      tags:
+        - response
+      requestBody:
+        required: true
+        description: Query Object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryObject"
+      responses:
+        200:
+          description: Partial formResponse matching the search condition
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FormResponse"
+        400:
+          description: Query object is invalid
+          $ref: "#/components/responses/BadRequest"
 
 components:
   responses:
@@ -300,6 +501,26 @@ components:
       required:
         - code
         - message
+
+    QueryObject:
+      type: object
+      properties:
+        __class:
+          type: string
+          description: Class identifier
+          default: Query
+        targetClass:
+          type: string
+          description: The class this query is for
+          example: "SDCForm"
+        condition:
+          type: object
+          description: Query condition
+          example:
+            __class: ColumnCondition
+            opt: contains
+            column: id
+            value: '111'
 
     Patient:
       type: object
@@ -336,17 +557,32 @@ components:
     Procedure:
       type: object
       properties:
-        id:
+        uid:
           type: string
           description: Unique identifier for this procedure
           format: uuid
-        external_id:
+        id:
           type: string
-          description: External ID (ProcedureID in handout) for identifying the procedure
+          description: External ID (DiagnosticProcedureID in handout) for identifying the procedure
         name:
           type: string
           description: The name of the procedure
           example: "Lung Biopsy"
+
+    ProcedureRequestBody:
+      type: object
+      properties:
+        __class:
+          type: string
+          description: Class identifier
+          default: Procedure
+        id:
+          type: string
+          description: Diagnostic procedure ID
+        name:
+          type: string
+          description: The name of the diagnostic procedure
+          example: "CT Scan"
 
     FormPartial:
       type: object

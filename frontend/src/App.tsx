@@ -7,8 +7,10 @@ import { Nav } from "./components/Nav";
 import { Responses } from "./pages/Responses";
 import { Forms } from "./pages/Forms";
 import { Home } from "./pages/Home";
+import { Patients } from "./pages/Patients";
 import { AnimatePresence } from "framer-motion";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Procedures } from "./pages/Procedures";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,8 +38,10 @@ function App() {
             <div className="flex-1">
               <AnimatePresence>
                 <Switch>
+                  <Route path="/home" component={Home} />
+                  <Route exact path="/patients" component={Patients} />
+                  <Route exact path="/procedures" component={Procedures} />
                   <Route path="/responses" component={Responses} />
-                  <Route exact path="/home" component={Home} />
                   <Route path="/forms" component={Forms} />
                   <Route exact path="/404" component={NotFound} />
                   <Redirect exact path="/" to="/responses" />

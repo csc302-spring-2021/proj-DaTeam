@@ -28,6 +28,18 @@ describe("Basic Serialization Tests", () => {
   });
 });
 
+describe("Mock Data Serialization Tests", () => {
+  test.each(Object.entries(Mocks))(
+    "Test serialization for %s",
+    (name, func) => {
+      const obj = func();
+      const encoded = GenericJsonSerializer.encode(obj, obj.constructor);
+      const decoded = GenericJsonSerializer.decode(encoded, obj.constructor);
+      expect(decoded).toStrictEqual(obj);
+    }
+  );
+});
+
 describe("Query Object Serialization Tests", () => {
   test("Simple case", (done) => {
     const obj = QueryObject.query(
@@ -41,10 +53,10 @@ describe("Query Object Serialization Tests", () => {
   });
   test("Complicated case", (done) => {
     const obj = QueryObject.query(
-      Model.Patient,
-      QueryObject.contains("name", "Henry").and(
-        QueryObject.greaterOrEq("age", "5")
-          .or(QueryObject.equals("age", "3"))
+      Model.SDCForm,
+      QueryObject.contains("title", "test").and(
+        QueryObject.greaterOrEq("order", "5")
+          .or(QueryObject.equals("order", "3"))
           .not()
       )
     );
