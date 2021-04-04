@@ -211,6 +211,7 @@ function StatPanel() {
   return (
     <div className="w-full h-full overflow-scroll">
       <svg
+        key={formId}
         className="flex w-full h-full overflow-scroll font-bold"
         ref={chartRef}
       />
