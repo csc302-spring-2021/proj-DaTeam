@@ -54,7 +54,7 @@ function StatPanel() {
         resps.forEach((res) => {
           res.answers.forEach((ans) => {
             ansIdData[ans.questionID] = [...ans.responses].concat(
-              ansIdData[ans.questionID]
+              ansIdData[ans.questionID] ? ansIdData[ans.questionID] : "No Answer"
             );
           });
         });
