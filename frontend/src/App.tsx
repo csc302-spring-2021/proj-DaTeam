@@ -7,6 +7,7 @@ import { Nav } from "./components/Nav";
 import { Responses } from "./pages/Responses";
 import { Forms } from "./pages/Forms";
 import { Home } from "./pages/Home";
+import { Patients } from "./pages/Patients";
 import { AnimatePresence } from "framer-motion";
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -30,14 +31,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<Loading />}>
         <BrowserRouter>
-          <div data-testid="app" className="bg-gray-100 flex flex-row">
+          <div data-testid="app" className="flex flex-row bg-gray-100">
             <Notification />
             <Nav />
             <div className="flex-1">
               <AnimatePresence>
                 <Switch>
                   <Route path="/responses" component={Responses} />
-                  <Route exact path="/home" component={Home} />
+                  <Route path="/home" component={Home} />
                   <Route path="/forms" component={Forms} />
                   <Route exact path="/404" component={NotFound} />
                   <Redirect exact path="/" to="/responses" />

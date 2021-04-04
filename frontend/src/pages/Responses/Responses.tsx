@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Route } from "react-router";
 
 import { pageVariants } from "../../App";
-import FormsPanel from "./FormsPanel";
+import FormsPanel from "../../components/FormsPanel/FormsPanel";
 import ResponsesPanel from "./ResponsesPanel";
 import FormRendererPanel from "./FormRendererPanel";
 
@@ -24,7 +24,7 @@ export default function Responses() {
             "/responses/:formId",
             "/responses/:formId/:responseId",
           ]}
-          component={FormsPanel}
+          component={FormsResponsePanel}
         />
         <Route
           exact
@@ -39,4 +39,8 @@ export default function Responses() {
       </div>
     </motion.div>
   );
+}
+
+function FormsResponsePanel() {
+  return <FormsPanel baseUri="/responses" />;
 }

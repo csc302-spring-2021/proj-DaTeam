@@ -12,6 +12,7 @@ export class ResponseAPI {
     this.getResponse();
     this.postResponse();
     this.putResponse();
+    this.searchResponses();
     return this.router;
   }
 
@@ -28,5 +29,9 @@ export class ResponseAPI {
   /* PUT /responses/{responseId} */
   private putResponse() {
     this.router.put("/responses/:responseId", ResponseController.update);
+  }
+
+  private searchResponses() {
+    this.router.post("/responses/search", ResponseController.search);
   }
 }

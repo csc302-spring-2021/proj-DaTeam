@@ -23,4 +23,16 @@ export const ProcedureController = {
   destroy: function (req: Request, res: Response) {
     res.sendStatus(HttpCode.NOT_IMPLEMENTED);
   },
+
+  readAll: function (req: Request, res: Response) {
+    Utils.search(req, res, Model.Procedure, null, true).catch((e) =>
+      sendError(res, HttpCode.BAD_REQUEST, e)
+    );
+  },
+
+  search: function (req: Request, res: Response) {
+    Utils.query(req, res, Model.Procedure, true).catch((e) => {
+      sendError(res, HttpCode.BAD_REQUEST, e);
+    });
+  },
 };

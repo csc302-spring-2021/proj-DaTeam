@@ -1,7 +1,8 @@
-import { Mocks, Model, GenericJsonSerializer } from "@dateam/shared";
+import { Mocks, Model, GenericJsonSerializer, Query } from "@dateam/shared";
 import * as assert from "assert";
 import dotenv from "dotenv";
 import { v4 as uuid } from "uuid";
+import { QueryObjectCompiler } from "../build/db/DBSerializer";
 
 process.env.NODE_ENV = "test_db";
 dotenv.config({
@@ -52,12 +53,17 @@ beforeAll(() => {
 });
 
 describe("Verify Create and Read from DB Works", () => {
-  let form1, form2, response, patient;
+  let form1, form2, response, patient, procedure;
   beforeAll(() => {
     form1 = Mocks.buildFormPartial();
     form2 = Mocks.buildFormComplete();
     response = Mocks.buildFormResponsePartial();
-    patient = Mocks.genPatientComplete();
+    patient = Mocks.genPatientPartial();
+    procedure = Mocks.genProcedurePartial();
+  });
+  test("Test Procedure Partial", async (done) => {
+    await expect(procedure).verifyCreateRead(Model.Procedure);
+    done();
   });
   test("Test Form Partial", async (done) => {
     const uid = await databaseManager.genericCreate(form1, Model.SDCForm);
@@ -125,7 +131,7 @@ describe("Verify Search from DB Works", () => {
     done();
   });
   test("Search all SDCForms", async (done) => {
-    let result = await databaseManager.genericSearch(Model.SDCForm, {}, true);
+    let result = await databaseManager.genericSearch(Model.SDCForm, null, true);
     result.forEach((o) => {
       expect(o).toBeInstanceOf(Model.SDCForm);
     });
@@ -135,7 +141,7 @@ describe("Verify Search from DB Works", () => {
   test("Search all SDCForms with id", async (done) => {
     let result = await databaseManager.genericSearch(
       Model.SDCForm,
-      { SDCNode: [`item.id = '${testFormId}'`] },
+      Query.query(Model.SDCForm, Query.equals("id", testFormId)),
       true
     );
     result.forEach((o) => {
@@ -151,6 +157,60 @@ describe.skip("Verify Delete from DB Works", () => {
   // Thus not implemented in the MockDatabaseManager yet
   test("Delete Base case", (done) => {
     done();
+  });
+});
+
+describe("Verify QueryObjectCompiler", () => {
+  test("Simple Case", () => {
+    expect(
+      QueryObjectCompiler.compile(
+        Query.query(Model.Patient, Query.equals("name", "Henry"))
+      )
+    ).toEqual(
+      expect.objectContaining({
+        query: "patient.name = 'Henry'",
+        usedColumns: { Patient: ["name"] },
+      })
+    );
+  });
+  test("Composite Condition", () => {
+    expect(
+      QueryObjectCompiler.compile(
+        Query.query(
+          Model.Patient,
+          Query.equals("name", "Henry")
+            .not()
+            .and(Query.startsWith("id", "%%").or(Query.endsWith("id", "__")))
+        )
+      )
+    ).toEqual(
+      expect.objectContaining({
+        query:
+          "(not (patient.name = 'Henry')) and ((patient.id like '\\%\\%%') or (patient.id like '%\\_\\_'))",
+        usedColumns: { Patient: ["name", "id"] },
+      })
+    );
+  });
+  test("polymorphism", () => {
+    expect(
+      QueryObjectCompiler.compile(
+        Query.query(
+          Model.SDCForm,
+          Query.equals("title", "some title").or(
+            Query.greaterThan("order", "5").or(Query.equals("lineage", "5.5"))
+          )
+        )
+      )
+    ).toEqual(
+      expect.objectContaining({
+        query:
+          "(item.title = 'some title') or ((item.displayOrder > 5) or (form.lineage = '5.5'))",
+        usedColumns: {
+          SDCForm: ["lineage"],
+          SDCNode: ["title", "displayOrder"],
+        },
+      })
+    );
   });
 });
 

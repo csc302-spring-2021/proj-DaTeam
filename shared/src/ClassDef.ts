@@ -5,6 +5,7 @@
 export class Procedure {
   uid?: string;
   id: string;
+  name: string;
   assignedFormID?: string; // uid of the form
   creationTime?: Date;
   updateTime?: Date;

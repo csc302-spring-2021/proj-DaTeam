@@ -1,4 +1,4 @@
-import { Model } from "@dateam/shared";
+import { Model, Query } from "@dateam/shared";
 import { Request, Response } from "express";
 import { HttpCode, sendError } from "../../utils/Error";
 import * as Utils from "../ControllerUtils";
@@ -22,8 +22,7 @@ export const FormController = {
       req,
       res,
       Model.SDCFormResponse,
-      // TODO: fix database inject
-      { SDCFormResponse: [`formId = '${pk}'`] },
+      Query.query(Model.SDCFormResponse, Query.equals("formId", pk)),
       true
     ).catch((e) => sendError(res, HttpCode.BAD_REQUEST, e));
   },
@@ -39,8 +38,14 @@ export const FormController = {
   },
 
   readAll: function (req: Request, res: Response) {
-    Utils.search(req, res, Model.SDCForm, {}, true).catch((e) =>
+    Utils.search(req, res, Model.SDCForm, null, true).catch((e) =>
       sendError(res, HttpCode.BAD_REQUEST, e)
     );
+  },
+
+  search: function (req: Request, res: Response) {
+    Utils.query(req, res, Model.SDCForm, true).catch((e) => {
+      sendError(res, HttpCode.BAD_REQUEST, e);
+    });
   },
 };

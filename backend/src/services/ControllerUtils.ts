@@ -1,4 +1,4 @@
-import { GenericJsonSerializer } from "@dateam/shared";
+import { GenericJsonSerializer, Query } from "@dateam/shared";
 import { Request, Response } from "express";
 import { HttpCode } from "../utils/Error";
 import { databaseManager as dbManager } from "../db";
@@ -31,7 +31,7 @@ export async function search(
   req: Request,
   res: Response,
   targetClass: new () => any,
-  param: any,
+  param: Query.Query | null,
   partial: boolean
 ) {
   const results = await dbManager.genericSearch(targetClass, param, partial);
@@ -40,4 +40,19 @@ export async function search(
   );
   res.type("json");
   res.status(HttpCode.OK).send(encoded);
+}
+
+export async function query(
+  req: Request,
+  res: Response,
+  targetClass: new () => any,
+  partial: boolean
+) {
+  const param: Query.Query = GenericJsonSerializer.decode(
+    req.body,
+    Query.Query
+  );
+  if (param.targetClass !== targetClass.name)
+    throw new Error("Query class incorrect");
+  await search(req, res, targetClass, param, partial);
 }

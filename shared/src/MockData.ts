@@ -17,6 +17,7 @@ const shortID = () => {
 export function genProcedurePartial(): Model.Procedure {
   const temp: Model.Procedure = {
     id: shortID(),
+    name: "Prodecure",
   };
   return new Model.Procedure(temp);
 }

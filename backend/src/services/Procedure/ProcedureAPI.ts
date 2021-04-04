@@ -11,6 +11,8 @@ export class ProcedureAPI {
   public returnRouter() {
     this.getProcedure();
     this.postProcedure();
+    this.getAllProcedures();
+    this.searchProcedures();
     return this.router;
   }
 
@@ -20,5 +22,13 @@ export class ProcedureAPI {
 
   private postProcedure() {
     this.router.post("/procedures", ProcedureController.create);
+  }
+
+  private getAllProcedures() {
+    this.router.get("/procedures", ProcedureController.readAll);
+  }
+
+  private searchProcedures() {
+    this.router.post("/procedures/search", ProcedureController.search);
   }
 }
