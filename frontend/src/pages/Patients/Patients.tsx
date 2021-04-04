@@ -89,57 +89,59 @@ function Patients() {
     };
 
     return (
-        <div data-testid="patients">
-            {showNewPatientModal && (
-                <NewPatientModel
-                    showModal={showNewPatientModal}
-                    setShowModal={setShowNewPatientModal}
-                    refetch={patientsRefetch}
-                    goToRespones={false}
-                />
-            )}
-            <motion.div
-                variants={pageVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="relative max-w-5xl mx-auto px-8"
-            >
-                <div className="py-16 flex flex-col space-y-8">
-                    <div>
-                        <h2 className="text-3xl font-medium tracking-tighter">
-                            Patient Directory
+        <>
+            <div data-testid="patients">
+                {showNewPatientModal && (
+                    <NewPatientModel
+                        showModal={showNewPatientModal}
+                        setShowModal={setShowNewPatientModal}
+                        refetch={patientsRefetch}
+                        goToRespones={false}
+                    />
+                )}
+                <motion.div
+                    variants={pageVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    className="relative max-w-5xl mx-auto px-8"
+                >
+                    <div className="py-16 flex flex-col space-y-8">
+                        <div>
+                            <h2 className="text-3xl font-medium tracking-tighter">
+                                Patient Directory
             </h2>
-                        <p className="text-gray-600">
-                            Manage Patients in the health care system
+                            <p className="text-gray-600">
+                                Manage Patients in the health care system
             </p>
-                    </div>
+                        </div>
 
-                    <div className="flex justify-between align-center">
-                        <form className="w-1/2" onSubmit={handleSearchPatientsSubmit}>
-                            <input
-                                type="text"
-                                placeholder="Search Patients"
-                                className="p-10 w-full h-6 px-4 py-5 bg-gray-200 rounded tracking-tighter"
-                                onChange={(event) =>
-                                    setSearchPatients(event.target.value.trim())
-                                }
-                            />
-                        </form>
-                        <button
-                            onClick={onCreatePatientBtnClick}
-                            className="px-3 py-2 bg-gray-300 rounded-md hover:bg-gray-800 hover:text-white text-bold font-semibold"
-                        >
-                            New Patient
+                        <div className="flex justify-between align-center">
+                            <form className="w-1/2" onSubmit={handleSearchPatientsSubmit}>
+                                <input
+                                    type="text"
+                                    placeholder="Search Patients"
+                                    className="p-10 w-full h-6 px-4 py-5 bg-gray-200 rounded tracking-tighter"
+                                    onChange={(event) =>
+                                        setSearchPatients(event.target.value.trim())
+                                    }
+                                />
+                            </form>
+                            <button
+                                onClick={onCreatePatientBtnClick}
+                                className="px-3 py-2 bg-gray-300 rounded-md hover:bg-gray-800 hover:text-white text-bold font-semibold"
+                            >
+                                New Patient
             </button>
-                    </div>
+                        </div>
 
-                    <div className="relative">
-                        <PatientTable patients={patients} />
+                        <div className="relative">
+                            <PatientTable patients={patients} />
+                        </div>
                     </div>
-                </div>
-            </motion.div>
-        </div>
+                </motion.div>
+            </div>
+        </>
     );
 }
 

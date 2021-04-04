@@ -1,7 +1,7 @@
 import React from "react";
 import { Patients } from "../Patients";
 import { createMemoryHistory, MemoryHistory } from "history";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { Router } from "react-router";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
@@ -40,6 +40,6 @@ describe("Patients", () => {
 
     it("renders patients", async () => {
         renderPatients();
-        expect(screen.getByTestId("patients")).toBeVisible();
+        await waitFor(() => expect(screen.getByTestId("patients")).toBeVisible());
     });
 });
