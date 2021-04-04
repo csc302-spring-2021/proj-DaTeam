@@ -1,18 +1,32 @@
 import { motion } from "framer-motion";
-import { pageVariants } from "../../App";
+import { Route } from "react-router";
 
-function Home() {
+import { pageVariants } from "../../App";
+import FormsPanel from "../../components/FormsPanel/FormsPanel";
+import StatPanel from "./StatPanel";
+
+export default function Home() {
   return (
     <motion.div
       variants={pageVariants}
       initial="initial"
       animate="animate"
       exit="exit"
-      data-testid="home"
+      data-testid="responses"
+      className="h-screen mx-auto overflow-hidden"
     >
-      Home Page
+      <div className="flex h-full">
+        <Route
+          exact
+          path={["/home", "/home/:formId"]}
+          component={FormsHomePanel}
+        />
+        <Route exact path={["/home/:formId"]} component={StatPanel} />
+      </div>
     </motion.div>
   );
 }
 
-export default Home;
+function FormsHomePanel() {
+  return <FormsPanel baseUri="/home" />;
+}

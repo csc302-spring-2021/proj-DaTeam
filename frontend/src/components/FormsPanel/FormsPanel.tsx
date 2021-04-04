@@ -4,19 +4,24 @@ import { useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
-import { FormInput } from "../../components/FormInput";
+import { FormInput } from "../FormInput";
 
 import { useForms } from "../../hooks/services";
 
-export default function FormsPanel() {
+interface IFormsPanelProps {
+  baseUri: string;
+}
+
+export default function FormsPanel(props: IFormsPanelProps) {
   const { formId } = useParams<{ formId: string }>();
   const { data: forms } = useForms();
+  const { baseUri } = props;
 
   const [responseFormsSearch, setResponseFormsSearch] = useState("");
 
   const responseFormInfoBlocks = forms?.map((responseForm, i) => {
     return (
-      <Link to={`/responses/${responseForm.uid}`} key={i}>
+      <Link to={`${baseUri}/${responseForm.uid}`} key={responseForm.uid}>
         <FormCard
           form={responseForm}
           isSelected={formId === responseForm.uid}
