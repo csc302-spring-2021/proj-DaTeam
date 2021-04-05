@@ -7,7 +7,7 @@ import { CloseButton } from "../../components/CloseButton";
 
 import { useForm, useFormResponse, usePatient } from "../../hooks/services";
 
-export default function NewFormResponsePanel() {
+export default function FormRendererPanel() {
   const { formId, responseId } = useParams<{
     formId: string;
     responseId: string;
@@ -34,6 +34,7 @@ export default function NewFormResponsePanel() {
           form={form}
           patient={patient}
           sdcResponse={response}
+          readOnly
         />
       )}
     </motion.div>

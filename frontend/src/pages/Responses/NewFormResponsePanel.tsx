@@ -7,7 +7,7 @@ import { CloseButton } from "../../components/CloseButton";
 
 import { useForm, useFormResponse, usePatient } from "../../hooks/services";
 
-export default function FormRendererPanel() {
+export default function NewFormResponsePanel() {
   const { formId, responseId } = useParams<{
     formId: string;
     responseId: string;

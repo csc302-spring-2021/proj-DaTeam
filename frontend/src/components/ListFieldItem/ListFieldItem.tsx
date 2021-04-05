@@ -10,6 +10,7 @@ interface IListFieldItemProps<T> {
   currentChoice?: T;
   uncollaped?: boolean;
   isMultiSelect: boolean;
+  isDisabled?: boolean;
 }
 
 /**
@@ -18,6 +19,7 @@ interface IListFieldItemProps<T> {
  * @param  {[type]} optionNodes [description]
  * @param  {[type]} children [description]
  * @param  {[type]} sdcListField [description]
+ * @param  {[type]} isDisabled [description]
  */
 function ListFieldItem(props: IListFieldItemProps<string[]>) {
   const {
@@ -26,6 +28,7 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
     optionNode,
     uncollaped,
     isMultiSelect,
+    isDisabled,
   } = props;
 
   const [isChecked, setIsChecked] = useState(false);
@@ -45,6 +48,10 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
     // e.preventDefault();
     e.stopPropagation();
 
+    if (isDisabled) {
+      return;
+    }
+
     const currentId = optionNode.listFieldItem.id;
     if (currentChoice && setCurrentChoice) {
       if (!currentChoice.includes(currentId)) {
@@ -63,17 +70,17 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
     <div className="flex flex-col" data-testid="listfielditem">
       <div
         onClick={onCheck}
-        className={`flex px-2 space-x-4 rounded-md cursor-pointer mb-1  ${
-          isChecked ? "bg-blue-200" : "hover:bg-blue-100"
-        }`}
+        className={`flex px-2 space-x-4 rounded-md mb-1 ${
+          isChecked ? "bg-blue-200" : isDisabled ? "" : "hover:bg-blue-100"
+        } ${isDisabled ? "" : "cursor-pointer"}`}
       >
         <input
-          className="my-auto cursor-pointer"
+          className={`my-auto ${isDisabled ? "" : "cursor-pointer"}`}
           checked={isChecked}
           onChange={onCheck}
           type={checkType}
         />
-        <label className="my-auto cursor-pointer">
+        <label className={`my-auto ${isDisabled ? "" : "cursor-pointer"}`}>
           {!optionNode.listFieldItem.selectionDisablesChildren &&
             optionNode.listFieldItemChildren.length > 0 &&
             " +  "}
@@ -93,6 +100,7 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
               type="text"
               state={optionalText}
               setState={setOptionalText}
+              isDisabled={isDisabled}
             />
           </div>
         )}

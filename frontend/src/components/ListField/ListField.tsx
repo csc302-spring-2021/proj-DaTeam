@@ -15,6 +15,7 @@ interface IListFieldProps {
   optionNodes: IOptionNode[];
   children?: React.ReactNode;
   sdcListField: Model.SDCListField;
+  readOnly?: boolean;
 }
 
 /**
@@ -23,9 +24,16 @@ interface IListFieldProps {
  * @param  {[type]} optionNodes [description]
  * @param  {[type]} children [description]
  * @param  {[type]} sdcListField [description]
+ * @param  {[type]} readOnly [description]
  */
 function ListField(props: IListFieldProps) {
-  const { responseState, optionNodes, children, sdcListField } = props;
+  const {
+    responseState,
+    optionNodes,
+    children,
+    sdcListField,
+    readOnly = false,
+  } = props;
   const [uncollapsed, setUncollapsed] = useState(true);
 
   // Set choice for single answer responses
@@ -90,6 +98,7 @@ function ListField(props: IListFieldProps) {
                 optionNode={optionnode}
                 uncollaped={uncollapsed}
                 isMultiSelect={isMultiSelect}
+                isDisabled={readOnly}
               />
             );
           })}
