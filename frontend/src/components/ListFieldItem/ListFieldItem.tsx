@@ -39,11 +39,10 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
         setIsChecked(false);
       }
     }
-    // console.log(isChecked, "CHECK@")
   }, [optionNode, currentChoice]);
 
   const onCheck = (e: React.MouseEvent | React.ChangeEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     e.stopPropagation();
 
     const currentId = optionNode.listFieldItem.id;
@@ -61,12 +60,9 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
   const checkType = isMultiSelect ? "checkbox" : "radio";
 
   return (
-    <div
-      onClick={onCheck}
-      className="flex flex-col"
-      data-testid="listfielditem"
-    >
+    <div className="flex flex-col" data-testid="listfielditem">
       <div
+        onClick={onCheck}
         className={`flex px-2 space-x-4 rounded-md cursor-pointer mb-1  ${
           isChecked ? "bg-blue-200" : "hover:bg-blue-100"
         }`}
