@@ -18,16 +18,18 @@ export function ResponseReadOnly() {
   return (
     <motion.div
       data-testid="form-renderer-panel"
-      className="relative w-full min-h-full overflow-y-auto rounded-lg shadow-2xl sm:w-1/2 lg:w-1/2 bg-gray-50"
+      className="relative w-full mx-auto overflow-y-auto rounded-lg shadow-2xl sm:w-1/2 lg:w-1/2 bg-gray-50"
     >
       {form && (
-        <FormRenderer
-          key={formId + responseId}
-          form={form}
-          patient={patient}
-          sdcResponse={response}
-          readOnly={true}
-        />
+        <div className="h-screen overflow-y-scroll">
+          <FormRenderer
+            key={formId + responseId}
+            form={form}
+            patient={patient}
+            sdcResponse={response}
+            readOnly={true}
+          />
+        </div>
       )}
     </motion.div>
   );
