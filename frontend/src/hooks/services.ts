@@ -16,21 +16,19 @@ export function usePatient(id?: string) {
 }
 
 export function usePatients(searchTerm: string) {
-    const { isLoading, error, data, refetch  } = useQuery(
-        ["patients", searchTerm], 
-        () => PatientService.search(searchTerm)
-        
-    );
-    return { isLoading, error, data, refetch };
+  const { isLoading, error, data, refetch } = useQuery(
+    ["search", "patients", searchTerm],
+    () => PatientService.search(searchTerm)
+  );
+  return { isLoading, error, data, refetch };
 }
 
 export function useProcedures(searchTerm: string) {
-    const { isLoading, error, data, refetch  } = useQuery(
-        ["procedures", searchTerm], 
-        () => ProcedureService.search(searchTerm)
-        
-    );
-    return { isLoading, error, data, refetch };
+  const { isLoading, error, data, refetch } = useQuery(
+    ["procedures", searchTerm],
+    () => ProcedureService.search(searchTerm)
+  );
+  return { isLoading, error, data, refetch };
 }
 
 export function useForms() {

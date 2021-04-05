@@ -86,7 +86,9 @@ describe("Responses", () => {
     await waitFor(() => screen.getByText(/Ujash/));
     fireEvent.click(screen.getByText("Ujash"));
 
-    expect(history.location.pathname).toBe("/responses/manage/form1/response1");
+    expect(history.location.pathname).toBe(
+      "/responses/manage/form1/response/response1"
+    );
   });
 
   it("navigates back when you close a panel", async () => {
@@ -97,7 +99,9 @@ describe("Responses", () => {
     await waitFor(() => screen.getByText(/Ujash/));
     fireEvent.click(screen.getByText("Ujash"));
 
-    expect(history.location.pathname).toBe("/responses/manage/form1/response1");
+    expect(history.location.pathname).toBe(
+      "/responses/manage/form1/response/response1"
+    );
 
     const closeButtons: HTMLElement[] = screen.getAllByLabelText("close");
     expect(closeButtons).toHaveLength(2);

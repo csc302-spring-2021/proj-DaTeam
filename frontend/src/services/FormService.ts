@@ -36,8 +36,8 @@ async function create(form: Model.SDCForm): Promise<string> {
   const formResponse = await fetch(`/api/v1/forms`, {
     method: "POST",
     headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(encodedForm),
   });
@@ -68,5 +68,5 @@ async function list(): Promise<Model.SDCForm[]> {
   );
 }
 
-const FormService = { read, create, list }
+const FormService = { read, create, list };
 export default FormService;
