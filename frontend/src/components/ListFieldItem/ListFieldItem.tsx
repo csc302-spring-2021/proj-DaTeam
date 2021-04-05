@@ -94,7 +94,7 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
           optionNode.listFieldItemChildren}
 
         {(isChecked || uncollaped) && optionNode.listFieldItem.textResponse && (
-          <div className="mt-2">
+          <div className="my-2">
             <FormInput
               placeholder={optionNode.listFieldItem.textResponse.title}
               type="text"
