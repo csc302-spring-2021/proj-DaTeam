@@ -5,6 +5,7 @@ import { pageVariants } from "../../App";
 import FormsPanel from "../../components/FormsPanel/FormsPanel";
 import ResponsesPanel from "./ResponsesPanel";
 import FormRendererPanel from "./FormRendererPanel";
+import NewFormResponsePanel from "./NewFormResponsePanel";
 
 export default function Responses() {
   return (
@@ -20,20 +21,30 @@ export default function Responses() {
         <Route
           exact
           path={[
-            "/responses",
-            "/responses/:formId",
-            "/responses/:formId/:responseId",
+            "/responses/manage",
+            "/responses/manage/:formId",
+            "/responses/manage/:formId/new",
+            "/responses/manage/:formId/response/:responseId",
           ]}
           component={FormsResponsePanel}
         />
         <Route
           exact
-          path={["/responses/:formId", "/responses/:formId/:responseId"]}
+          path={[
+            "/responses/manage/:formId",
+            "/responses/manage/:formId/new",
+            "/responses/manage/:formId/response/:responseId",
+          ]}
           component={ResponsesPanel}
         />
         <Route
           exact
-          path={["/responses/:formId", "/responses/:formId/:responseId"]}
+          path="/responses/manage/:formId/new"
+          component={NewFormResponsePanel}
+        />
+        <Route
+          exact
+          path="/responses/manage/:formId/response/:responseId"
           component={FormRendererPanel}
         />
       </div>
@@ -42,5 +53,5 @@ export default function Responses() {
 }
 
 function FormsResponsePanel() {
-  return <FormsPanel baseUri="/responses" />;
+  return <FormsPanel baseUri="/responses/manage" />;
 }

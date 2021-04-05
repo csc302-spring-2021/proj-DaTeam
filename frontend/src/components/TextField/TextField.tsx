@@ -9,8 +9,9 @@ function TextField(props: {
   };
   sdcTextField: Model.SDCTextField;
   children?: any;
+  readOnly?: boolean;
 }) {
-  const { responseState, sdcTextField } = props;
+  const { responseState, sdcTextField, readOnly = false } = props;
   const [textResponse, setTextResponse] = useState<string>("");
   useEffect(() => {
     const currentRes = responseState?.response[sdcTextField.id];
@@ -35,6 +36,7 @@ function TextField(props: {
         iid={props.sdcTextField.id}
         responseState={props.responseState}
         setState={setTextResponse}
+        isDisabled={readOnly}
       />
       {props.children}
     </div>

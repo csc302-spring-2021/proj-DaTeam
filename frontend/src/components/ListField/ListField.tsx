@@ -15,6 +15,7 @@ interface IListFieldProps {
   optionNodes: IOptionNode[];
   children?: React.ReactNode;
   sdcListField: Model.SDCListField;
+  readOnly?: boolean;
 }
 
 /**
@@ -23,29 +24,36 @@ interface IListFieldProps {
  * @param  {[type]} optionNodes [description]
  * @param  {[type]} children [description]
  * @param  {[type]} sdcListField [description]
+ * @param  {[type]} readOnly [description]
  */
 function ListField(props: IListFieldProps) {
-  const { responseState, optionNodes, children, sdcListField } = props;
+  const {
+    responseState,
+    optionNodes,
+    children,
+    sdcListField,
+    readOnly = false,
+  } = props;
   const [uncollapsed, setUncollapsed] = useState(true);
 
   // Set choice for single answer responses
   const [currentChoice, setCurrentChoice] = useState<string[]>([]);
   useEffect(() => {
-    const res = responseState.response[sdcListField.id];
+    const res = responseState?.response[sdcListField.id];
     if (typeof res === "string") {
       setCurrentChoice([res]);
     } else {
-      console.log("RES", res);
       /* setCurrentChoice([]); */
     }
   }, [responseState]);
 
   useEffect(() => {
-    console.log("CRR", currentChoice);
-    responseState.setResponse((o) => {
-      o[sdcListField.id] = currentChoice;
-      return o;
-    });
+    if (responseState) {
+      responseState.setResponse((o) => {
+        o[sdcListField.id] = currentChoice;
+        return o;
+      });
+    }
   }, [currentChoice]);
 
   const collapseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -80,8 +88,6 @@ function ListField(props: IListFieldProps) {
       <div className="">
         {uncollapsed &&
           optionNodes.map((optionnode) => {
-            /* currentChoice.addValue([optionnode.listFieldItem.id]); */
-
             return (
               <ListFieldItem
                 key={optionnode.listFieldItem.id}
@@ -90,6 +96,7 @@ function ListField(props: IListFieldProps) {
                 optionNode={optionnode}
                 uncollaped={uncollapsed}
                 isMultiSelect={isMultiSelect}
+                isDisabled={readOnly}
               />
             );
           })}

@@ -5,21 +5,34 @@ import { DisplayItem } from "../../components/DisplayItem";
 import { TextField } from "../../components/TextField";
 import { ListField } from "../../components/ListField";
 import { NotFound } from "../../pages/NotFound";
-import { useForms, usePatient } from "../../hooks/services";
+import { usePatients } from "../../hooks/services";
 import PatientService from "../../services/PatientService";
 import { notify } from "../Notification/Notification";
 import ResponseService from "../../services/ResponseService";
 import { useQueryClient } from "react-query";
+import { PatientsSelect } from "./PatientsSelect";
 interface IFormRendererProps {
   form?: Model.SDCForm;
   patient?: Model.Patient;
   sdcResponse?: Model.SDCFormResponse;
+  readOnly?: boolean;
 }
 
 function FormRenderer(props: IFormRendererProps) {
-  const { form: sdcform, patient: selectedPatient, sdcResponse } = props;
+  const {
+    form: sdcform,
+    patient: selectedPatient,
+    sdcResponse,
+    readOnly = false,
+  } = props;
   const [patient, setPatient] = useState<Model.Patient>();
   const queryClient = useQueryClient();
+
+  const { data: patients } = usePatients("");
+
+  function handlePatientSelect(patientId: string) {
+    setPatient(patients?.find((p) => p.uid === patientId));
+  }
 
   useEffect(() => {
     const queryString = window.location.search;
@@ -92,9 +105,9 @@ function FormRenderer(props: IFormRendererProps) {
       .catch((err) => notify.error(err.message));
   };
 
-  const RenderNode = (sdcnode: Model.SDCNode) => {
+  const RenderNode = (sdcnode: Model.SDCNode, readOnly: boolean = false) => {
     const childNodes = sdcnode.children.map((childnode) => {
-      return <div key={childnode.id}>{RenderNode(childnode)}</div>;
+      return <div key={childnode.id}>{RenderNode(childnode, readOnly)}</div>;
     });
     if (sdcnode instanceof Model.SDCSection) {
       return (
@@ -111,6 +124,7 @@ function FormRenderer(props: IFormRendererProps) {
           responseState={{ response, setResponse }}
           sdcTextField={sdcnode}
           children={childNodes}
+          readOnly={readOnly}
         />
       );
     } else if (sdcnode instanceof Model.SDCListField) {
@@ -119,7 +133,9 @@ function FormRenderer(props: IFormRendererProps) {
         listFieldItemChildren: JSX.Element[];
       }[] = sdcnode.options.map((optionnode: Model.SDCListFieldItem) => {
         const optionChild = optionnode.children.map((childnode) => {
-          return <div key={childnode.id}>{RenderNode(childnode)}</div>;
+          return (
+            <div key={childnode.id}>{RenderNode(childnode, readOnly)}</div>
+          );
         });
         return {
           listFieldItem: optionnode,
@@ -133,6 +149,7 @@ function FormRenderer(props: IFormRendererProps) {
           sdcListField={sdcnode}
           optionNodes={optionsNodes}
           children={childNodes}
+          readOnly={readOnly}
         />
       );
     } else {
@@ -150,67 +167,42 @@ function FormRenderer(props: IFormRendererProps) {
         Response of <span className="font-bold">{sdcform.title}</span> for{" "}
         <span className="font-bold"> {patient?.name || BLANK_STRING}</span>
       </h2>
-      <div className="flex flex-col justify-between space-x-4 md:flex-row">
-        <div className="w-1/2" data-testid="input-form-patientid">
-          <ValueBlock
-            id="patientid"
-            value={patient?.id || BLANK_STRING}
-            label="OHIP number"
-          />
-        </div>
-        <div className="w-1/2" data-testid="input-form-patientname">
-          <ValueBlock
-            id="patientname"
-            value={patient?.name || BLANK_STRING}
-            label="Patient Name"
-          />
-        </div>
-      </div>
-      <div>{RenderNode(sdcform)}</div>
-      <div className="flex flex-row-reverse">
-        <button
-          onClick={onSubmitForm}
-          className="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
-        >
-          <span>Submit </span>
-          <svg
-            className="w-8 h-8 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+
+      {patients && (
+        <PatientsSelect
+          patients={patients}
+          selectedPatient={patient}
+          onSelect={handlePatientSelect}
+          readOnly={readOnly}
+        />
+      )}
+
+      <div>{RenderNode(sdcform, readOnly)}</div>
+
+      {!readOnly && (
+        <div className="flex flex-row-reverse">
+          <button
+            onClick={onSubmitForm}
+            className="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
           >
-            <path
-              fillRule="evenodd"
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-      </div>
+            <span>Submit </span>
+            <svg
+              className="w-8 h-8 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
 export default FormRenderer;
-
-function ValueBlock({
-  value,
-  id,
-  label,
-}: {
-  value: string;
-  id: string;
-  label: string;
-}) {
-  return (
-    <>
-      <label className="text-lg font-bold tracking-wide">{label}:</label>
-      <div
-        id={id}
-        className="block w-full px-3 py-2 my-1 text-xl bg-gray-200 border-gray-300 rounded"
-      >
-        {value}
-      </div>
-    </>
-  );
-}

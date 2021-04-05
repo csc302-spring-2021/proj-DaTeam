@@ -10,6 +10,7 @@ interface IListFieldItemProps<T> {
   currentChoice?: T;
   uncollaped?: boolean;
   isMultiSelect: boolean;
+  isDisabled?: boolean;
 }
 
 /**
@@ -18,6 +19,7 @@ interface IListFieldItemProps<T> {
  * @param  {[type]} optionNodes [description]
  * @param  {[type]} children [description]
  * @param  {[type]} sdcListField [description]
+ * @param  {[type]} isDisabled [description]
  */
 function ListFieldItem(props: IListFieldItemProps<string[]>) {
   const {
@@ -26,6 +28,7 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
     optionNode,
     uncollaped,
     isMultiSelect,
+    isDisabled,
   } = props;
 
   const [isChecked, setIsChecked] = useState(false);
@@ -39,12 +42,15 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
         setIsChecked(false);
       }
     }
-    // console.log(isChecked, "CHECK@")
   }, [optionNode, currentChoice]);
 
   const onCheck = (e: React.MouseEvent | React.ChangeEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     e.stopPropagation();
+
+    if (isDisabled) {
+      return;
+    }
 
     const currentId = optionNode.listFieldItem.id;
     if (currentChoice && setCurrentChoice) {
@@ -61,23 +67,20 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
   const checkType = isMultiSelect ? "checkbox" : "radio";
 
   return (
-    <div
-      onClick={onCheck}
-      className="flex flex-col"
-      data-testid="listfielditem"
-    >
+    <div className="flex flex-col" data-testid="listfielditem">
       <div
-        className={`flex px-2 space-x-4 rounded-md cursor-pointer mb-1  ${
-          isChecked ? "bg-blue-200" : "hover:bg-blue-100"
-        }`}
+        onClick={onCheck}
+        className={`flex px-2 space-x-4 rounded-md mb-1 ${
+          isChecked ? "bg-blue-200" : isDisabled ? "" : "hover:bg-blue-100"
+        } ${isDisabled ? "" : "cursor-pointer"}`}
       >
         <input
-          className="my-auto cursor-pointer"
+          className={`my-auto ${isDisabled ? "" : "cursor-pointer"}`}
           checked={isChecked}
           onChange={onCheck}
           type={checkType}
         />
-        <label className="my-auto cursor-pointer">
+        <label className={`my-auto ${isDisabled ? "" : "cursor-pointer"}`}>
           {!optionNode.listFieldItem.selectionDisablesChildren &&
             optionNode.listFieldItemChildren.length > 0 &&
             " +  "}
@@ -91,12 +94,13 @@ function ListFieldItem(props: IListFieldItemProps<string[]>) {
           optionNode.listFieldItemChildren}
 
         {(isChecked || uncollaped) && optionNode.listFieldItem.textResponse && (
-          <div className="mt-2">
+          <div className="my-2">
             <FormInput
               placeholder={optionNode.listFieldItem.textResponse.title}
               type="text"
               state={optionalText}
               setState={setOptionalText}
+              isDisabled={isDisabled}
             />
           </div>
         )}

@@ -103,8 +103,8 @@ function Patients() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                data-testid="patients"
                 className="relative max-w-5xl mx-auto px-8"
+                data-testid="patients"
             >
                 <div className="py-16 flex flex-col space-y-8">
                     <div>
