@@ -6,7 +6,6 @@ import { FormInput } from "../../components/FormInput";
 import { CloseButton } from "../../components/CloseButton";
 import { useFormResponses, usePatient } from "../../hooks/services";
 import { Model } from "@dateam/shared";
-import { NewPatientModel } from "../../components/NewPatientModel";
 
 export default function ResponsesPanel() {
   const { formId, responseId } = useParams<{
@@ -15,14 +14,11 @@ export default function ResponsesPanel() {
   }>();
   const [formResponseSearch, setFormResponseSearch] = useState("");
   const { data: formResponses } = useFormResponses(formId);
-  const [showNewModel, setNewShowModel] = useState(false);
-
-  const onNewBtnClick = () => setNewShowModel(true);
 
   const responseFormInfoBlocks = formResponses?.map((formResponse, i) => {
     return (
       <Link
-        to={`/responses/manage/${formResponse.formId}/${formResponse.uid}`}
+        to={`/responses/manage/${formResponse.formId}/response/${formResponse.uid}`}
         key={formResponse.uid}
       >
         <ResponsesCard
@@ -35,13 +31,6 @@ export default function ResponsesPanel() {
 
   return (
     <>
-      {showNewModel && (
-        <NewPatientModel
-          showModal={showNewModel}
-          setShowModal={setNewShowModel}
-          goToRespones={true}
-        />
-      )}
       <motion.div
         data-testid="responses-panel"
         variants={{
@@ -73,12 +62,11 @@ export default function ResponsesPanel() {
               <h2 className="text-3xl font-medium tracking-tighter">
                 Responses
               </h2>
-              <button
-                onClick={onNewBtnClick}
-                className="w-20 h-8 mt-2 font-semibold bg-gray-300 rounded-lg hover:bg-gray-800 hover:text-white text-bold"
-              >
-                New
-              </button>
+              <Link to={`/responses/manage/${formId}/new`}>
+                <button className="w-20 h-8 mt-2 font-semibold bg-gray-300 rounded-lg hover:bg-gray-800 hover:text-white text-bold">
+                  New
+                </button>
+              </Link>
             </div>
 
             <p className="text-gray-600">

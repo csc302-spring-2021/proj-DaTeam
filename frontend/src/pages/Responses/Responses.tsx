@@ -22,7 +22,8 @@ export default function Responses() {
           path={[
             "/responses/manage",
             "/responses/manage/:formId",
-            "/responses/manage/:formId/:responseId",
+            "/responses/manage/:formId/new",
+            "/responses/manage/:formId/response/:responseId",
           ]}
           component={FormsResponsePanel}
         />
@@ -30,15 +31,16 @@ export default function Responses() {
           exact
           path={[
             "/responses/manage/:formId",
-            "/responses/manage/:formId/:responseId",
+            "/responses/manage/:formId/new",
+            "/responses/manage/:formId/response/:responseId",
           ]}
           component={ResponsesPanel}
         />
         <Route
           exact
           path={[
-            "/responses/manage/:formId",
-            "/responses/manage/:formId/:responseId",
+            "/responses/manage/:formId/new",
+            "/responses/manage/:formId/response/:responseId",
           ]}
           component={FormRendererPanel}
         />
