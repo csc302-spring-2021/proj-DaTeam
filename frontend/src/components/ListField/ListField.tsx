@@ -88,8 +88,6 @@ function ListField(props: IListFieldProps) {
       <div className="">
         {uncollapsed &&
           optionNodes.map((optionnode) => {
-            /* currentChoice.addValue([optionnode.listFieldItem.id]); */
-
             return (
               <ListFieldItem
                 key={optionnode.listFieldItem.id}

@@ -25,9 +25,8 @@ function NewPatientModal(props: {
     });
     PatientService.create(newPatient)
       .then((patientId) => {
-        console.log(patientId);
         if (props.goToRespones) {
-          hist.push(`/responses/manage/${formId}?patient=${patientId}`);
+          hist.push(`/responses/${formId}?patient=${patientId}`);
         }
         if (props.refetch) {
           props.refetch();
@@ -38,7 +37,6 @@ function NewPatientModal(props: {
       })
       .catch((err) => {
         notify.error(err.message);
-        console.log(err);
       });
   };
 

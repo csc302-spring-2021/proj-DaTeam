@@ -32,13 +32,12 @@ async function read(formId: number | string): Promise<Model.SDCForm> {
  * @form A SDC Form Object
  */
 async function create(form: Model.SDCForm): Promise<string> {
-  console.log(GenericJsonSerializer.encode(form, Model.SDCForm));
   const encodedForm = GenericJsonSerializer.encode(form, Model.SDCForm);
   const formResponse = await fetch(`/api/v1/forms`, {
     method: "POST",
     headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(encodedForm),
   });
@@ -46,7 +45,6 @@ async function create(form: Model.SDCForm): Promise<string> {
     //throw Error(`Could not get form by ID. Error: ${formResponse.statusText}`);
   }
   const id = await formResponse.text();
-  console.log(id);
   return id;
 }
 
@@ -70,5 +68,5 @@ async function list(): Promise<Model.SDCForm[]> {
   );
 }
 
-const FormService = { read, create, list }
+const FormService = { read, create, list };
 export default FormService;
