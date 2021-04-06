@@ -56,17 +56,12 @@ export default function ResponsesPanel() {
           <CloseButton />
         </Link>
 
-        <div className="space-y-8">
+        <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex justify-between">
               <h2 className="text-3xl font-medium tracking-tighter">
                 Responses
               </h2>
-              <Link to={`/responses/manage/${formId}/new`}>
-                <button className="w-20 h-8 mt-2 font-semibold bg-gray-300 rounded-lg hover:bg-gray-800 hover:text-white text-bold">
-                  New
-                </button>
-              </Link>
             </div>
 
             <p className="text-gray-600">
@@ -79,6 +74,24 @@ export default function ResponsesPanel() {
             state={formResponseSearch}
             setState={setFormResponseSearch}
           />
+          <div className="flex justify-end space-x-2">
+            {responseId && (
+              <a
+                href={`/responses/view/${formId}/${responseId}`}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <button className="h-8 px-4 font-semibold bg-blue-300 rounded-lg hover:bg-blue-500 hover:text-white text-bold">
+                  Share Page
+                </button>
+              </a>
+            )}
+            <Link to={`/responses/manage/${formId}/new`}>
+              <button className="w-20 h-8 font-semibold bg-gray-300 rounded-lg hover:bg-gray-800 hover:text-white text-bold">
+                New
+              </button>
+            </Link>
+          </div>
           <motion.div className="space-y-4">
             {responseFormInfoBlocks}
           </motion.div>
