@@ -53,5 +53,11 @@ export default function Responses() {
 }
 
 function FormsResponsePanel() {
-  return <FormsPanel baseUri="/responses/manage" />;
+  return (
+    <FormsPanel
+      title="Manage Forms"
+      subtext="Lists all uploaded forms."
+      baseUri="/responses/manage"
+    />
+  );
 }

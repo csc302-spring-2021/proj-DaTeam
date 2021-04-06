@@ -11,6 +11,7 @@ import { Patients } from "./pages/Patients";
 import { AnimatePresence } from "framer-motion";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Procedures } from "./pages/Procedures";
+import { ResponseReadOnly } from "./pages/Responses/ResponseReadOnly";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,6 +45,11 @@ function App() {
                   <Route path="/responses/manage" component={Responses} />
                   <Route path="/forms" component={Forms} />
                   <Route exact path="/404" component={NotFound} />
+                  <Route
+                    exact
+                    path="/responses/view/:formId/:responseId"
+                    component={ResponseReadOnly}
+                  />
                   <Redirect exact path="/" to="/home" />
                   <Redirect exact path="/responses" to="/responses/manage" />
                   <Redirect to="/404" />
