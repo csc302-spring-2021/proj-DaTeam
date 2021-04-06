@@ -58,11 +58,19 @@ describe("Verify Create and Read from DB Works", () => {
     form1 = Mocks.buildFormPartial();
     form2 = Mocks.buildFormComplete();
     response = Mocks.buildFormResponsePartial();
-    patient = Mocks.genPatientPartial();
+    patient = Mocks.genPatientComplete();
     procedure = Mocks.genProcedurePartial();
   });
   test("Test Procedure Partial", async (done) => {
-    await expect(procedure).verifyCreateRead(Model.Procedure);
+    const uid = await databaseManager.genericCreate(procedure, Model.Procedure);
+    const loaded = await databaseManager.genericRead(uid, Model.Procedure);
+    expect(loaded.creationTime).toBeInstanceOf(Date);
+    expect(loaded.updateTime).toBeInstanceOf(Date);
+    loaded.creationTime = null;
+    loaded.updateTime = null;
+    expect(strip(procedure, Model.Procedure)).toStrictEqual(
+      strip(loaded, Model.Procedure)
+    );
     done();
   });
   test("Test Form Partial", async (done) => {
