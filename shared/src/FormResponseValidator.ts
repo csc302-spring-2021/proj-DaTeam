@@ -100,6 +100,9 @@ export class FormResponseValidator {
       );
     }
     const parser = textFieldTypeMeta[question.type].parser;
+    let processor = textFieldTypeMeta[question.type].processor;
+    if (!processor) processor = String.prototype.trim;
+    answer.responses[0] = processor(answer.responses[0]);
     if (parser) {
       try {
         parser(answer.responses[0]);
