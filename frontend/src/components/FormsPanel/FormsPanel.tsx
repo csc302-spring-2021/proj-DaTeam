@@ -56,10 +56,8 @@ export default function FormsPanel(props: IFormsPanelProps) {
       className="z-20 w-1/2 w-full px-6 py-12 space-y-8 overflow-y-auto rounded-lg shadow-xl lg:w-1/4 bg-gray-50"
     >
       <div className="space-y-2">
-        <h2 className="text-3xl font-medium tracking-tighter">Responses</h2>
-        <p className="text-gray-600">
-          Responses are grouped by the form they come from.
-        </p>
+        <h2 className="text-3xl font-medium tracking-tighter">Manage Forms</h2>
+        <p className="text-gray-600">Lists all uploaded forms.</p>
       </div>
       <FormInput
         placeholder="Filter by name."
